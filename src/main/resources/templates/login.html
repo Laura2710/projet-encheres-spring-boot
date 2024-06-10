@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>S'inscrire - Se connecter</title>
+	</head>
+	<body>
+	<p class="card" th:if="${#authorization.expression('isAuthenticated()')}">
+		<span data-th-text="${#authentication.principal.authorities}"></span>
+	</p>
+	
+	<!-- Affichage du message d'erreur -->
+	<div data-th-if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></div>
+		<form data-th-action="@{/login}"  method="post">
+			<div>
+				<label for="username">Identifiant: </label>
+				<input type="text" name="username" id="username">
+			</div>
+			<div>
+				<label for="password">Mot de passe: </label>
+				<input type="password" name="password" id="password">
+			</div>
+			<div>
+				<input type="submit" value="Connexion">
+				<a href="">Mot de passe oublié</a>
+			</div>
+		</form>
+		
+		<a data-th-href="@{/utilisateur/creer-compte}">Créer un compte</a>
+
+	</body>
+</html>
