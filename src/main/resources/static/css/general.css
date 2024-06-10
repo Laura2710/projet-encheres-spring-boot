@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+* {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+/* Fragment Entete */
+
+header {
+	display : flex;
+	align-items: baseline;
+	justify-content: space-between;
+	padding : 0.8%;
+}
+
+#entete-title {
+	display : flex;
+	font-size: 1.3em;
+}
+
+#entete-title a {
+	text-decoration: none;
+	color: black;
+}
+ 
+ header li {
+	list-style: none;
+	display: inline-block;
+	padding: 0 20px;
+}
+
+/* Fragment Encart */
+
+#encart {
+	display: flex;
+	list-style-type: none;
+	justify-content : flex-end;
+	
+}
+
+#contenu {
+	display : flex;
+	flex-direction: column;
+	border: 3px solid ;
+	padding: 0.5%;
+}

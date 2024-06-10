@@ -1,0 +1,26 @@
+<div xmlns:th="http://www.thymeleaf.org" data-th-fragment="frag-encart"
+	id="encart">
+
+	<div id="contenu">
+		<ul>
+			<li>Date du jour : <span id="date"></span></li>
+
+			<li>
+				<!-- A declencher quand la méthode pour enregistrer les membres en session sera OK -->
+				<!--  <th:block data-th-if="${#authorization.expression('isAuthenticated()')}">Participant : <span data-th-text="${#authentication.name}"></span>
+			</th:block> -->
+			</li>
+
+		</ul>
+	</div>
+	
+	
+<script>
+let date1 = new Date().toLocaleDateString();
+let date=document.getElementById("date");
+date.innerText=date1;
+console.log(date1);
+</script>
+	
+
+</div>

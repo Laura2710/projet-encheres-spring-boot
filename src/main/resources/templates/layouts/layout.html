@@ -1,0 +1,26 @@
+!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	data-th-fragment="layout-enchere(titrePage, contenuPage, ressourceSupp)">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title data-th-replace="${titrePage}">EniEncheres</title>
+
+<link rel="stylesheet" data-th-href="@{/css/general.css}">
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<th:block data-th-replace="${ressourcesSupp} ?: ~{}"></th:block>
+</head>
+
+<body>
+
+	<div data-th-replace="~{fragments/fragment-entete :: frag-entete}"></div>
+	
+	<div data-th-replace="~{fragments/fragment-encart :: frag-encart}"></div>
+
+	<main data-th-replace="${contenuPage}?:~{}"></main>
+
+	<div data-th-replace="~{fragments/fragment-piedpage :: frag-piedpage}"></div>
+</body>
+
+</html>
