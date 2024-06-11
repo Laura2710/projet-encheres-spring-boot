@@ -83,9 +83,67 @@ header li {
 	padding-bottom: 15px;
 }
 
-footer {
-	margin-top: 1%;
+#contenu {
+	display : flex;
+	flex-direction: column;
+	border: 3px solid ;
+	padding: 0.5%;
 }
 
+}
 
+/* Formulaire login */
+a {
+	text-decoration: none;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    margin: 0 auto;
+    gap: 16px;
+}
+
+.form > div:not(.btnActions) {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.btnActions {
+	display: flex;	
+	align-items: center;
+	gap: 16px;
+}
+
+.btnPrimaire {
+	display: flex;
+	background: #004982;
+    border: none;
+    padding: .8em 1.25em;
+    border: 1px solid;
+    border-radius: 8px;
+    color: white;
+    border: navajowhite;
+    text-transform: uppercase;
+    cursor: pointer;
+    justify-content: center;
+}
+
+.btnSecondaire {
+	background-color: teal;
+}
+.listErrors {
+	color: red;
+    background-color: pink; 
+    padding: 1em;
+}
+.errors {
+    text-align: center;
+    width: max-content;
 }

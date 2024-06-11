@@ -1,51 +1,80 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	data-th-replace="~{layouts/layout :: layout-enchere(
+			titrePage=~{:: title}, 
+			contenuPage=~{:: main}, 
+			ressourceSupp=~{})}"
+>
 <head>
-<title>Creer un compte</title>
+<title>Créer un compte</title>
 </head>
 <body>
-	<h2>Nouveau Profil</h2>
-	<form  id="creer-compte-form" data-th-action="@{/utilisateur/creer-compte}" data-th-object="${utilisateur}" method="post">
-		<div>
-			<label for="pseudo">Pseudo (*): </label>
-			<input type="text" data-th-field="*{pseudo}" required>
-		</div>
-		<div>
-			<label for="nom">Nom (*): </label>
-			<input type="text" data-th-field="*{nom}" required>
-		</div>
-		<div>
-			<label for="prenom">Prenom (*): </label>
-			<input type="text" data-th-field="*{prenom}" required>
-		</div>
-		<div>
-			<label for="email">Email (*): </label>
-			<input type="text" data-th-field="*{email}" required>
-		</div>
-		<div>
-			<label for="telephone">Téléphone: </label>
-			<input type="text" data-th-field="*{telephone}">
-		</div>
-		<div>
-			<label for="adresse">Adresse (*): </label>
-			<input type="text" data-th-field="*{adresse.rue}" placeholder="Rue">
-			<input type="text" data-th-field="*{adresse.codePostal}" placeholder="Code Postal">
-			<input type="text" data-th-field="*{adresse.ville}" placeholder="Ville">
-		</div>
-		<div>
-			<label for="motDePasse">Mot de passe: </label>
-			<input type="text" data-th-field="*{motDePasse}">
-		</div>
-		<div>
-			<label for="confirmationMdp">Confirmation du mot de passe: </label>
-			<input type="text" name="confirmationMdp" id="confirmationMdp">
-		</div>
-		<div>
-			<input type="submit" value="Créer">
-					<a href="/">Annuler</a>
-		</div>
-	</form>
+	<main>
+		<form id="creer-compte-form" class="form" data-th-action="@{/utilisateur/creer-compte}"
+			data-th-object="${utilisateur}" method="post"
+		>
+			<h2>Nouveau Profil</h2>
 
-	<script type="module" src="/js/index.js"></script>
+			<div>
+				<div>
+					<label for="pseudo">Pseudo (*):</label>
+					<input type="text" data-th-field="*{pseudo}" required>
+					
+				</div>
+				<div>
+					<label for="nom">Nom (*): </label>
+					<input type="text" data-th-field="*{nom}" required>
+				</div>
+			</div>
+			<div>
+				<div>
+					<label for="prenom">Prenom (*): </label>
+					<input type="text" data-th-field="*{prenom}" required>
+				</div>
+				<div>
+					<label for="email">Email (*): </label>
+					<input type="text" data-th-field="*{email}" required>
+				</div>
+			</div>
+			<div>
+				<div>
+					<label for="telephone">Téléphone: </label>
+					<input type="text" data-th-field="*{telephone}">
+				</div>
+			</div>
+			<div>
+				<label for="adresse">Adresse (*): </label>
+				<input type="text" data-th-field="*{adresse.rue}" placeholder="Rue">
+				<input type="text" data-th-field="*{adresse.codePostal}" placeholder="Code Postal">
+				<input type="text" data-th-field="*{adresse.ville}" placeholder="Ville">
+			</div>
+			<div>
+				<div>
+					<label for="motDePasse">Mot de passe (*): </label>
+					<input type="password" data-th-field="*{motDePasse}" required>
+				</div>
+				<div>
+					<label for="confirmationMdp">Confirmation du mot de passe (*):</label>
+					<input type="password" name="confirmationMdp" id="confirmationMdp" required>
+				</div>
+			</div>
+			<!-- Affichage des Exceptions Métiers -->
+			<ul data-th-if="${#fields.hasErrors('global')}" class="listErrors">
+				<li data-th-each="err : ${#fields.errors('global')}" data-th-text="#{${err}}"></li>
+			</ul>
+			
+			<!-- Affichage des Erreurs de BindingResult (@Valid) -->
+			<ul data-th-if="${#fields.hasErrors('*')}" class="listErrors">
+			    <li data-th-each="err : ${#fields.allErrors()}" data-th-text="${err}"></li>
+			</ul>
+
+			<div class="btnActions">
+				<input type="submit" value="Créer" class="btnPrimaire">
+				<a href="/">Annuler</a>
+			</div>
+		</form>
+		<script type="module" src="/js/index.js"></script>
+	</main>
+
 </body>
 </html>

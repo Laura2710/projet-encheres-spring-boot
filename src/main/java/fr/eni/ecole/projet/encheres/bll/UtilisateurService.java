@@ -6,5 +6,7 @@ import fr.eni.ecole.projet.encheres.bo.Utilisateur;
 public interface UtilisateurService {
 	Utilisateur getByPseudo(String pseudo);
 
-	Adresse getAdresseByID(int id);
+	Adresse getAdresseByID(long id);
+	
+	void creerUnCompte(Utilisateur utilisateur);
 }
