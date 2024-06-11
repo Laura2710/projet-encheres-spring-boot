@@ -19,13 +19,14 @@
 				<div>
 					<label for="pseudo">Pseudo (*):</label>
 					<input type="text" data-th-field="*{pseudo}" required class="input">
-					
 				</div>
 				<div>
 					<label for="nom">Nom (*): </label>
 					<input type="text" data-th-field="*{nom}" required class="input">
 				</div>
 			</div>
+			
+			
 			<div>
 				<div>
 					<label for="prenom">Prenom (*): </label>
@@ -58,15 +59,12 @@
 					<input type="password" name="confirmationMdp" id="confirmationMdp" required class="input">
 				</div>
 			</div>
-			<!-- Affichage des Exceptions Métiers -->
-			<ul data-th-if="${#fields.hasErrors('global')}" class="listErrors">
-				<li data-th-each="err : ${#fields.errors('global')}" data-th-text="#{${err}}"></li>
-			</ul>
-			
-			<!-- Affichage des Erreurs de BindingResult (@Valid) -->
+
+			<!-- Affichage des Exceptions -->
 			<ul data-th-if="${#fields.hasErrors('*')}" class="listErrors">
-			    <li data-th-each="err : ${#fields.allErrors()}" data-th-text="${err}"></li>
+				<li th:each="err : ${#fields.errors('*')}" th:text="#{${err}}"></li>
 			</ul>
+	
 
 			<div class="btnActions">
 				<input type="submit" value="Créer" class="btnPrimaire">

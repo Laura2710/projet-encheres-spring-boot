@@ -30,5 +30,6 @@ public class BusinessCode {
 	public static final String VALIDATION_MDP_MAJUSCULE = "validation.utilisateur.mdp.majuscule";
 	public static final String VALIDATION_MDP_SPECIAL_CHAR = "validation.utilisateur.mdp.special.char";
 	public static final String VALIDATION_MDP_NOESPACE =  "validation.utilisateur.mdp.nospace";
-	public static final String VALIDATION_DAL_AJOUT_UTILISATEUR = "validation.dal.ajout_utilisateur";
+	public static final String VALIDATION_DAL_AJOUT_UTILISATEUR = "validation.dal.ajout.utilisateur";
+	public static final String VALIDATION_DAL_AJOUT_UTILISATEUR_EXISTANT = "validation.dal.ajout.utilisateur.existant";
 }
