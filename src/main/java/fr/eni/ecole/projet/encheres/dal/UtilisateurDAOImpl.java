@@ -28,7 +28,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	
 	@Override
 	public void addUtilisateur(Utilisateur utilisateur) {
-		String sql = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse) VALUES (:pseudo, :nom, :prenom, :email, :telephone, :motDePasse, 10, 0, :idAdresse)";
+		String sql = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, mot_de_passe, no_adresse) VALUES (:pseudo, :nom, :prenom, :email, :telephone, :motDePasse, :idAdresse)";
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("pseudo", utilisateur.getPseudo());
 		params.addValue("nom", utilisateur.getNom());

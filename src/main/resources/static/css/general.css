@@ -109,6 +109,7 @@ a {
     gap: 16px;
 }
 
+
 .form > div:not(.btnActions) {
     display: flex;
     width: 100%;
@@ -120,7 +121,7 @@ a {
 .btnActions {
 	display: flex;	
 	align-items: center;
-	gap: 16px;
+	column-gap: 16px;
 }
 
 .btnPrimaire {
@@ -131,21 +132,32 @@ a {
     border: 1px solid;
     border-radius: 8px;
     color: white;
-    border: navajowhite;
     text-transform: uppercase;
     cursor: pointer;
     justify-content: center;
+    font-size: 1em;
 }
 
 .btnSecondaire {
-	background-color: teal;
+    background-color: teal;
+    display: flex;
+    width: -webkit-fill-available;
 }
 .listErrors {
-	color: red;
-    background-color: pink; 
+    color: red;
+    background-color: pink;
     padding: 1em;
+    margin-bottom: 8px;
 }
 .errors {
     text-align: center;
-    width: max-content;
+    width: auto;
+}
+
+.form .input {
+	padding: 8px;
+}
+
+label {
+    align-self: flex-start;
 }

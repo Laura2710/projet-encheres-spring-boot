@@ -11,18 +11,18 @@
 	
 	<!-- Affichage du message d'erreur -->
 		<form data-th-action="@{/login}"  method="post" class="form">
-	<div data-th-if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></div>
+	<div data-th-if="${errorMessage}" th:text="${errorMessage}" class="listErrors"></div>
 			<div>
 				<label for="username">Identifiant: </label>
-				<input type="text" name="username" id="username" required>
+				<input type="text" name="username" id="username" required class="input">
 			</div>
 			<div>
 				<label for="password">Mot de passe: </label>
-				<input type="password" name="password" id="password" required>
+				<input type="password" name="password" id="password" required class="input">
 			</div>
 			<div>
 				<input type="submit" value="Connexion" class="btnPrimaire">
-				<a href="">Mot de passe oublié</a>
+				<a id="forgetPassword" href="">Mot de passe oublié</a>
 			</div>
 		<a data-th-href="@{/utilisateur/creer-compte}" class="btnPrimaire btnSecondaire">Créer un compte</a> 
 		</form>
