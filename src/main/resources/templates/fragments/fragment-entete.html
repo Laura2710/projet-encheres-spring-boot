@@ -1,7 +1,7 @@
 <header xmlns:th="http://www.thymeleaf.org"
 	data-th-fragment="frag-entete">
 	
-<section id="entete-title">
+<section id="entete-titre">
 	<h1> <a href="/"><img data-th-src="@{/images/logoENI.png}"><span>Eni-Encheres</span></a></h1>
 </section>
 
@@ -9,10 +9,10 @@
 	<ul>
 			<li><a href="/index">Accueil</a></li>
 			
-			<!-- Placeholder pour voir si les élements s'alignent correctement -->
-			<li><a href="/index">Placeholder</a></li>
+			<!-- Placeholder pour voir si les élements s'alignent correctement 
+			<li><a href="/index">Placeholder</a></li> -->
 			
-			<!-- A declencher quand la méthode pour enregistrer les membres en session sera OK 
+			<!-- A declencher quand la méthode pour enregistrer les membres en session sera OK -->
 			
 			<li data-th-if="${!#authorization.expression('isAuthenticated()')}">
 				<a href="/login">S'inscrire - Se Connecter</a>
@@ -30,7 +30,7 @@
 				<a href="/logout">Se déconnecter</a>
 			</li>
 			
-			-->
+			
 		</ul>
 </nav>
 
