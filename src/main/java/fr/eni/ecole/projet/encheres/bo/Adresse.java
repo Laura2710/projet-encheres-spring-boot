@@ -3,20 +3,34 @@ package fr.eni.ecole.projet.encheres.bo;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Adresse implements Serializable{
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
+public class Adresse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	private int id;
+
+	private long id;
+	@NotBlank(message = "La rue doit être renseignée")
+	@Size(min = 3, max = 100, message = "Rue doit contenir entre 3 et 100 caractères")
+	@Pattern(regexp = "^[0-9A-Za-zÀ-ÿ, °-]+$", message = "La rue contient des caractères interdits")
 	private String rue;
+	
+	@NotBlank(message = "Le code postal doit être renseigné")
+    @Pattern(regexp = "^[0-9]{5}$", message = "Le code postal doit contenir exactement 5 chiffres")
 	private String codePostal;
+	
+	@NotBlank(message = "La ville doit être renseignée")
+    @Size(min = 3, max = 50, message = "La ville doit contenir entre 3 et 50 caractères")
+    @Pattern(regexp = "^[A-Za-zÀ-ÿ]+(?:[ '-][A-Za-zÀ-ÿ]+)*$", message = "La ville doit contenir uniquement des lettres")
 	private String ville;
 	private boolean isAdresseEni;
-	
+
 	public Adresse() {
 	}
 
-	public Adresse(int id, String rue, String codePostal, String ville, boolean isAdresseEni) {
+	public Adresse(long id, String rue, String codePostal, String ville, boolean isAdresseEni) {
 		this.id = id;
 		this.rue = rue;
 		this.codePostal = codePostal;
@@ -24,11 +38,11 @@ public class Adresse implements Serializable{
 		this.isAdresseEni = isAdresseEni;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -98,8 +112,5 @@ public class Adresse implements Serializable{
 		return Objects.equals(codePostal, other.codePostal) && id == other.id && isAdresseEni == other.isAdresseEni
 				&& Objects.equals(rue, other.rue) && Objects.equals(ville, other.ville);
 	}
-	
-	
-	
-	
+
 }

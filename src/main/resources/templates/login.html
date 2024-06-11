@@ -1,31 +1,32 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(
+			titrePage=~{:: title}, 
+			contenuPage=~{:: main}, 
+			ressourceSupp=~{})}">
 	<head>
 		<title>S'inscrire - Se connecter</title>
 	</head>
 	<body>
-	<p class="card" th:if="${#authorization.expression('isAuthenticated()')}">
-		<span data-th-text="${#authentication.principal.authorities}"></span>
-	</p>
+	<main>
 	
 	<!-- Affichage du message d'erreur -->
+		<form data-th-action="@{/login}"  method="post" class="form">
 	<div data-th-if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></div>
-		<form data-th-action="@{/login}"  method="post">
 			<div>
 				<label for="username">Identifiant: </label>
-				<input type="text" name="username" id="username">
+				<input type="text" name="username" id="username" required>
 			</div>
 			<div>
 				<label for="password">Mot de passe: </label>
-				<input type="password" name="password" id="password">
+				<input type="password" name="password" id="password" required>
 			</div>
 			<div>
-				<input type="submit" value="Connexion">
+				<input type="submit" value="Connexion" class="btnPrimaire">
 				<a href="">Mot de passe oublié</a>
 			</div>
+		<a data-th-href="@{/utilisateur/creer-compte}" class="btnPrimaire btnSecondaire">Créer un compte</a> 
 		</form>
 		
-		<a data-th-href="@{/utilisateur/creer-compte}">Créer un compte</a>
-
+	</main>
 	</body>
 </html>

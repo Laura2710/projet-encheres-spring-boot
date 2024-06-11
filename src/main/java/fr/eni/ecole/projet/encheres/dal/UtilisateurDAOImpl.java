@@ -26,6 +26,22 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		return namedParameterJdbcTemplate.queryForObject(sql, param, new UtilisateurRowMapper());
 	}
 	
+	@Override
+	public void addUtilisateur(Utilisateur utilisateur) {
+		String sql = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse) VALUES (:pseudo, :nom, :prenom, :email, :telephone, :motDePasse, 10, 0, :idAdresse)";
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("pseudo", utilisateur.getPseudo());
+		params.addValue("nom", utilisateur.getNom());
+		params.addValue("prenom", utilisateur.getNom());
+		params.addValue("email", utilisateur.getEmail());
+		params.addValue("telephone", utilisateur.getTelephone());
+		params.addValue("motDePasse", utilisateur.getMotDePasse());
+		params.addValue("idAdresse", utilisateur.getAdresse().getId());
+		
+		namedParameterJdbcTemplate.update(sql, params);
+
+	}
+	
 	public class UtilisateurRowMapper implements RowMapper<Utilisateur> {
 
 		@Override
@@ -47,5 +63,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		}
 
 	}
+
+
 
 }
