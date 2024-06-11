@@ -11,12 +11,12 @@ public class Enchere implements Serializable{
 	private static final long serialVersionUID = 1L;
 	//Association avec l'acquereur
 	@NotNull
-	private Utilisateur utilisateur;
-	//Association avec l'artileAVendre
+	private Utilisateur acquereur;
+	//Association avec l'articleAVendre
 	@NotNull
 	private ArticleAVendre articleAVendre;
 	@NotNull
-	private LocalDateTime date;
+	private LocalDateTime dateEnchere;
 	@NotNull
 	@Min(value = 1)
 	private int montant;
@@ -27,23 +27,23 @@ public class Enchere implements Serializable{
 
 	
 
-	public Enchere(Utilisateur utilisateur, ArticleAVendre articleAVendre,
-			LocalDateTime date, int montant) {
+	public Enchere(Utilisateur acquereur, ArticleAVendre articleAVendre,
+			LocalDateTime dateEnchere, int montant) {
 		super();
-		this.utilisateur = utilisateur;
+		this.acquereur = acquereur;
 		this.articleAVendre = articleAVendre;
-		this.date = date;
+		this.dateEnchere = dateEnchere;
 		this.montant = montant;
 	}
 
 
 
-	public LocalDateTime getDate() {
-		return date;
+	public LocalDateTime getDateEnchere() {
+		return dateEnchere;
 	}
 
-	public void setDate(LocalDateTime date) {
-		this.date = date;
+	public void setDateEnchere(LocalDateTime dateEnchere) {
+		this.dateEnchere = dateEnchere;
 	}
 
 	public ArticleAVendre getArticleAVendre() {
@@ -54,12 +54,12 @@ public class Enchere implements Serializable{
 		this.articleAVendre = articleAVendre;
 	}
 
-	public Utilisateur getUtilisateur() {
-		return utilisateur;
+	public Utilisateur getAcquereur() {
+		return acquereur;
 	}
 
-	public void setUtilisateur(Utilisateur utilisateur) {
-		this.utilisateur = utilisateur;
+	public void setAcquereur(Utilisateur acquereur) {
+		this.acquereur = acquereur;
 	}
 
 	public int getMontant() {
@@ -73,12 +73,12 @@ public class Enchere implements Serializable{
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Enchere [date=");
-		builder.append(date);
+		builder.append("Enchere [dateEnchere=");
+		builder.append(dateEnchere);
 		builder.append(", articleAVendre=");
 		builder.append(articleAVendre);
-		builder.append(", utilisateur=");
-		builder.append(utilisateur);
+		builder.append(", acquereur=");
+		builder.append(acquereur);
 		builder.append(", montant=");
 		builder.append(montant);
 		builder.append("]");
@@ -87,7 +87,7 @@ public class Enchere implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(articleAVendre, date, montant, utilisateur);
+		return Objects.hash(articleAVendre, dateEnchere, montant, acquereur);
 	}
 
 	@Override
@@ -99,8 +99,8 @@ public class Enchere implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Enchere other = (Enchere) obj;
-		return Objects.equals(articleAVendre, other.articleAVendre) && Objects.equals(date, other.date)
-				&& montant == other.montant && Objects.equals(utilisateur, other.utilisateur);
+		return Objects.equals(articleAVendre, other.articleAVendre) && Objects.equals(dateEnchere, other.dateEnchere)
+				&& montant == other.montant && Objects.equals(acquereur, other.acquereur);
 	}
 	
 	
