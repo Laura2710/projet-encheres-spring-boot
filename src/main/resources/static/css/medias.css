@@ -1,16 +1,40 @@
-@media all and (max-width: 768px) {
+@media all and (max-width:768px) {
+	.form>div:not(.btnActions) {
+		align-items: center;
+		gap: 8px;
+		flex-direction: column;
+		align-items: stretch;
+		width: 100%;
+	}
+	.form .input {
+		margin-bottom: 8px;
+		width: -webkit-fill-available;
+	}
+	.btnPrimaire {
+		width: -webkit-fill-available;
+	}
+}
+
+@media all and (max-width: 425px) {
 	.form {
 		gap: 0;
 		width: 100%;
 	}
-	.form>div {
-		margin-bottom: 0;
-	}
-	.form div, label, input {
-		display: block !important;
+	.form div, label {
+		flex-direction: column;
 		width: 100%;
 	}
-	input {
-		margin-bottom: 8px;
+	.form>div:not(.btnActions) {
+		align-items: flex-start;
+		width: inherit;
+		justify-content: inherit;
+		align-items: inherit;
+	}
+	.listErrors {
+		width: auto !important;
+	}
+	#forgetPassword {
+		margin-bottom: 32px;
+		align-self: flex-end;
 	}
 }
