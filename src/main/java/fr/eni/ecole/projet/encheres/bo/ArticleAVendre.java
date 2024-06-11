@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,8 +23,10 @@ public class ArticleAVendre implements Serializable{
 	@Size(min = 20, max = 300)
 	private String description;
 	@NotNull
+	@Future
 	private LocalDate dateDebutEncheres;
 	@NotNull
+	@Future
 	private LocalDate dateFinEncheres;
 	private int statut;
 	@NotNull
@@ -35,7 +38,7 @@ public class ArticleAVendre implements Serializable{
 	private Utilisateur vendeur;
 	//Association avec une adresse de retrait
 	@NotNull
-	private Adresse adresse;
+	private Adresse adresseRetrait;
 	
 	public ArticleAVendre() {
 		
@@ -44,7 +47,7 @@ public class ArticleAVendre implements Serializable{
 	public ArticleAVendre(long id,Categorie categorie,String nom,
 			String description,LocalDate dateDebutEncheres,
 			LocalDate dateFinEncheres, int statut,int prixInitial, int prixVente,
-			Utilisateur vendeur,Adresse adresse) {
+			Utilisateur vendeur,Adresse adresseRetrait) {
 		this.id = id;
 		this.categorie = categorie;
 		this.nom = nom;
@@ -55,7 +58,7 @@ public class ArticleAVendre implements Serializable{
 		this.prixInitial = prixInitial;
 		this.prixVente = prixVente;
 		this.vendeur = vendeur;
-		this.adresse = adresse;
+		this.adresseRetrait = adresseRetrait;
 	}
 
 	public long getId() {
@@ -138,12 +141,12 @@ public class ArticleAVendre implements Serializable{
 		this.vendeur = vendeur;
 	}
 
-	public Adresse getAdresse() {
-		return adresse;
+	public Adresse getAdresseRetrait() {
+		return adresseRetrait;
 	}
 
-	public void setAdresse(Adresse adresse) {
-		this.adresse = adresse;
+	public void setAdresseRetrait(Adresse adresseRetrait) {
+		this.adresseRetrait = adresseRetrait;
 	}
 
 	@Override
@@ -169,8 +172,8 @@ public class ArticleAVendre implements Serializable{
 		builder.append(prixVente);
 		builder.append(", vendeur=");
 		builder.append(vendeur);
-		builder.append(", adresse=");
-		builder.append(adresse);
+		builder.append(", adresseRetrait=");
+		builder.append(adresseRetrait);
 		builder.append("]");
 		return builder.toString();
 	}
