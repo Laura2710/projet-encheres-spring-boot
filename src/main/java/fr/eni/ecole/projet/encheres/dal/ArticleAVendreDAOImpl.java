@@ -2,6 +2,7 @@ package fr.eni.ecole.projet.encheres.dal;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,10 +18,12 @@ import fr.eni.ecole.projet.encheres.bo.Utilisateur;
 @Repository
 public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 
-	private static final String INSERT = "INSERT INTO ARTICLE_A_VENDRE(nom_article, description, date_debut_encheres, date_fin_encheres, statut_enchere, prix_initial, prix_vente, id_utilisateur, no_categorie, no_adresse_retrait) VALUES "
+	private static final String INSERT = "INSERT INTO ARTICLES_A_VENDRE(nom_article, description, date_debut_encheres, date_fin_encheres, statut_enchere, prix_initial, prix_vente, id_utilisateur, no_categorie, no_adresse_retrait) VALUES "
 			+ " (:nom, :description, :dateDebutEncheres, :dateFinEncheres, :statut, :prixInitial, :prixVente, :vendeur, :categorie, :adresse)";
 
-	private static final String FIND_BY_ID = "SELECT * FROM ARTICLE_A_VENDRE WHERE no_article = :id";
+	private static final String FIND_BY_ID = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_article = :id";
+
+	private static final String FIND_ALL_STATUT_EN_COURS = "SELECT * FROM ARTICLES_A_VENDRE WHERE statut_enchere = 1";
 	
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -76,6 +79,12 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 			return articleAVendre;
 		}
 		
+	}
+
+	@Override
+	public List<ArticleAVendre> findAllStatutEnCours() {
+		return namedParameterJdbcTemplate.query(FIND_ALL_STATUT_EN_COURS, new ArticleAVendreRowMapper());
+
 	}
 
 }

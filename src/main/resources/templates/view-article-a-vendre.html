@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+data-th-replace="~{layouts/layout :: layout-enchere(
+			titrePage=~{:: title}, 
+			contenuPage=~{:: main}, 
+			ressourceSupp=~{:: .ressourceSupp})}">
+<head>
+<title>Enchères en Cours</title>
+<th:block class="ressourceSupp"><link rel="stylesheet" data-th-href="@{/css/article-card.css}">
+</th:block>
+</head>
+<body>
+<main>
+	<h1>Liste des enchères</h1>
+	<div class="articleCard" data-th-each="article : ${articlesAVendre}">
+		<h2 data-th-text="${article.nom}"></h2>
+		<h3 data-th-if="${article.prixVente == 0}" data-th-text="${article.prixInitial}"></h3>
+		<h3 data-th-if="${article.prixVente != 0}" data-th-text="${article.prixVente}"></h3>
+		<h3 data-th-text="${article.dateFinEncheres}"></h3>
+		<h3 data-th-text="${article.vendeur.pseudo}"></h3>
+	</div>
+
+
+</main>
+</body>
+</html>

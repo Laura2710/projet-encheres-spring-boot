@@ -3,8 +3,9 @@ package fr.eni.ecole.projet.encheres.dal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 
-
+@Repository
 public class EnchereDAOImpl implements EnchereDAO {
 	
 	private static final String FIND_MONTANT = "SELECT MONTANT_ENCHERE FROM ENCHERES WHERE id = :id";
