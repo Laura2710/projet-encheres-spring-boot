@@ -49,7 +49,7 @@ public class EncheresSecurity {
 		});
 		httpSecurity.formLogin(form -> {
 			form.loginPage("/login").permitAll();
-			form.defaultSuccessUrl("/session", true).permitAll();
+			form.defaultSuccessUrl("/", true).permitAll();
             form.failureUrl("/login?error=true"); 	
 		});
 
