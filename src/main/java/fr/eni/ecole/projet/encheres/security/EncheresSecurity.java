@@ -42,6 +42,7 @@ public class EncheresSecurity {
 		httpSecurity.authorizeHttpRequests(auth -> {
 			auth.requestMatchers("/").permitAll()
 				.requestMatchers("/utilisateur/creer-compte").permitAll()
+				.requestMatchers("/encheres/detail").hasRole("USER")
 				.requestMatchers("/css/*").permitAll()
 				.requestMatchers("/js/*").permitAll()
 				.requestMatchers("/images/*").permitAll()
@@ -50,7 +51,7 @@ public class EncheresSecurity {
 		});
 		httpSecurity.formLogin(form -> {
 			form.loginPage("/login").permitAll();
-			form.defaultSuccessUrl("/session", true).permitAll();
+			form.defaultSuccessUrl("/", true).permitAll();
             form.failureUrl("/login?error=true"); 	
 		});
 

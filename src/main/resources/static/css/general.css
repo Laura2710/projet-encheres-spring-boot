@@ -135,13 +135,12 @@ a {
     text-transform: uppercase;
     cursor: pointer;
     justify-content: center;
-    font-size: 1em;
+    font-size: 1rem;
 }
 
 .btnSecondaire {
     background-color: teal;
     display: flex;
-    width: -webkit-fill-available;
 }
 .listErrors {
     color: red;
@@ -158,6 +157,66 @@ a {
 	padding: 8px;
 }
 
-label {
-    align-self: flex-start;
+
+
+.main-detail-vente {
+	display: flex;
+    align-items: center;
+}
+
+.main-detail-vente h2 {
+	margin-bottom : 1em;
+}
+
+.main-detail-vente div {
+	display: flex;
+    column-gap: 32px;
+    flex-wrap: wrap;
+    font-size: 1.25em;
+}
+
+.main-detail-vente li {
+	font-weight: bold;
+}
+
+.main-detail-vente span {
+	font-weight: normal;
+}
+
+.description-vente {
+		padding: 1em;
+}
+
+.description-vente li {
+	margin-bottom: 8px;
+
+}
+
+.detail-vente-detail {
+	padding: 1em;
+    background-color: hsl(206deg 100% 25% / 15%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 8px;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.content-description-vente {
+	margin-bottom: 1em;
+	
+}
+
+.warning {
+    padding: 1em;
+    background-color: hsl(45deg 100% 51% / 15%);
+    color: #FF5722;
+    font-size: 1.25rem;
+    margin: 1em 0;
+}
+
+
+.form-enchere {
+	margin: 32px 0;
 }

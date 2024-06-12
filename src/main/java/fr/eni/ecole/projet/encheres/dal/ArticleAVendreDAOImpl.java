@@ -2,6 +2,7 @@ package fr.eni.ecole.projet.encheres.dal;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -21,6 +22,9 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 			+ " (:nom, :description, :dateDebutEncheres, :dateFinEncheres, :statut, :prixInitial, :prixVente, :vendeur, :categorie, :adresse)";
 
 	private static final String FIND_BY_ID = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_article = :id";
+
+	private static final String UPDATE_PRIX_VENTE = "UPDATE articles_a_vendre SET prix_vente=:prixVente WHERE no_article=:idArticle";
+	private static final String FIND_ALL_STATUT_EN_COURS = "SELECT * FROM ARTICLES_A_VENDRE WHERE statut_enchere = 1";
 	
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -48,6 +52,14 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		namedParameterJdbcTemplate.update(INSERT, namedParameters);
 	}
 	
+	@Override
+	public void updatePrixVente(long id, int montant) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("prixVente", montant);
+		params.addValue("idArticle", id);
+		namedParameterJdbcTemplate.update(UPDATE_PRIX_VENTE, params);		
+	}
+	
 	public class ArticleAVendreRowMapper implements RowMapper<ArticleAVendre> {
 
 		@Override
@@ -73,10 +85,16 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 			Adresse adresse = new Adresse();
 			adresse.setId(rs.getInt("no_adresse_retrait"));
 			articleAVendre.setAdresseRetrait(adresse);
-			
 			return articleAVendre;
 		}
 		
+	}
+
+
+	@Override
+	public List<ArticleAVendre> findAllStatutEnCours() {
+		return namedParameterJdbcTemplate.query(FIND_ALL_STATUT_EN_COURS, new ArticleAVendreRowMapper());
+
 	}
 
 }

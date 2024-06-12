@@ -27,7 +27,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	}
 	
 	@Override
-	public void addUtilisateur(Utilisateur utilisateur) {
+	public int addUtilisateur(Utilisateur utilisateur) {
 		String sql = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, mot_de_passe, no_adresse) VALUES (:pseudo, :nom, :prenom, :email, :telephone, :motDePasse, :idAdresse)";
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("pseudo", utilisateur.getPseudo());
@@ -38,9 +38,44 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		params.addValue("motDePasse", utilisateur.getMotDePasse());
 		params.addValue("idAdresse", utilisateur.getAdresse().getId());
 		
-		namedParameterJdbcTemplate.update(sql, params);
 
+		int nbrLigneAffectee = namedParameterJdbcTemplate.update(sql, params);
+		return nbrLigneAffectee;
 	}
+	
+	@Override
+	public boolean findEmail(String email) {
+		String sql = "SELECT COUNT(*) as nbr FROM utilisateurs WHERE email=:email";
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("email", email);
+		int count = namedParameterJdbcTemplate.queryForObject(sql, param, Integer.class);
+
+        // Retourne true si le nombre d'utilisateurs  est supérieur à zéro
+        return count > 0;
+	}
+	
+	@Override
+	public boolean findPseudo(String pseudo) {
+		String sql = "SELECT COUNT(*) as nbr FROM utilisateurs WHERE pseudo=:pseudo";
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("pseudo", pseudo);
+		int count = namedParameterJdbcTemplate.queryForObject(sql, param, Integer.class);
+
+        // Retourne true si le nombre d'utilisateurs  est supérieur à zéro
+        return count > 0;
+	}
+
+	@Override
+	public int updateCredit(String pseudo, int credit) {
+		String sql = "UPDATE utilisateurs SET credit=:credit WHERE pseudo=:pseudo";
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("credit", credit);
+		params.addValue("pseudo", pseudo);
+		return namedParameterJdbcTemplate.update(sql, params); 
+	}
+	
+
+
 	
 	public class UtilisateurRowMapper implements RowMapper<Utilisateur> {
 
@@ -63,6 +98,15 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		}
 
 	}
+
+
+
+
+
+
+
+
+
 
 
 

@@ -12,18 +12,18 @@ public class Adresse implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private long id;
-	@NotBlank(message = "La rue doit être renseignée")
-	@Size(min = 3, max = 100, message = "Rue doit contenir entre 3 et 100 caractères")
-	@Pattern(regexp = "^[0-9A-Za-zÀ-ÿ, °-]+$", message = "La rue contient des caractères interdits")
+	@NotBlank
+	@Size(min = 3, max = 100)
+	@Pattern(regexp = "^[0-9A-Za-zÀ-ÿ, °-]+$")
 	private String rue;
 	
-	@NotBlank(message = "Le code postal doit être renseigné")
-    @Pattern(regexp = "^[0-9]{5}$", message = "Le code postal doit contenir exactement 5 chiffres")
+	@NotBlank
+    @Pattern(regexp = "^[0-9]{5}$")
 	private String codePostal;
 	
-	@NotBlank(message = "La ville doit être renseignée")
-    @Size(min = 3, max = 50, message = "La ville doit contenir entre 3 et 50 caractères")
-    @Pattern(regexp = "^[A-Za-zÀ-ÿ]+(?:[ '-][A-Za-zÀ-ÿ]+)*$", message = "La ville doit contenir uniquement des lettres")
+	@NotBlank
+    @Size(min = 3, max = 50)
+    @Pattern(regexp = "^[A-Za-zÀ-ÿ]+(?:[ '-][A-Za-zÀ-ÿ]+)*$")
 	private String ville;
 	private boolean isAdresseEni;
 

@@ -12,30 +12,28 @@ import jakarta.validation.constraints.Size;
 public class Utilisateur implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@NotBlank(message = "Le pseudo doit être renseigné")
-	@Size(min = 8, max = 30, message = "Le pseudo doit contenir entre 8 et 30 caractères")
-	@Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Le pseudo ne peut contenir que des caractères alphanumériques et des underscores ('_')")
+	@NotBlank
+	@Size(min = 8, max = 30)
+	@Pattern(regexp = "^[a-zA-Z0-9_]+$")
 	private String pseudo;
 	
-	@NotBlank(message = "Le nom doit être renseigné")
-    @Size(min = 2, max = 40, message = "Le nom doit contenir entre 2 et 40 caractères")
-    @Pattern(regexp = "^[a-zA-ZÀ-ÿ]+$", message = "Le nom doit contenir uniquement des lettres")
+	@NotBlank
+    @Size(min = 2, max = 40)
+    @Pattern(regexp = "^[a-zA-ZÀ-ÿ]+$")
 	private String nom;
 	
-	@NotBlank(message = "Le prénom doit être renseigné")
-    @Size(min = 2, max = 50, message = "Le prénom doit contenir entre 2 et 50 caractères")
-    @Pattern(regexp = "^[a-zA-ZÀ-ÿ]+$", message = "Le prénom doit contenir uniquement des lettres")
+	@NotBlank
+    @Size(min = 2, max = 50)
+    @Pattern(regexp = "^[a-zA-ZÀ-ÿ]+$")
 	private String prenom;
 	
-	@NotBlank(message = "L'email doit être renseigné")
-    @Size(min = 5, max = 100, message = "L'email doit c entre 5 et 100 caractères")
-    @Email(message = "L'email n'a pas un format valide")
+	@NotBlank
+    @Size(min = 5, max = 100)
+    @Email
 	private String email;
 	
 	private String telephone;
 	
-	@NotBlank(message = "Le mot de passe doit être renseigné")
-	@Size(min = 8, max = 20, message = "Le mot de passe doit contenir entre 8 et 20 caractères")
 	private String motDePasse;
 	private int credit;
 	private boolean administrateur;

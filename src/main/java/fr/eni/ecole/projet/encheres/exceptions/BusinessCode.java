@@ -57,4 +57,11 @@ public class BusinessCode {
 	public static final String VALIDATION_ARTICLE_A_VENDRE_CATEGORIE_NULL = "validation.article_a_vendre.categorie.null";
 	public static final String VALIDATION_ARTICLE_A_VENDRE_CATEGORIE_INCONNU = "validation.article_a_vendre.categorie.id_inconnu";
 	
+	public static final String VALIDATION_DAL_AJOUT_UTILISATEUR_EXISTANT = "validation.dal.ajout.utilisateur.existant";
+	
+	public static final String VALIDATION_OFFRE_DATE_DEBUT = "validation.offre.date.debut";
+	public static final String VALIDATION_OFFRE_DATE_FIN = "validation.offre.date.fin";
+	public static final String VALIDATION_OFFRE_MONTANT = "validation.offre.montant";
+	public static final String VALIDATION_OFFRE_CREDIT = "validation.offre.credit";
+	public static final String VALIDATION_OFFRE_AJOUT_ENCHERE = "validation.offre.ajout.enchere";
 }

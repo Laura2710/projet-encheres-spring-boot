@@ -1,6 +1,5 @@
 package fr.eni.ecole.projet.encheres.bll;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,16 +54,27 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		isValid &= this.verifierVille(utilisateur.getAdresse().getVille(), be);
 		isValid &= this.verifierMotPasse(utilisateur.getMotDePasse(), be);
 		if (isValid) {
-			try {
-				this.adresseDAO.addAdresse(utilisateur.getAdresse());
-				String hashedPassword = passwordEncoder.encode(utilisateur.getMotDePasse());
-				utilisateur.setMotDePasse(hashedPassword);
-				this.utilisateurDAO.addUtilisateur(utilisateur);
-			} catch (DataAccessException e) {
-				System.out.println(e.getMessage());
-				be.add(BusinessCode.VALIDATION_DAL_AJOUT_UTILISATEUR);
-				throw be;
-			}
+				// Chercher si le pseudo existe déjà
+				boolean pseudoExist = this.utilisateurDAO.findPseudo(utilisateur.getPseudo());
+				// Chercher si l'email existe déjà 
+				boolean emailExist = this.utilisateurDAO.findEmail(utilisateur.getEmail());
+				
+				if (pseudoExist || emailExist) {
+					be.add(BusinessCode.VALIDATION_DAL_AJOUT_UTILISATEUR_EXISTANT);
+					throw be;
+				}
+				else {
+					this.adresseDAO.addAdresse(utilisateur.getAdresse());
+					String hashedPassword = passwordEncoder.encode(utilisateur.getMotDePasse());
+					utilisateur.setMotDePasse(hashedPassword);
+					int nbrLigne = this.utilisateurDAO.addUtilisateur(utilisateur);
+					
+					if (nbrLigne == 0) {
+						be.add(BusinessCode.VALIDATION_DAL_AJOUT_UTILISATEUR);
+						throw be;					
+					}
+				}
+			
 		}
 		else {
 			throw be;

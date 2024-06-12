@@ -6,4 +6,6 @@ public interface AdresseDAO {
 	Adresse getByID(long id);
 
 	void addAdresse(Adresse adresse);
+
+
 }
