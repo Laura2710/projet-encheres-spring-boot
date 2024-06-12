@@ -2,6 +2,7 @@ package fr.eni.ecole.projet.encheres.dal;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,6 +23,7 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 
 	private static final String FIND_BY_ID = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_article = :id";
 	private static final String UPDATE_PRIX_VENTE = "UPDATE articles_a_vendre SET prix_vente=:prixVente WHERE no_article=:idArticle";
+	private static final String FIND_ALL_STATUT_EN_COURS = "SELECT * FROM ARTICLES_A_VENDRE WHERE statut_enchere = 1";
 	
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -88,5 +90,10 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	}
 
 
+	@Override
+	public List<ArticleAVendre> findAllStatutEnCours() {
+		return namedParameterJdbcTemplate.query(FIND_ALL_STATUT_EN_COURS, new ArticleAVendreRowMapper());
+
+	}
 
 }

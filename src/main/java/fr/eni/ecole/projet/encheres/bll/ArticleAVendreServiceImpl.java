@@ -1,6 +1,9 @@
 package fr.eni.ecole.projet.encheres.bll;
 
+
 import java.time.LocalDate;
+import java.util.List;
+
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,26 +21,37 @@ import fr.eni.ecole.projet.encheres.dal.UtilisateurDAO;
 import fr.eni.ecole.projet.encheres.exceptions.BusinessCode;
 import fr.eni.ecole.projet.encheres.exceptions.BusinessException;
 
+
+
 @Service
 public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 
-	ArticleAVendreDAO articleAVendreDAO;
-	AdresseDAO adresseDAO;
-	CategorieDAO categorieDAO;
-	EnchereDAO enchereDAO;
-	UtilisateurDAO utilisateurDAO;
-	
 
+	private ArticleAVendreDAO articleAVendreDAO;
+	private AdresseDAO adresseDAO;
+	private UtilisateurDAO utilisateurDAO;
+	private CategorieDAO categorieDAO;
+	private EnchereDAO enchereDAO;
+
+	
 	public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO adresseDAO,
-			CategorieDAO categorieDAO, EnchereDAO enchereDAO, UtilisateurDAO utilisateurDAO) {
+			UtilisateurDAO utilisateurDAO, CategorieDAO categorieDAO, EnchereDAO enchereDAO) {
 		this.articleAVendreDAO = articleAVendreDAO;
 		this.adresseDAO = adresseDAO;
+		this.utilisateurDAO = utilisateurDAO;
 		this.categorieDAO = categorieDAO;
 		this.enchereDAO = enchereDAO;
-		this.utilisateurDAO = utilisateurDAO;
 	}
 
-
+	@Override
+	public List<ArticleAVendre> getArticlesAVendreEnCours() {
+		//Remonter la liste des article a vendre en cours depuis la DAL
+		List<ArticleAVendre> articlesAVendreEnCours = articleAVendreDAO.findAllStatutEnCours();
+		
+		return articlesAVendreEnCours;
+	}
+	
+	
 	@Override
 	public ArticleAVendre getById(int idArticle) {
 		ArticleAVendre article = this.articleAVendreDAO.getByID(idArticle);
@@ -161,5 +175,6 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 		derniereEnchere.setArticleAVendre(articleAVendreDAO.getByID(idArticle));
 		return derniereEnchere;
 	}
+	
 
 }

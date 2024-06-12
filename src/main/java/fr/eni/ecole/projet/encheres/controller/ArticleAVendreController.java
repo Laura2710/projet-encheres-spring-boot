@@ -1,6 +1,7 @@
 package fr.eni.ecole.projet.encheres.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +21,10 @@ import fr.eni.ecole.projet.encheres.bo.Utilisateur;
 import fr.eni.ecole.projet.encheres.exceptions.BusinessException;
 import jakarta.validation.Valid;
 
+
+
 @Controller
-@RequestMapping
+@RequestMapping("/")
 public class ArticleAVendreController {
 
 	ArticleAVendreService articleAVendreService;
@@ -33,6 +36,14 @@ public class ArticleAVendreController {
 		this.utilisateurService = utilisateurService;
 	}
 
+	@GetMapping
+	public String afficherArticleAVendre(Model model) {
+		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreEnCours();
+		model.addAttribute("articlesAVendre", articlesAVendre);
+		return "view-article-a-vendre";
+	}
+
+	
 	@GetMapping("/encheres/detail")
 	public String voirDetailEnchere(@RequestParam("id") int idArticle, Model model, Principal principal) {
 		try {
@@ -59,7 +70,7 @@ public class ArticleAVendreController {
 			return "view-detail-vente";		
 		}
 	}
-	
+
 	@PostMapping("/encheres/detail")
 	 public String soumettreOffreEnchere(@Valid @ModelAttribute("enchere") Enchere enchere, BindingResult bindingResult, Principal principal, Model model) {
 		int idArticle = (int) enchere.getArticleAVendre().getId();
@@ -96,5 +107,7 @@ public class ArticleAVendreController {
     	  return "view-detail-vente";	
       }
     }
+
+
 	
 }
