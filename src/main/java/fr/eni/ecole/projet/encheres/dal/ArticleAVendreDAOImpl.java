@@ -17,10 +17,10 @@ import fr.eni.ecole.projet.encheres.bo.Utilisateur;
 @Repository
 public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 
-	private static final String INSERT = "INSERT INTO ARTICLE_A_VENDRE(nom_article, description, date_debut_encheres, date_fin_encheres, statut_enchere, prix_initial, prix_vente, id_utilisateur, no_categorie, no_adresse_retrait) VALUES "
+	private static final String INSERT = "INSERT INTO ARTICLES_A_VENDRE(nom_article, description, date_debut_encheres, date_fin_encheres, statut_enchere, prix_initial, prix_vente, id_utilisateur, no_categorie, no_adresse_retrait) VALUES "
 			+ " (:nom, :description, :dateDebutEncheres, :dateFinEncheres, :statut, :prixInitial, :prixVente, :vendeur, :categorie, :adresse)";
 
-	private static final String FIND_BY_ID = "SELECT * FROM ARTICLE_A_VENDRE WHERE no_article = :id";
+	private static final String FIND_BY_ID = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_article = :id";
 	
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -33,7 +33,7 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	}
 
 	@Override
-	public void addArticle(ArticleAVendre articleAVendre, Utilisateur vendeur, Adresse adresse) {
+	public void addArticle(ArticleAVendre articleAVendre) {
 		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
 		namedParameters.addValue("nom", articleAVendre.getNom());
 		namedParameters.addValue("description", articleAVendre.getDescription());
@@ -44,7 +44,7 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		namedParameters.addValue("prixVente", articleAVendre.getPrixVente());
 		namedParameters.addValue("vendeur", articleAVendre.getVendeur().getNom());
 		namedParameters.addValue("categorie", articleAVendre.getCategorie().getId());
-		namedParameters.addValue("adresse", articleAVendre.getAdresse().getId());
+		namedParameters.addValue("adresse", articleAVendre.getAdresseRetrait().getId());
 		namedParameterJdbcTemplate.update(INSERT, namedParameters);
 	}
 	
@@ -72,7 +72,8 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 			
 			Adresse adresse = new Adresse();
 			adresse.setId(rs.getInt("no_adresse_retrait"));
-			articleAVendre.setAdresse(adresse);
+			articleAVendre.setAdresseRetrait(adresse);
+			
 			return articleAVendre;
 		}
 		

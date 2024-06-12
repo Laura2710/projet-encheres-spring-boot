@@ -3,7 +3,7 @@
 
 	<div id="contenu">
 		<ul>
-			<li>Date du jour : <span id="date"></span></li>
+			<li th:text="'Date du jour : ' + ${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></li>
 
 			<li>
 				<!-- A declencher quand la méthode pour enregistrer les membres en session sera OK -->
@@ -13,14 +13,5 @@
 
 		</ul>
 	</div>
-	
-	
-<script>
-let date1 = new Date().toLocaleDateString();
-let date=document.getElementById("date");
-date.innerText=date1;
-console.log(date1);
-</script>
-	
 
 </div>
