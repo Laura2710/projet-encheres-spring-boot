@@ -42,6 +42,7 @@ public class EncheresSecurity {
 		httpSecurity.authorizeHttpRequests(auth -> {
 			auth.requestMatchers("/").permitAll()
 				.requestMatchers("/utilisateur/creer-compte").permitAll()
+				.requestMatchers("/encheres/detail").hasRole("USER")
 				.requestMatchers("/css/*").permitAll()
 				.requestMatchers("/js/*").permitAll()
 				.requestMatchers("/images/*").permitAll()

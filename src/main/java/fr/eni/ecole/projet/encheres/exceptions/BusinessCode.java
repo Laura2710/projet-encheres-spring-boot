@@ -32,4 +32,10 @@ public class BusinessCode {
 	public static final String VALIDATION_MDP_NOESPACE =  "validation.utilisateur.mdp.nospace";
 	public static final String VALIDATION_DAL_AJOUT_UTILISATEUR = "validation.dal.ajout.utilisateur";
 	public static final String VALIDATION_DAL_AJOUT_UTILISATEUR_EXISTANT = "validation.dal.ajout.utilisateur.existant";
+	
+	public static final String VALIDATION_OFFRE_DATE_DEBUT = "validation.offre.date.debut";
+	public static final String VALIDATION_OFFRE_DATE_FIN = "validation.offre.date.fin";
+	public static final String VALIDATION_OFFRE_MONTANT = "validation.offre.montant";
+	public static final String VALIDATION_OFFRE_CREDIT = "validation.offre.credit";
+	public static final String VALIDATION_OFFRE_AJOUT_ENCHERE = "validation.offre.ajout.enchere";
 }

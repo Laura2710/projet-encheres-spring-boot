@@ -10,4 +10,6 @@ public interface ArticleAVendreDAO {
 	
 	void addArticle(ArticleAVendre articleAVendre, Utilisateur vendeur, Adresse adresse);
 
+	void updatePrixVente(long id, int montant);
+
 }

@@ -65,6 +65,17 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         return count > 0;
 	}
 
+	@Override
+	public int updateCredit(String pseudo, int credit) {
+		String sql = "UPDATE utilisateurs SET credit=:credit WHERE pseudo=:pseudo";
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("credit", credit);
+		params.addValue("pseudo", pseudo);
+		return namedParameterJdbcTemplate.update(sql, params); 
+	}
+	
+
+
 	
 	public class UtilisateurRowMapper implements RowMapper<Utilisateur> {
 
@@ -87,6 +98,11 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		}
 
 	}
+
+
+
+
+
 
 
 

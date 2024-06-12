@@ -10,13 +10,13 @@ import jakarta.validation.constraints.NotNull;
 public class Enchere implements Serializable{
 	private static final long serialVersionUID = 1L;
 	//Association avec l'acquereur
-	@NotNull
 	private Utilisateur acquereur;
 	//Association avec l'articleAVendre
 	@NotNull
 	private ArticleAVendre articleAVendre;
-	@NotNull
+
 	private LocalDateTime dateEnchere;
+	
 	@NotNull
 	@Min(value = 1)
 	private int montant;

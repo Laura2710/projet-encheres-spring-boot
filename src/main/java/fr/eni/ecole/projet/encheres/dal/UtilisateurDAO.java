@@ -10,4 +10,7 @@ public interface UtilisateurDAO {
 	boolean findEmail(String email);
 
 	boolean findPseudo(String pseudo);
+
+	int updateCredit(String pseudo, int credit);
+
 }

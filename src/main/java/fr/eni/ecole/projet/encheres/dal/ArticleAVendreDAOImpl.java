@@ -17,10 +17,11 @@ import fr.eni.ecole.projet.encheres.bo.Utilisateur;
 @Repository
 public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 
-	private static final String INSERT = "INSERT INTO ARTICLE_A_VENDRE(nom_article, description, date_debut_encheres, date_fin_encheres, statut_enchere, prix_initial, prix_vente, id_utilisateur, no_categorie, no_adresse_retrait) VALUES "
+	private static final String INSERT = "INSERT INTO ARTICLES_A_VENDRE(nom_article, description, date_debut_encheres, date_fin_encheres, statut_enchere, prix_initial, prix_vente, id_utilisateur, no_categorie, no_adresse_retrait) VALUES "
 			+ " (:nom, :description, :dateDebutEncheres, :dateFinEncheres, :statut, :prixInitial, :prixVente, :vendeur, :categorie, :adresse)";
 
-	private static final String FIND_BY_ID = "SELECT * FROM ARTICLE_A_VENDRE WHERE no_article = :id";
+	private static final String FIND_BY_ID = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_article = :id";
+	private static final String UPDATE_PRIX_VENTE = "UPDATE articles_a_vendre SET prix_vente=:prixVente WHERE no_article=:idArticle";
 	
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -46,6 +47,14 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		namedParameters.addValue("categorie", articleAVendre.getCategorie().getId());
 		namedParameters.addValue("adresse", articleAVendre.getAdresseRetrait().getId());
 		namedParameterJdbcTemplate.update(INSERT, namedParameters);
+	}
+	
+	@Override
+	public void updatePrixVente(long id, int montant) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("prixVente", montant);
+		params.addValue("idArticle", id);
+		namedParameterJdbcTemplate.update(UPDATE_PRIX_VENTE, params);		
 	}
 	
 	public class ArticleAVendreRowMapper implements RowMapper<ArticleAVendre> {
@@ -77,5 +86,7 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		}
 		
 	}
+
+
 
 }
