@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.eni.ecole.projet.encheres.bll.ArticleAVendreService;
 import fr.eni.ecole.projet.encheres.bll.UtilisateurService;
+import fr.eni.ecole.projet.encheres.bo.Adresse;
 import fr.eni.ecole.projet.encheres.bo.ArticleAVendre;
 import fr.eni.ecole.projet.encheres.bo.Categorie;
 import fr.eni.ecole.projet.encheres.bo.Enchere;
@@ -29,7 +30,6 @@ import jakarta.validation.Valid;
 public class ArticleAVendreController {
 
 	ArticleAVendreService articleAVendreService;
-	
 	UtilisateurService utilisateurService;
 
 	public ArticleAVendreController(ArticleAVendreService articleAVendreService,
@@ -60,8 +60,12 @@ public class ArticleAVendreController {
 	public String vendreArticle(Model model, Principal principal) {
 		String pseudo = principal.getName();
 		Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
+		List<Categorie> categories = this.articleAVendreService.getAllCategories();
+		List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
 		if(utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
 			model.addAttribute("articleAVendre", new ArticleAVendre());
+			model.addAttribute("categories", categories);
+			model.addAttribute("adressesRetrait", adressesRetrait);
 			return "view-vente-article";
 		} else {
 			return "redirect:/index";
@@ -92,7 +96,7 @@ public class ArticleAVendreController {
 			return "redirect:/index";
 		}
 		
-		return "view-vente-article";
+		return "index";
 	}
 	
 	@GetMapping("/encheres/detail")
