@@ -10,12 +10,9 @@
 		margin-bottom: 8px;
 		width: -webkit-fill-available;
 	}
-	.btnPrimaire {
-		width: -webkit-fill-available;
-	}
 }
 
-@media all and (max-width: 425px) {
+@media all and (max-width: 576px) {
 	.form {
 		gap: 0;
 		width: 100%;
@@ -36,5 +33,21 @@
 	#forgetPassword {
 		margin-bottom: 32px;
 		align-self: flex-end;
+	}
+	.btnPrimaire {
+		width: -webkit-fill-available;
+	}
+	
+	.article-vente {
+		flex-wrap: wrap;
+	}
+	
+	.article-vente section {
+		width:100%;
+	}
+
+	.warning {
+		width: 100%;
+		text-align: center;
 	}
 }

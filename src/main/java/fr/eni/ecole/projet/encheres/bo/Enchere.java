@@ -5,19 +5,16 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 
 public class Enchere implements Serializable{
 	private static final long serialVersionUID = 1L;
 	//Association avec l'acquereur
 	private Utilisateur acquereur;
 	//Association avec l'articleAVendre
-	@NotNull
 	private ArticleAVendre articleAVendre;
 
 	private LocalDateTime dateEnchere;
 	
-	@NotNull
 	@Min(value = 1)
 	private int montant;
 	

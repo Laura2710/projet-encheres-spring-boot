@@ -1,0 +1,17 @@
+<form xmlns:th="http://www.thymeleaf.org" data-th-fragment="frag-form-enchere" data-th-action="@{/encheres/detail}"
+	method="post" class="form form-enchere" data-th-object="${enchereForm}"
+>
+
+
+	<input type="hidden" data-th-field="*{articleAVendre.id}">
+	<div>
+		<label for="montant">Mon enchère :</label>
+		<input type="number" th:min="*{montant}" th:max="${utilisateur.credit}" data-th-field="*{montant}" class="input">
+		<input class="btnPrimaire" type="submit" value="Enchérir">
+	</div>
+	<!-- Affichage des Exceptions -->
+	<ul data-th-if="${#fields.hasErrors('*')}" class="listErrors">
+		<li th:each="err : ${#fields.errors('*')}" th:text="#{${err}}"></li>
+	</ul>
+
+</form>
