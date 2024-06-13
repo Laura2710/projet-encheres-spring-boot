@@ -2,6 +2,7 @@ package fr.eni.ecole.projet.encheres.dal;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,6 +17,8 @@ import fr.eni.ecole.projet.encheres.bo.Adresse;
 @Repository
 public class AdresseDAOImpl implements AdresseDAO {
 
+	private static final String FIND_ALL = "SELECT no_adresse, rue, code_postal, ville, adresse_eni FROM ADRESSES WHERE adresse_eni = 1";
+	
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -44,6 +47,11 @@ public class AdresseDAOImpl implements AdresseDAO {
 			adresse.setId(keyHolder.getKey().longValue());
 		}
 
+	}
+	
+	@Override
+	public List<Adresse> findAll() {
+		return namedParameterJdbcTemplate.query(FIND_ALL, new AdresseRowMapper());
 	}
 
 	public class AdresseRowMapper implements RowMapper<Adresse> {
