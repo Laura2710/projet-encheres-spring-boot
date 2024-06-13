@@ -125,7 +125,9 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 			throw be;
 		}
 
+
 	}
+
 
 	@Transactional
 	@Override
@@ -258,6 +260,19 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 		return true;
 	}
 
+	
+	@Override
+	public List<Categorie> getAllCategories() {
+		return categorieDAO.findAll();
+	}
+	
+	public List<Adresse> getAllAdressesRetrait(){
+		return adresseDAO.findAll();
+	}
+	
+	// Méthodes pour enchères
+
+
 	private boolean verifierMontant(int montant, int prixInitial, int prixVente, BusinessException be) {
 		if (prixVente > prixInitial) {
 			if (montant <= prixVente) {
@@ -288,6 +303,7 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 		}
 		return true;
 	}
+	
 
 	@Override
 	public Enchere getEnchereByIdArticle(int idArticle) {
@@ -302,5 +318,6 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 		derniereEnchere.setMontant(article.getPrixVente() + 1);
 		return derniereEnchere;
 	}
+
 
 }

@@ -3,20 +3,53 @@
 	data-th-replace="~{layouts/layout :: layout-enchere(
 			titrePage=~{:: title}, 
 			contenuPage=~{:: main}, 
-			ressourceSupp=~{})}">
-			
+			ressourceSupp=~{:: link})}">
 <head>
-	<title>EniEncheres</title>
+<title>Enchères en Cours</title>
+<link rel="stylesheet" data-th-href="@{/css/article-card.css}">
 </head>
-
 <body>
 	<main>
-		<section class="center-section">
-			<h1 style="text-align: center;">Liste des enchères</h1>
-		</section>
+		<h1>Liste des enchères</h1>
 		
-	<h3>Filtres : </h3>
+		<div class="filterSection">
+			<h2>Filtres : </h2>
+			<form action="post">
+			<ul>
+				<li><input type="text" id="inputName" placeholder="Le nom de l'article contient :"></li>
+				<li><label for="inputCategorie" data-th-field="${nomRecherché}">Catégories</label>
+					<select id="inputCategorie" name="inputCategorie" data-th-field="${categorieRecherché}">
+						<option value="0">Toutes</option>
+						<option data-th-each="categorie : ${listCategorie}" data-th-text="${categorie.libelle}" data-th-value="${categorie.id}"></option>
+					</select>
+				</li>
+			</ul>
+			<ul>
+			<li><input type="submit" value="Rechercher"></li>
+			<li><a href="/" >Annuler</a></li>
+			</ul>
+		</form>
+		</div>
+		
+		<div class="listCard">
+			<div class="articleCard" data-th-each="article : ${articlesAVendre}">
+				<h2 data-th-text="${article.nom}"></h2>
+				<div class="articleCardDetails" >
+					<h3>
+						Prix : <span data-th-if="${article.prixVente != 0}" data-th-text="${article.prixVente}"></span>
+						<span data-th-if="${article.prixVente == 0}" data-th-text="${article.prixInitial}"></span> point(s)
+					</h3>
+					<h3>
+						Fin de l'enchère : <span data-th-text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"></span>
+					</h3>
+					<h3>
+						Vendeur : <span data-th-text="${article.vendeur.pseudo}"></span>
+					</h3>
+				</div>
+			</div>
+		</div>
+
+
 	</main>
 </body>
-			
 </html>

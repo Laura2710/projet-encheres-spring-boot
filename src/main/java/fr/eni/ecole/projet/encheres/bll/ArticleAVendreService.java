@@ -2,11 +2,14 @@ package fr.eni.ecole.projet.encheres.bll;
 
 import java.util.List;
 
+import fr.eni.ecole.projet.encheres.bo.Adresse;
 import fr.eni.ecole.projet.encheres.bo.ArticleAVendre;
+import fr.eni.ecole.projet.encheres.bo.Categorie;
 import fr.eni.ecole.projet.encheres.bo.Enchere;
 import fr.eni.ecole.projet.encheres.bo.Utilisateur;
 
 public interface ArticleAVendreService {
+
 	List<ArticleAVendre> getArticlesAVendreEnCours();
 
 	ArticleAVendre getById(int idArticle);
@@ -16,5 +19,11 @@ public interface ArticleAVendreService {
 	Enchere getEnchereByIdArticle(int idArticle);
 
 	void mettreArticleEnVente(ArticleAVendre articleAVendre);
+	
+	List<Categorie> getAllCategories();
+
+	List<Adresse> getAllAdressesRetrait();
+
+
 
 }

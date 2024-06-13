@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.eni.ecole.projet.encheres.bll.ArticleAVendreService;
 import fr.eni.ecole.projet.encheres.bll.UtilisateurService;
+import fr.eni.ecole.projet.encheres.bo.Adresse;
 import fr.eni.ecole.projet.encheres.bo.ArticleAVendre;
+import fr.eni.ecole.projet.encheres.bo.Categorie;
 import fr.eni.ecole.projet.encheres.bo.Enchere;
 import fr.eni.ecole.projet.encheres.bo.Utilisateur;
 import fr.eni.ecole.projet.encheres.exceptions.BusinessCode;
@@ -37,24 +39,41 @@ public class ArticleAVendreController {
 		this.utilisateurService = utilisateurService;
 	}
 
+
+	@GetMapping
+	public String afficherArticleAVendre(Model model) {
+		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreEnCours();
+		model.addAttribute("articlesAVendre", articlesAVendre);
+		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
+		model.addAttribute("listCategorie",listCategorie);
+		//Ajout au model ma variable "nomRecherché" qui contiendra la chaine de caractère a retrouver dans le nom des articles
+		String nomRecherché = null;
+		model.addAttribute("nomRecherché", nomRecherché);
+		//Ajout au model de ma variable categorieRecherché qui contiendra l'id de la catégorie a rechercher
+		int categorieRecherché = 0 ;
+		model.addAttribute("categorieRecherché", categorieRecherché);
+		return "index";
+	}
+
+
+	
 	@GetMapping("/vendre")
 	public String vendreArticle(Model model, Principal principal) {
 		String pseudo = principal.getName();
 		Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
-		if (utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
+
+		List<Categorie> categories = this.articleAVendreService.getAllCategories();
+		List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
+		if(utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
 			model.addAttribute("articleAVendre", new ArticleAVendre());
+			model.addAttribute("categories", categories);
+			model.addAttribute("adressesRetrait", adressesRetrait);
 			return "view-vente-article";
 		} else {
 			return "redirect:/index";
 		}
 	}
 
-	@GetMapping
-	public String afficherArticleAVendre(Model model) {
-		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreEnCours();
-		model.addAttribute("articlesAVendre", articlesAVendre);
-		return "view-article-a-vendre";
-	}
 
 	@PostMapping("/vendre")
 	public String vendreArticle(Principal principal,
@@ -79,7 +98,7 @@ public class ArticleAVendreController {
 			return "redirect:/index";
 		}
 
-		return "view-vente-article";
+		return "index";
 	}
 
 	@GetMapping("/encheres/detail")
