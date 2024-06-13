@@ -300,4 +300,9 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		derniereEnchere.setArticleAVendre(articleAVendreDAO.getByID(idArticle));
 		return derniereEnchere;
 	}
+
+	@Override
+	public List<Categorie> getAllCategories() {
+		return categorieDAO.findAll();
+	}
 }

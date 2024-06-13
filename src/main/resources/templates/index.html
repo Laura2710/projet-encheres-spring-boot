@@ -11,6 +11,26 @@
 <body>
 	<main>
 		<h1>Liste des enchères</h1>
+		
+		<div class="filterSection">
+			<h2>Filtres : </h2>
+			<form action="post">
+			<ul>
+				<li><input type="text" id="inputName" placeholder="Le nom de l'article contient :"></li>
+				<li><label for="inputCategorie" data-th-field="${nomRecherché}">Catégories</label>
+					<select id="inputCategorie" name="inputCategorie" data-th-field="${categorieRecherché}">
+						<option value="0">Toutes</option>
+						<option data-th-each="categorie : ${listCategorie}" data-th-text="${categorie.libelle}" data-th-value="${categorie.id}"></option>
+					</select>
+				</li>
+			</ul>
+			<ul>
+			<li><input type="submit" value="Rechercher"></li>
+			<li><a href="/" >Annuler</a></li>
+			</ul>
+		</form>
+		</div>
+		
 		<div class="listCard">
 			<div class="articleCard" data-th-each="article : ${articlesAVendre}">
 				<h2 data-th-text="${article.nom}"></h2>
