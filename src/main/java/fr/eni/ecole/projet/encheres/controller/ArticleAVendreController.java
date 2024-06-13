@@ -38,6 +38,13 @@ public class ArticleAVendreController {
 		this.utilisateurService = utilisateurService;
 	}
 
+	@GetMapping
+	public String afficherArticleAVendre(Model model) {
+		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreEnCours();
+		model.addAttribute("articlesAVendre", articlesAVendre);
+		return "index";
+	}
+	
 	@GetMapping("/vendre")
 	public String vendreArticle(Model model, Principal principal) {
 		String pseudo = principal.getName();
@@ -54,12 +61,6 @@ public class ArticleAVendreController {
 		}
 	}
 
-	@GetMapping
-	public String afficherArticleAVendre(Model model) {
-		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreEnCours();
-		model.addAttribute("articlesAVendre", articlesAVendre);
-		return "view-article-a-vendre";
-	}
 
 	
 	@PostMapping("/vendre")

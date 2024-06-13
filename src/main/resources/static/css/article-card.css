@@ -1,19 +1,31 @@
-
+.listCard{
+	margin-top: 2rem;
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
 .articleCard{
     margin: 5px;
-    padding-top: 10px;
+    padding: 10px;
     display: flex;
     flex-flow: column;
-    align-items: center;
     height: 120px;
-    width: 200px;
-    background-color: #134a7f;
+    width: 350px;
+    background-color: #00ABE4;
     border-radius: 15px;
     box-shadow: 5px 5px 5px black;
     color: white;
 }
 .articleCard h2{
-    font-size: 1,5rem;
+	padding-bottom: 5px;
+    font-size: 1,2rem;
+    align-self: center;
+}
+.articleCardDetails {
+	align-self: flex-start;
+	display: flex;
+	flex-flow: column;
+	align-items: flex-start;
 }
 .articleCard h3{
     font-size: 1rem;

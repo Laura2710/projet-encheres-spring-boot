@@ -2,12 +2,12 @@
 	data-th-fragment="frag-entete">
 	
 <section id="entete-titre">
-	<h1> <a href="/"><img data-th-src="@{/images/logoENI.png}"><span>Eni-Encheres</span></a></h1>
+	<a href="/"><img data-th-src="@{/images/logoENI.png}"><span>Eni-Encheres</span></a>
 </section>
 
 <nav>
 	<ul>
-			<li><a href="/">Accueil</a></li>
+			<li ><a href="/">Accueil</a></li>
 			
 			<!-- A declencher quand la méthode pour enregistrer les membres en session sera OK -->
 			<li data-th-if="${!#authorization.expression('isAuthenticated()')}">

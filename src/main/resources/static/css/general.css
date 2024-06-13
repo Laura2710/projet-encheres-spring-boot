@@ -9,6 +9,8 @@
 
 /* Fragment Entete */
 header {
+	background-color: #00ABE4;
+	color: black;
 	display: flex;
 	align-items: baseline;
 	justify-content: space-between;
@@ -53,10 +55,13 @@ main {
     flex-direction: column;
     padding: 0.8%;
 }
+h1 {
+	align-self: center
+}
 
 footer {
-	background-color: #c2c2c2;
-	color: white;
+	background-color: #00ABE4;
+	color: black;
 	padding: 0.8%;
 }
 
@@ -64,7 +69,7 @@ footer {
 
 @media screen and (max-width: 750px) {
 	
-header h1 {
+#entete-titre {
 	display: flex;
 	padding: 10px;
 	
