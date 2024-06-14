@@ -22,13 +22,15 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 			+ " (:nom, :description, :dateDebutEncheres, :dateFinEncheres, :statut, :prixInitial, :prixVente, :vendeur, :categorie, :adresse)";
 
 	private static final String FIND_BY_ID = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_article = :id";
-
 	private static final String UPDATE_PRIX_VENTE = "UPDATE articles_a_vendre SET prix_vente=:prixVente WHERE no_article=:idArticle";
 	private static final String FIND_ALL_STATUT_EN_COURS = "SELECT * FROM ARTICLES_A_VENDRE WHERE statut_enchere = 1";
-	
+	private static final String DELETE_VENTE = "DELETE FROM articles_a_vendre WHERE no_article=:idArticle AND statut_enchere=0";
+	private static final String GET_VENTE_NON_COMMENCEES_DU_JOUR = "SELECT * FROM articles_a_vendre WHERE statut_enchere=0";
+	private static final String UPDATE_STATUS_TO_ONE = "UPDATE articles_a_vendre SET statut_enchere=1 WHERE no_article=:idArticle";
+
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	
+
 	@Override
 	public ArticleAVendre getByID(long id) {
 		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
@@ -51,15 +53,15 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		namedParameters.addValue("adresse", articleAVendre.getAdresseRetrait().getId());
 		namedParameterJdbcTemplate.update(INSERT, namedParameters);
 	}
-	
+
 	@Override
 	public void updatePrixVente(long id, int montant) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("prixVente", montant);
 		params.addValue("idArticle", id);
-		namedParameterJdbcTemplate.update(UPDATE_PRIX_VENTE, params);		
+		namedParameterJdbcTemplate.update(UPDATE_PRIX_VENTE, params);
 	}
-	
+
 	public class ArticleAVendreRowMapper implements RowMapper<ArticleAVendre> {
 
 		@Override
@@ -73,28 +75,46 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 			articleAVendre.setStatut(rs.getInt("statut_enchere"));
 			articleAVendre.setPrixInitial(rs.getInt("prix_initial"));
 			articleAVendre.setPrixVente(rs.getInt("prix_vente"));
-			
+
 			Utilisateur utilisateur = new Utilisateur();
 			utilisateur.setPseudo(rs.getString("id_utilisateur"));
 			articleAVendre.setVendeur(utilisateur);
-			
+
 			Categorie categorie = new Categorie();
 			categorie.setId(rs.getInt("no_categorie"));
 			articleAVendre.setCategorie(categorie);
-			
+
 			Adresse adresse = new Adresse();
 			adresse.setId(rs.getInt("no_adresse_retrait"));
 			articleAVendre.setAdresseRetrait(adresse);
 			return articleAVendre;
 		}
-		
-	}
 
+	}
 
 	@Override
 	public List<ArticleAVendre> findAllStatutEnCours() {
 		return namedParameterJdbcTemplate.query(FIND_ALL_STATUT_EN_COURS, new ArticleAVendreRowMapper());
 
+	}
+
+	@Override
+	public int annulerVente(long idArticle) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("idArticle", idArticle);
+		return namedParameterJdbcTemplate.update(DELETE_VENTE, params);
+	}
+
+	@Override
+	public List<ArticleAVendre> getVentesNonCommencees() {
+		return namedParameterJdbcTemplate.query(GET_VENTE_NON_COMMENCEES_DU_JOUR, new ArticleAVendreRowMapper());
+	}
+
+	@Override
+	public void mettreStatutAUn(long idArticle) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("idArticle", idArticle);
+		namedParameterJdbcTemplate.update(UPDATE_STATUS_TO_ONE, params);
 	}
 
 }

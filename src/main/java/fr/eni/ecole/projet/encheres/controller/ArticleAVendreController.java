@@ -98,6 +98,27 @@ public class ArticleAVendreController {
 
 		return "index";
 	}
+	
+	@GetMapping("/vente/annuler") 
+	public String annulerVente(@RequestParam("id") int idArticle, Principal principal, Model model) {
+		ArticleAVendre article = this.articleAVendreService.getById(idArticle);
+		// Vérifier que le vendeur est l'utilisateur connecté
+		if (article.getVendeur().getPseudo().equals(principal.getName())) {
+			try {
+				this.articleAVendreService.annulerVente(article);
+			}
+			catch (BusinessException e) {
+				List<String> errors = new ArrayList<String>();
+				e.getClefsExternalisations().forEach(key -> {
+					errors.add(key);
+				});
+				model.addAttribute("errorBLL", errors);
+				return "view-vente-article";
+			}
+		}
+
+		return "redirect:/";
+	}
 
 	@GetMapping("/encheres/detail")
 	public String voirDetailEnchere(@RequestParam("id") int idArticle, Model model, Principal principal) {

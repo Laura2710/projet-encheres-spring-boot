@@ -24,6 +24,13 @@ public interface ArticleAVendreService {
 
 	List<Adresse> getAllAdressesRetrait();
 
+	void annulerVente(ArticleAVendre article);
+
+
+	List<ArticleAVendre> getVentesNonCommencees();
+
+	void activerVente(long id);
+
 
 
 }

@@ -66,4 +66,8 @@ public class BusinessCode {
 	public static final String VALIDATION_OFFRE_AJOUT_ENCHERE = "validation.offre.ajout.enchere";
 
 	public static final String VALIDATION_OFFRE_DONNEES_INACCESSIBLES = "validation.offre.donnees.inaccessibles";
+
+	public static final String VALIDATION_ANNULER_VENTE_DATE_DEBUT = "validation.annuler.vente.date.debut";
+
+	public static final String VALIDATION_ANNULER_VENTE = "validation.annuler.vente";
 }

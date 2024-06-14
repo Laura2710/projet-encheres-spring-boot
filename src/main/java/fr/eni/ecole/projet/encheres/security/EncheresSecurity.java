@@ -48,6 +48,7 @@ public class EncheresSecurity {
 				.requestMatchers("/js/*").permitAll()
 				.requestMatchers("/images/*").permitAll()
 				.requestMatchers("/vendre").hasRole("USER")
+				.requestMatchers("/vente/annuler").hasRole("USER")
 				.anyRequest().authenticated();
 		});
 		httpSecurity.formLogin(form -> {

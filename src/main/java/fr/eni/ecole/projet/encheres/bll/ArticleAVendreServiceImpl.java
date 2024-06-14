@@ -314,4 +314,44 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 		return enchere;
 	}
 
+	@Override
+	public void annulerVente(ArticleAVendre article) {
+		BusinessException be = new BusinessException();
+		boolean isValid = true;
+
+		isValid &= validerAnnulationDateDebutEnchere(article.getDateDebutEncheres(), be);
+
+		if (isValid) {
+			System.out.println(article);
+			int count = this.articleAVendreDAO.annulerVente(article.getId());
+			if (count == 0) {
+				be.add(BusinessCode.VALIDATION_ANNULER_VENTE);
+				throw be;
+			}
+		} else {
+			throw be;
+		}
+
+	}
+
+	private boolean validerAnnulationDateDebutEnchere(LocalDate dateDebutEncheres, BusinessException be) {
+		LocalDate today = LocalDate.now();
+		if (dateDebutEncheres.isBefore(today) || dateDebutEncheres.equals(today)) {
+			be.add(BusinessCode.VALIDATION_ANNULER_VENTE_DATE_DEBUT);
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public List<ArticleAVendre> getVentesNonCommencees() {
+		return this.articleAVendreDAO.getVentesNonCommencees();
+	}
+
+	@Override
+	public void activerVente(long id) {
+		this.articleAVendreDAO.mettreStatutAUn(id);
+
+	}
+
 }
