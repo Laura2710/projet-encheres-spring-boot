@@ -39,7 +39,6 @@ public class ArticleAVendreController {
 		this.utilisateurService = utilisateurService;
 	}
 
-
 	@GetMapping
 	public String afficherArticleAVendre(Model model) {
 		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreEnCours();
@@ -67,8 +66,6 @@ public class ArticleAVendreController {
 		
 	}
 
-
-	
 	@GetMapping("/vendre")
 	public String vendreArticle(Model model, Principal principal) {
 		String pseudo = principal.getName();
@@ -76,7 +73,7 @@ public class ArticleAVendreController {
 
 		List<Categorie> categories = this.articleAVendreService.getAllCategories();
 		List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
-		if(utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
+		if (utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
 			model.addAttribute("articleAVendre", new ArticleAVendre());
 			model.addAttribute("categories", categories);
 			model.addAttribute("adressesRetrait", adressesRetrait);
@@ -85,7 +82,6 @@ public class ArticleAVendreController {
 			return "redirect:/index";
 		}
 	}
-
 
 	@PostMapping("/vendre")
 	public String vendreArticle(Principal principal,
@@ -115,80 +111,104 @@ public class ArticleAVendreController {
 
 	@GetMapping("/encheres/detail")
 	public String voirDetailEnchere(@RequestParam("id") int idArticle, Model model, Principal principal) {
-	
 		try {
-			ArticleAVendre article = this.articleAVendreService.getById(idArticle);
 			Utilisateur utilisateur = utilisateurService.getByPseudo(principal.getName());
-			String vendeur = article.getVendeur().getPseudo();
-			boolean leVendeurEstConnecte = vendeur.equals(principal.getName());
-			
+			ArticleAVendre article = this.articleAVendreService.getById(idArticle);
+			Enchere enchere = this.articleAVendreService.getEnchereByIdArticle(idArticle);
+			injecterDonneesEnchere(model, utilisateur, article, enchere);
+
 			if (article.getStatut() == 1) {
-				// Récupération des détails de l'enchère associée à cet article
-				Enchere enchere = this.articleAVendreService.getEnchereByIdArticle(idArticle);		
-				enchere.setArticleAVendre(article);
-				ajouterDonneesEnchere(model, utilisateur, article, enchere);
-				model.addAttribute("leVendeurEstConnecte", leVendeurEstConnecte);;
 				model.addAttribute("enchereForm", enchere);
-				return "view-detail-vente";
 			}
-			// Le vendeur peut modifier la vente (si c’est son article et que l’enchère n’a pas débuté)
-			if (article.getStatut() == 0 && leVendeurEstConnecte) {
-				// TODO
-				return "redirect:/";		
-				
-			}
-			
-		}
-		 catch (BusinessException e) {
-			 List<String> errors = new ArrayList<String>();
+
+			return "view-detail-vente";
+
+		} catch (BusinessException e) {
+			List<String> errors = new ArrayList<String>();
 			e.getClefsExternalisations().forEach(key -> {
 				errors.add(key);
 			});
 			model.addAttribute("errorBLL", errors);
 			return "view-detail-vente";
 		}
-		return "redirect:/";	
 	}
-
-
 
 	@PostMapping("/encheres/detail")
 	public String soumettreOffreEnchere(@Valid @ModelAttribute("enchereForm") Enchere enchereSoumise,
 			BindingResult bindingResult, Principal principal, Model model) {
-	    
-	    String pseudoUtilisateur = principal.getName();
-	    Utilisateur utilisateur = utilisateurService.getByPseudo(pseudoUtilisateur);
-	    
+
+	    // Récupération de l'utilisateur connecté à partir de son pseudo
+	    Utilisateur utilisateur = utilisateurService.getByPseudo(principal.getName());
+	   
+	    // Récupération de l'identifiant de l'article soumis pour enchère
 	    int idArticle = (int) enchereSoumise.getArticleAVendre().getId();
-	    ArticleAVendre article = articleAVendreService.getById(idArticle);
 	    
-	    Enchere enchere = articleAVendreService.getEnchereByIdArticle(idArticle);
+		try {
+	        // Récupération de l'article s'il existe et de son enchère associée
+			ArticleAVendre article = articleAVendreService.getById(idArticle);
+			
+	        // Vérification du statut de l'article et du vendeur pour rediriger si nécessaire
+			if (article.getStatut() != 1 || article.getVendeur().getPseudo().equals(principal.getName())) {
+				return "redirect:/encheres/detail?id=" + enchereSoumise.getArticleAVendre().getId();
+			}
 
-	    if (bindingResult.hasErrors()) {
-	        ajouterDonneesEnchere(model, utilisateur, article, enchere);
-	        return "view-detail-vente";
-	    }
+	        // Vérification des erreurs de validation du formulaire
+			if (bindingResult.hasErrors()) {
+				Enchere enchere = articleAVendreService.getEnchereByIdArticle(idArticle);
+				injecterDonneesEnchere(model, utilisateur, article, enchere);
+				return "view-detail-vente";
+			}
 
-	    if (!article.getVendeur().getPseudo().equals(pseudoUtilisateur)) {
-	        try {
-	            enchereSoumise.setArticleAVendre(article);
-	            articleAVendreService.faireUneOffre(enchereSoumise, utilisateur);
-	        } catch (BusinessException e) {
-	            e.getClefsExternalisations().forEach(key -> {
-	                ObjectError err = new ObjectError("globalError", key);
-	                bindingResult.addError(err);
-	            });
-	            ajouterDonneesEnchere(model, utilisateur, article, enchere);
-	            return "view-detail-vente";
-	        }
-	    }
+			try {
+	            // Soumission de l'offre pour l'enchère
+				articleAVendreService.faireUneOffre(enchereSoumise, utilisateur);
+			} catch (BusinessException e) {
+	            handleBusinessException(e, bindingResult, model, utilisateur, idArticle);
+				return "view-detail-vente";
+			} catch (RuntimeException e) { // Capturer l'exception venant de @Transactionnal
+				handleRuntimeException(e, model);
+				return "view-detail-vente";
+			}
 
-	    return "redirect:/encheres/detail?id=" + enchereSoumise.getArticleAVendre().getId();
+		} catch (BusinessException e) {
+	        handleBusinessException(e, model);
+			return "view-detail-vente";
+		}
+
+		return "redirect:/encheres/detail?id=" + enchereSoumise.getArticleAVendre().getId();
+	}
+
+	private void injecterDonneesEnchere(Model model, Utilisateur utilisateur, ArticleAVendre article, Enchere enchere) {
+		model.addAttribute("utilisateur", utilisateur);
+		model.addAttribute("article", article);
+		model.addAttribute("enchere", enchere);
+		boolean leVendeurEstConnecte = article.getVendeur().getPseudo().equals(utilisateur.getPseudo());
+		model.addAttribute("leVendeurEstConnecte", leVendeurEstConnecte);
 	}
 	
-	private void ajouterDonneesEnchere(Model model, Utilisateur utilisateur, ArticleAVendre article, Enchere enchere) {
-	    model.addAttribute("utilisateur", utilisateur);
-	    model.addAttribute("article", article);
-	    model.addAttribute("enchere", enchere);
+	private void preparerDonneesEnchere(Model model, Utilisateur utilisateur, int idArticle) {
+	    ArticleAVendre article = articleAVendreService.getById(idArticle);
+	    Enchere enchere = articleAVendreService.getEnchereByIdArticle(idArticle);
+	    injecterDonneesEnchere(model, utilisateur, article, enchere);
+	}
+	
+	
+	private void handleBusinessException(BusinessException e, Model model) {
+	    List<String> errors = e.getClefsExternalisations();
+	    model.addAttribute("errorBLL", errors);
+	}
+
+	private void handleBusinessException(BusinessException e, BindingResult bindingResult, Model model,
+	                                      Utilisateur utilisateur, int idArticle) {
+	    List<String> errors = e.getClefsExternalisations();
+	    errors.forEach(key -> {
+	        ObjectError error = new ObjectError("globalError", key);
+	        bindingResult.addError(error);
+	    });
+	    preparerDonneesEnchere(model, utilisateur, idArticle);
+	}
+
+	private void handleRuntimeException(RuntimeException e, Model model) {
+	    model.addAttribute("errorBLL", "validation.offre.donnees.inaccessibles");
 	}
 }
