@@ -16,18 +16,40 @@
 			<form data-th-action="@{/rechercher}" method="post">
 			<ul>
 				<li><input type="text" id="inputName" name="nomRecherche" placeholder="Le nom de l'article contient :" min='5' maxlength="30" data-th-value="${nomRecherche}"></li>
-				<li><input type="submit" value="Rechercher" class="btnFilter" ></li>
-			</ul>
-			<ul>
 				<li><label for="inputCategorie" >Catégories</label>
 					<select id="inputCategorie" name="categorieRecherche" data-th-value="${categorieRecherche}">
 						<option value="0">Toutes</option>
 						<option data-th-each="categorie : ${listCategorie}" data-th-text="${categorie.libelle}" data-th-value="${categorie.id}" th:selected="(${categorie.id} == ${categorieRecherche})"></option>
 					</select>
 				</li>
+			</ul>
+			<ul>
+				<li><input type="submit" value="Rechercher" class="btnFilter" ></li>
 			<li><a href="/" class="btnFilter">Annuler</a></li>
 			</ul>
-		</form>
+			<div data-th-if="${#authorization.expression('isAuthenticated()') && !#authorization.expression('hasRole(''ADMIN'')') }">
+				<ul>
+					<li><input type="radio" id="achats" name="buySell" checked> <label for="achats">Achats</label> </li>
+					<li><input type="radio" id="ventes" name="buySell"> <label for="ventes">Mes Ventes</label> </li>
+				</ul>
+				<ul>
+				<li>
+				<select id="inputEnchere" name="mesEncheres">
+					<option value="0" selected>Enchères ouvertes</option>
+					<option value="1" >Mes enchères en cours</option>
+					<option value="2" >Mes enchères remportées</option>
+				</select>
+				</li>
+				<li>
+					<select id="inputStatut" name="statutRecherche">
+					<option value="0" selected>Mes ventes en cours</option>
+					<option value="1">Mes ventes non débutées</option>
+					<option value="2">Mes ventes terminées</option>
+					</select>
+				</li>
+				</ul>
+				</div>
+			</form>
 		</div>
 		
 		<div class="listCard">

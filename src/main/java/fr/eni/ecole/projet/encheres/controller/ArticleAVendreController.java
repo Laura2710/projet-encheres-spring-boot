@@ -40,28 +40,42 @@ public class ArticleAVendreController {
 	}
 
 	@GetMapping
-	public String afficherArticleAVendre(Model model) {
+	public String afficherArticleAVendre(Model model, Principal principal) {
+		String pseudo = principal.getName();
+		Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
+		
 		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreEnCours();
 		model.addAttribute("articlesAVendre", articlesAVendre);
 		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
 		model.addAttribute("listCategorie",listCategorie);
-		//Ajout au model ma variable "nomRecherché" qui contiendra la chaine de caractère a retrouver dans le nom des articles
+		//Ajout au model ma variable "nomRecherche" qui contiendra la chaine de caractère a retrouver dans le nom des articles
 		String nomRecherche = null;
 		model.addAttribute("nomRecherche", nomRecherche);
-		//Ajout au model de ma variable categorieRecherché qui contiendra l'id de la catégorie a rechercher
+		//Ajout au model de ma variable categorieRecherche qui contiendra l'id de la catégorie a rechercher
 		int categorieRecherche = 0 ;
 		model.addAttribute("categorieRecherche", categorieRecherche);
+		//Ajout au model ma variable "statutRecherche" qui contient l'int du statut recherché, disponible seulement en mode connecté
+		if (utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
+		int statutRecherche = 0;
+		model.addAttribute("statutRecherche", statutRecherche);
+		}
 		return "index";
 	}
 	
 	@PostMapping("/rechercher")
-	public String afficherArticleAVendre(@RequestParam(value = "nomRecherche") String nomRecherche,@RequestParam(value = "categorieRecherche") int categorieRecherche,Model model) {
+	public String afficherArticleAVendre(@RequestParam(value = "nomRecherche") String nomRecherche,@RequestParam(value = "categorieRecherche") int categorieRecherche,
+										@RequestParam(value = "statutRecherche") int statutRecherche,Model model, Principal principal) {
+		String pseudo = principal.getName();
+		Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
+		
+		
 		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreAvecParamètres(nomRecherche, categorieRecherche);
 		model.addAttribute("articlesAVendre", articlesAVendre);
 		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
 		model.addAttribute("listCategorie",listCategorie);
 		model.addAttribute("nomRecherche", nomRecherche);
 		model.addAttribute("categorieRecherche", categorieRecherche);
+		model.addAttribute("statutRecherche", statutRecherche);
 		return "index";
 		
 	}

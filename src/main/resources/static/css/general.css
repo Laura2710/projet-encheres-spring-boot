@@ -1,9 +1,9 @@
 @charset "UTF-8";
-
+ 
 @import
 	url('https://fonts.googleapis.com/css?family=Work%20Sans:700|Work%20Sans:400')
 	;
-
+ 
 :root {
 	--text: hsl(210, 22%, 7%);
 	--background: hsl(200, 27%, 98%);
@@ -12,7 +12,7 @@
 	--accent: hsl(71, 65%, 45%);
 	--bg: hsl(206deg 100% 25%/ 10%);
 }
-
+ 
 * {
 	margin: 0;
 	padding: 0;
@@ -20,22 +20,22 @@
 	border-collapse: collapse;
 	box-sizing: border-box;
 }
-
+ 
 body {
 	font-family: 'Work Sans';
 	font-weight: 400;
 }
-
+ 
 h1, h2, h3, h4, h5 {
 	font-family: 'Work Sans';
 	font-weight: 700;
 }
-
+ 
 h1 {
 	font-size: 3.366rem;
 	align-self: center;
 }
-
+ 
 /* Fragment Entete */
 header {
 	display: flex;
@@ -44,13 +44,13 @@ header {
 	padding: 0.8%;
 	align-items: center;
 }
-
+ 
 #entete-titre {
 	display: flex;
 	font-size: 1.3em;
 	align-items: center;
 }
-
+ 
 #entete-titre a {
 	text-decoration: none;
 	color: black;
@@ -58,45 +58,45 @@ header {
 	align-items: center;
 	gap: 8px;
 }
-
+ 
 header li {
 	list-style: none;
 	display: inline-block;
 }
-
+ 
 /* Fragment Encart */
 #encart {
 	display: flex;
 	list-style-type: none;
 	justify-content: flex-end;
 }
-
+ 
 #contenu {
 	display: flex;
 	flex-direction: column;
 	border: 3px solid;
 	padding: 0.5%;
 }
-
+ 
 main {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
 	padding: 0.8%;
 }
-
+ 
 main a {
 	text-decoration: underline;
 }
-
-
+ 
+ 
 footer {
 	background-color: var(--primary);
 	color: white;
 	padding: 1em;
 	text-align: center;
 }
-
+ 
 /* Responsive */
 @media screen and (max-width: 750px) {
 	#entete-titre {
@@ -109,12 +109,12 @@ footer {
 		padding: 5px;
 	}
 }
-
+ 
 /* Formulaire login */
 a {
 	text-decoration: none;
 }
-
+ 
 .form {
 	display: flex;
 	flex-direction: column;
@@ -124,7 +124,7 @@ a {
 	margin: 0 auto;
 	gap: 16px;
 }
-
+ 
 .form>div:not(.btnActions) {
 	display: flex;
 	width: 100%;
@@ -132,13 +132,13 @@ a {
 	align-items: center;
 	gap: 8px;
 }
-
+ 
 .btnActions {
 	display: flex;
 	align-items: center;
 	column-gap: 16px;
 }
-
+ 
 .btnPrimaire {
 	display: flex;
 	background: #004982;
@@ -151,50 +151,50 @@ a {
 	justify-content: center;
 	font-size: 1rem;
 }
-
+ 
 .btnSecondaire {
 	background-color: var(--accent);
 	display: flex;
 	color: var(--text);
 }
-
+ 
 .listErrors {
 	color: red;
 	background-color: pink;
 	padding: 1em;
 	margin-bottom: 8px;
 }
-
+ 
 .errors {
 	text-align: center;
 	width: auto;
 }
-
+ 
 .form .input {
 	padding: 8px;
 }
-
+ 
 .main-detail-vente {
 	display: flex;
 	align-items: center;
 }
-
+ 
 .article-vente {
 	display: flex;
 	column-gap: 32px;
 	align-items: stretch;
 	height: 100%;
 }
-
+ 
 .article-vente p {
 	font-weight: bold;
 	margin-bottom: 16px;
 }
-
+ 
 .article-vente span {
 	font-weight: normal;
 }
-
+ 
 .detail-vente {
 	padding: 1em;
 	background-color: hsl(206deg 100% 25%/ 15%);
@@ -207,15 +207,15 @@ a {
 	font-weight: bold;
 	height: 100%;
 }
-
+ 
 .form-enchere {
 	margin: 32px 0;
 }
-
+ 
 .form-enchere input {
 	width: auto;
 }
-
+ 
 .warning {
 	margin: 1em auto;
 	background-color: hsl(35.76deg 100% 50%/ 20%);
@@ -223,11 +223,11 @@ a {
 	padding: 1em 2em;
 	border-radius: 8px;
 }
-
+ 
 .main-h2 {
 	margin-bottom: 32px;
 }
-
+ 
 header {
 	position: fixed;
 	height: 80px;
@@ -236,35 +236,35 @@ header {
 	z-index: 1;
 	top: 0;
 }
-
+ 
 header nav ul {
 	display: flex;
 	gap: 48px;
 }
-
+ 
 header nav a {
 	color: var(--text);
 }
-
+ 
 header nav a:hover {
 	color: var(--accent);
 }
-
+ 
 #encart {
 	margin-top: 110px;
 	margin-bottom: 32px;
 }
-
+ 
 main, header, #encart {
 	padding: 0 3em;
 }
-
+ 
 .filterSection form {
 	display: flex;
 	gap: 16px;
 	flex-wrap: wrap;
 }
-
+ 
 .filterSection {
 	margin: 0 !important;
 	padding: 0 !important;
@@ -273,18 +273,18 @@ main, header, #encart {
 	box-shadow: none !important;
 	color: inherit !important;
 }
-
+ 
 input, select, form a {
 	width: 100%;
 	min-height: 42px;
 	padding: .8em 1.25em;
 	font-size: 1rem;
 }
-
+ 
 input[type="text"], select, input[type="date"] {
 	padding: 8px;
 }
-
+ 
 .filterSection form li {
 	display: flex;
 	justify-content: space-around;
@@ -292,19 +292,19 @@ input[type="text"], select, input[type="date"] {
 	margin-bottom: 8px;
 	align-items: center;
 }
-
+ 
 .filterSection label {
 	font-weight: bold;
 	margin-top: 8px;
 }
-
+ 
 .listCard {
 	display: flex;
 	gap: 32px;
 	margin: 32px 0;
 	flex-wrap: wrap;
 }
-
+ 
 .articleCard {
 	background-color: var(--bg);
 	padding: 2em;
@@ -313,12 +313,12 @@ input[type="text"], select, input[type="date"] {
 	gap: 16px;
 	border-radius: 16px;
 }
-
+ 
 .articleCardDetails>* {
 	font-weight: normal;
 	margin-bottom: 6px;
 }
-
+ 
 .filterSection input[type="submit"], .filterSection a {
 	display: flex;
 	padding: .8em 1.25em;
@@ -328,28 +328,28 @@ input[type="text"], select, input[type="date"] {
 	justify-content: center;
 	font-size: 1rem;
 }
-
+ 
 .filterSection input[type="submit"] {
 	background: var(--primary);
 	border: none;
 	color: #fff;
 }
-
+ 
 .filterSection a {
 	border: 1px solid #555;
 	color: #555;
 	height: 42px;
 	align-items: center;
 }
-
+ 
 h1 {
 	margin-bottom: 32px;
 }
-
+ 
 .filterSection ul:first-of-type {
 	min-width: 20%;
 }
-
+ 
 #contenu {
 	display: flex;
 	flex-direction: column;
@@ -357,30 +357,30 @@ h1 {
 	padding: 1em;
 	border-radius: 8px;
 }
-
+ 
 #tag, #bloc {
 	padding: 0 !important;
 }
-
+ 
 #bloc {
 	align-items: stretch;
 	gap: 16px;
 }
-
+ 
 #creer-vente-form textarea {
 	width: 100%;
 	min-height: 100px;
 }
-
+ 
 #bloc1, #bloc2 {
 	gap: 16px;
 }
-
+ 
 #set {
 	justify-content: center;
 	margin: 32px 0;
 }
-
+ 
 #set button {
 	display: flex;
 	padding: .8em 1.25em;
@@ -391,26 +391,26 @@ h1 {
 	font-size: 1rem;
 	box-shadow: none;
 }
-
+ 
 #set button:nth-child(1) {
 	background: var(--primary);
 	border: none;
 	color: white;
 }
-
+ 
 #set button:nth-child(2) {
 	background: var(--secondary);
 	border: none;
 }
-
+ 
 #set button:nth-child(3) {
 	border: 1px solid #555;
 }
-
+ 
 .showMobile {
 	display: none;
 }
-
+ 
 #tag {
 	margin-bottom: 16px;
 }
