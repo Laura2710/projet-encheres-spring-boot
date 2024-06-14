@@ -97,4 +97,25 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 
 	}
 
+	@Override
+	public List<ArticleAVendre> findAllWithParameters(String nomRecherche, int categorieRecherche) {
+		// Création de mon String Builder avec la requete de base
+		StringBuilder FIND_ALL_WITH_PARAMETERS = new StringBuilder(
+				"SELECT * FROM ARTICLES_A_VENDRE WHERE statut_enchere = 1 ");
+
+		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+		if (nomRecherche != "") {
+			//Ajout des % a mon nom recherché pour la requete SQL
+			String SQLNomRecherche = "%" + nomRecherche + '%';
+			namedParameters.addValue("SQLNomRecherche",SQLNomRecherche);
+			FIND_ALL_WITH_PARAMETERS.append("AND nom_article LIKE :SQLNomRecherche ");
+		}
+		if (categorieRecherche != 0) {
+			namedParameters.addValue("categorieRecherche", categorieRecherche);
+			FIND_ALL_WITH_PARAMETERS.append("AND no_categorie = :categorieRecherche ");
+		}
+		return namedParameterJdbcTemplate.query(FIND_ALL_WITH_PARAMETERS.toString(), namedParameters,
+				new ArticleAVendreRowMapper());
+	}
+
 }

@@ -47,12 +47,24 @@ public class ArticleAVendreController {
 		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
 		model.addAttribute("listCategorie",listCategorie);
 		//Ajout au model ma variable "nomRecherché" qui contiendra la chaine de caractère a retrouver dans le nom des articles
-		String nomRecherché = null;
-		model.addAttribute("nomRecherché", nomRecherché);
+		String nomRecherche = null;
+		model.addAttribute("nomRecherche", nomRecherche);
 		//Ajout au model de ma variable categorieRecherché qui contiendra l'id de la catégorie a rechercher
-		int categorieRecherché = 0 ;
-		model.addAttribute("categorieRecherché", categorieRecherché);
+		int categorieRecherche = 0 ;
+		model.addAttribute("categorieRecherche", categorieRecherche);
 		return "index";
+	}
+	
+	@PostMapping("/rechercher")
+	public String afficherArticleAVendre(@RequestParam(value = "nomRecherche") String nomRecherche,@RequestParam(value = "categorieRecherche") int categorieRecherche,Model model) {
+		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreAvecParamètres(nomRecherche, categorieRecherche);
+		model.addAttribute("articlesAVendre", articlesAVendre);
+		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
+		model.addAttribute("listCategorie",listCategorie);
+		model.addAttribute("nomRecherche", nomRecherche);
+		model.addAttribute("categorieRecherche", categorieRecherche);
+		return "index";
+		
 	}
 
 

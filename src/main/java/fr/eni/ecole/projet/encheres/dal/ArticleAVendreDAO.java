@@ -12,4 +12,6 @@ public interface ArticleAVendreDAO {
 	void updatePrixVente(long id, int montant);
 	List<ArticleAVendre> findAllStatutEnCours();
 
+	List<ArticleAVendre> findAllWithParameters(String nomRecherche, int categorieRecherche);
+
 }

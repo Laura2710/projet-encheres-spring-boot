@@ -105,6 +105,14 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 
 		return articlesAVendreEnCours;
 	}
+	
+
+	@Override
+	public List<ArticleAVendre> getArticlesAVendreAvecParamètres(String nomRecherche, int categorieRecherche) {
+		List<ArticleAVendre> articlesAVendreAvecParametres = articleAVendreDAO.findAllWithParameters(nomRecherche, categorieRecherche);
+
+		return articlesAVendreAvecParametres;
+	}
 
 	@Override
 	public ArticleAVendre getById(int idArticle) {
@@ -318,6 +326,7 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 		derniereEnchere.setMontant(article.getPrixVente() + 1);
 		return derniereEnchere;
 	}
+
 
 
 }
