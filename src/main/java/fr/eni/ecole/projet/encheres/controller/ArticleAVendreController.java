@@ -55,7 +55,22 @@ public class ArticleAVendreController {
 		return "index";
 	}
 
+	@GetMapping("/profil")
+	public String afficherMonProfil(Model model, Principal principal) {
+		String pseudo = principal.getName();
+		Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
 
+		List<Categorie> categories = this.articleAVendreService.getAllCategories();
+		List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
+		if(utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
+			model.addAttribute("articleAVendre", new ArticleAVendre());
+			model.addAttribute("categories", categories);
+			model.addAttribute("adressesRetrait", adressesRetrait);
+			return "view-profil";
+		} else {
+			return "redirect:/index";
+		}
+	}
 	
 	@GetMapping("/vendre")
 	public String vendreArticle(Model model, Principal principal) {

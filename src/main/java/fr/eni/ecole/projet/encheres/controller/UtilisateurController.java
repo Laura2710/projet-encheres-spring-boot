@@ -1,5 +1,7 @@
 package fr.eni.ecole.projet.encheres.controller;
 
+import java.security.Principal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -54,5 +56,13 @@ public class UtilisateurController {
 			return "view-creer-compte";
 		}
 		return "redirect:/";
+	}
+	
+	@GetMapping("/profil")
+	public String afficherMonProfil(Model model, Principal principal) {
+		String pseudo = principal.getName();
+		Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
+model.addAttribute("utilisateur",utilisateurSession);
+			return "view-profil";
 	}
 }
