@@ -34,7 +34,7 @@ public class ArticleAVendre implements Serializable{
 	private int prixInitial;
 	private int prixVente;
 	//Association avec un utilisateur - vendeur
-	@NotNull
+	
 	private Utilisateur vendeur;
 	//Association avec une adresse de retrait
 	@NotNull

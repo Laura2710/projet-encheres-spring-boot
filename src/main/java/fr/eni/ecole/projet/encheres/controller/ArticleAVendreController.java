@@ -45,32 +45,92 @@ public class ArticleAVendreController {
 		return "index";
 	}
 	
+	// Penser à refactoriser
+	
 	@GetMapping("/vendre")
 	public String vendreArticle(Model model, Principal principal) {
-		String pseudo = principal.getName();
-		Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
-		List<Categorie> categories = this.articleAVendreService.getAllCategories();
-		List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
-		if(utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
-			model.addAttribute("articleAVendre", new ArticleAVendre());
-			model.addAttribute("categories", categories);
-			model.addAttribute("adressesRetrait", adressesRetrait);
+		try {
+			String pseudo = principal.getName();
+			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
+			List<Categorie> categories = this.articleAVendreService.getAllCategories();
+			List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
+			if(utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
+				model.addAttribute("articleAVendre", new ArticleAVendre());
+				model.addAttribute("categories", categories);
+				model.addAttribute("adressesRetrait", adressesRetrait);
+				return "view-vente-article";
+			} else {
+				return "redirect:/index";
+			}
+		} catch (Exception e) {
+			model.addAttribute("error", "Impossible d'enregister la vente");
 			return "view-vente-article";
-		} else {
-			return "redirect:/index";
 		}
 	}
 
 
 	
 	@PostMapping("/vendre")
-	public String vendreArticle(Principal principal, @Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, BindingResult bindingResult) {
+	public String vendreArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, BindingResult bindingResult, Principal principal, Model model) {
 		String pseudo = principal.getName();
 		Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
+		List<Categorie> categories = this.articleAVendreService.getAllCategories();
+		List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
 		if (utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
+	        if (!bindingResult.hasErrors()) {
+	            try {
+	                articleAVendreService.mettreArticleEnVente(articleAVendre, utilisateurSession);
+	                return "redirect:/";
+	            } catch (BusinessException be) {
+	                List<String> clefs = be.getClefsExternalisations();
+	                if (clefs != null) {
+	                    clefs.forEach(key -> {
+	                        ObjectError error = new ObjectError("globalError", key);
+	                        bindingResult.addError(error);
+	                    });
+	                }
+	            }
+	        }
+	    } else {
+	        ObjectError error = new ObjectError("globalError", BusinessCode.VALIDATION_UTILISATEUR_ADMIN);
+	        bindingResult.addError(error);
+	        return "redirect:/";
+	    }
+
+	    model.addAttribute("categories", categories);
+	    model.addAttribute("adressesRetrait", adressesRetrait);
+	    return "view-vente-article";
+	}
+	
+	@GetMapping("/vendre/modifier")
+	public String modifierArticle(@RequestParam("id") int idArticle, Model model, Principal principal) {
+		try {
+			ArticleAVendre article = this.articleAVendreService.getById(idArticle);
+			if((article.getStatut() == 0) && principal.getName().equals(article.getVendeur().getPseudo())) {
+			
+			List<Categorie> categories = this.articleAVendreService.getAllCategories();
+			List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
+			
+				model.addAttribute("articleAVendre", new ArticleAVendre());
+				model.addAttribute("categories", categories);
+				model.addAttribute("adressesRetrait", adressesRetrait);
+				return "view-vente-article";
+			} else {
+				return "redirect:/index";
+			}
+		} catch (Exception e) {
+			model.addAttribute("error", "Impossible de modifier la vente");
+			return "view-vente-article";		
+		}
+	}
+	
+	@PostMapping("/vendre/modifier")
+	public String modifierArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, BindingResult bindingResult, @RequestParam("id") int idArticle, Principal principal) {
+		ArticleAVendre article = this.articleAVendreService.getById(idArticle);
+		if (article.getStatut() == 0 && principal.getName().equals(article.getVendeur().getPseudo())) {
 			if (!bindingResult.hasErrors()) {
 				try {
-					articleAVendreService.mettreArticleEnVente(articleAVendre);
+					articleAVendreService.modifierArticleEnVente(articleAVendre);
 					return "redirect:/index";
 				} catch (BusinessException be) {
 					be.getClefsExternalisations().forEach(key-> {
@@ -80,7 +140,7 @@ public class ArticleAVendreController {
 				}
 			}
 		} else {
-			ObjectError error = new ObjectError("globalError", BusinessCode.VALIDATION_UTILISATEUR_ADMIN);
+			ObjectError error = new ObjectError("globalError", BusinessCode.VALIDATION_UTILISATEUR_NON_CREATEUR_VENTE);
 			bindingResult.addError(error);
 			return "redirect:/index";
 		}

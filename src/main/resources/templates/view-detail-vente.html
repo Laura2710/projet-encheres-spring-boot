@@ -6,7 +6,7 @@
 			ressourceSupp=~{})}"
 >
 <head>
-<title>Detail vente</title>
+<title data-th-text="#{view-detail-vente.title}"></title>
 </head>
 <body>
 	<main class="main-detail-vente">
@@ -19,27 +19,27 @@
 			<h2 data-th-text="${'Detail de la vente : ' +article.nom}">Détail d'une vente</h2>
 			<div class="content-description-vente">
 				<ul class="description-vente">
-					<li>
-						Article: <span data-th-text="${article.nom}"></span>
+					<li data-th-text="#{view-detail-vente.article}">
+						<span data-th-text="${article.nom}"></span>
 					</li>
-					<li>
-						Catégorie: <span data-th-text="${article.categorie.libelle}"></span>
+					<li data-th-text="#{view-detail-vente.categorie}">
+						<span data-th-text="${article.categorie.libelle}"></span>
 					</li>
-					<li>
-						Description: <span data-th-text="${article.description}"></span>
+					<li data-th-text="#{view-detail-vente.description}">
+						<span data-th-text="${article.description}"></span>
 					</li>
-					<li>
-						Retrait: <span
+					<li data-th-text="#{view-detail-vente.adresse_retrait}">
+						<span
 							data-th-text="${article.adresseRetrait.rue +', '+ article.adresseRetrait.codePostal + ' ' + article.adresseRetrait.ville}"
 						></span>
 					</li>
-					<li>
-						Vendeur: <span data-th-text="${article.vendeur.pseudo}"></span>
+					<li data-th-text="#{view-detail-vente.vendeur}">
+						<span data-th-text="${article.vendeur.pseudo}"></span>
 					</li>
 				</ul>
 				<ul class="detail-vente-detail">
-					<li>
-						Mise à prix: <span data-th-text="${article.prixInitial +' point(s)'}"></span>
+					<li data-th-text="${article.vendeur.prix_initial}">
+						<span data-th-text="${article.prixInitial +' point(s)'}"></span>
 					</li>
 					<li>
 						Meilleure offre: <span data-th-text="${article.prixVente +' point(s)'}"></span>  <span data-th-if="${!#strings.isEmpty(enchere.acquereur.pseudo)}" data-th-text="'par ' + ${enchere.acquereur.pseudo}"></span>

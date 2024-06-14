@@ -6,6 +6,7 @@ import fr.eni.ecole.projet.encheres.bo.Adresse;
 import fr.eni.ecole.projet.encheres.bo.ArticleAVendre;
 import fr.eni.ecole.projet.encheres.bo.Categorie;
 import fr.eni.ecole.projet.encheres.bo.Enchere;
+import fr.eni.ecole.projet.encheres.bo.Utilisateur;
 
 public interface ArticleAVendreService {
 
@@ -17,9 +18,15 @@ public interface ArticleAVendreService {
 
 	Enchere getEnchereByIdArticle(int idArticle);
 
-	void mettreArticleEnVente(ArticleAVendre articleAVendre);
+	void mettreArticleEnVente(ArticleAVendre articleAVendre, Utilisateur utilisateur);
+	
+	void modifierArticleEnVente(ArticleAVendre articleAVendre);
+	
+	Categorie getCategorieById (long id);
 	
 	List<Categorie> getAllCategories();
+	
+	Adresse getAdresseById (long id);
 
 	List<Adresse> getAllAdressesRetrait();
 

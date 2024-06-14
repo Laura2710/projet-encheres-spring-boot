@@ -3,6 +3,7 @@ package fr.eni.ecole.projet.encheres.bll;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,30 +38,53 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	this.categorieDAO = categorieDAO;
 	this.enchereDAO = enchereDAO;
 }
-
-	// A rajouter dans les validations : point de retrait et categorie//
 	
 	@Override
-	public void mettreArticleEnVente(ArticleAVendre articleAVendre) {
+	public void mettreArticleEnVente(ArticleAVendre articleAVendre, Utilisateur utilisateur) {
 			BusinessException be = new BusinessException();
-			boolean isValid = true;
+			articleAVendre.setVendeur(utilisateur);
+			 if (validationArticle(articleAVendre, be)) {
+			        try {
+			            articleAVendreDAO.addArticle(articleAVendre);
+			        } catch (DataAccessException e) {
+			            be.printStackTrace();
+			            //TODO Créer businessException
+			        }
+			    } else {
+			        throw be;
+			    }
 			
-			isValid &= validerArticleAVendre(articleAVendre, be);
-			isValid &= validerNom(articleAVendre.getNom(), be);
-			isValid &= validerDescription(articleAVendre.getDescription(), be);
-			isValid &= validerDateDebutEncheres(articleAVendre.getDateDebutEncheres(), be);
-			isValid &= validerDateFinEncheres(articleAVendre.getDateFinEncheres(), be);
-			isValid &= validerDateFinEncheres(articleAVendre.getDateFinEncheres(), be);
-			isValid &= validerPrixInitial(articleAVendre.getPrixInitial(), be);
-			isValid &= validerCategorie(articleAVendre.getCategorie(), be);
-			isValid &= validerAdresseRetrait(articleAVendre.getAdresseRetrait(), be);
-			
-			if (isValid) {
-				articleAVendreDAO.addArticle(articleAVendre);
-			} else {
-				throw be;
-			}
 		}
+	
+	@Override
+	public void modifierArticleEnVente(ArticleAVendre articleAVendre) {
+		// test ID vérif si article existe
+		BusinessException be = new BusinessException();
+		
+		if (validationArticle(articleAVendre, be)) {
+	            articleAVendreDAO.updateArticle(articleAVendre);
+	    } else {
+	        throw be;
+	    }
+	}
+	
+	// Mutualisation des méthodes mettreArticleEnVente et modifierArticleEnVente
+	
+	private boolean validationArticle(ArticleAVendre articleAVendre, BusinessException be) {
+		boolean isValid = true;
+		
+		isValid &= validerArticleAVendre(articleAVendre, be);
+	    isValid &= validerNom(articleAVendre.getNom(), be);
+	    isValid &= validerDescription(articleAVendre.getDescription(), be);
+	    isValid &= validerDateDebutEncheres(articleAVendre.getDateDebutEncheres(), be);
+	    isValid &= validerDateFinEncheres(articleAVendre.getDateFinEncheres(), articleAVendre.getDateDebutEncheres(), be);
+	    isValid &= validerPrixInitial(articleAVendre.getPrixInitial(), be);
+	    isValid &= validerCategorie(articleAVendre.getCategorie(), be);
+	    isValid &= validerAdresseRetrait(articleAVendre.getAdresseRetrait(), be);
+	    
+	    
+	    return isValid;
+	}
 
 	// Validation pour mettre un article en vente
 
@@ -79,7 +103,7 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		}
 		
 		if (nom.length() < 5 || nom.length() > 30) {
-			be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_DESCRIPTION_LENGTH);
+			be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_NOM_LENGTH);
 			return false;
 		}
 		
@@ -181,12 +205,13 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	}
 	
 	private boolean validerDateDebutEncheres(LocalDate dateDebutEncheres, BusinessException be) {
-		 if (dateDebutEncheres == null) {
+		LocalDate today = LocalDate.now();
+		if (dateDebutEncheres == null) {
 	            be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_DATE_DEBUT_NULL);
 	            return false;
 	        }
 	        
-	        if (dateDebutEncheres.isBefore(LocalDate.now())) {
+	        if (dateDebutEncheres.isBefore(LocalDate.now()) || dateDebutEncheres.equals(today)) {
 	            be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_DATE_DEBUT_PASSE);
 	            return false;
 	        }
@@ -194,7 +219,7 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	}
 	
 
-	private boolean validerDateFinEncheres(LocalDate dateFinEncheres, BusinessException be) {
+	private boolean validerDateFinEncheres(LocalDate dateFinEncheres, LocalDate dateDebutEncheres, BusinessException be) {
 		 if (dateFinEncheres == null) {
 	            be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_DATE_FIN_NULL);
 	            return false;
@@ -202,6 +227,12 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	        
 	        if (dateFinEncheres.isBefore(LocalDate.now())) {
 	            be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_DATE_FIN_PASSE);
+	            return false;
+	        }
+	        
+	        if (dateFinEncheres.isBefore(dateDebutEncheres) || dateFinEncheres.equals(dateDebutEncheres)) {
+	        	// TODO rajouter un bon business code 
+	        	be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_DATE_FIN_AVANT_DEBUT);
 	            return false;
 	        }
 		return true;
@@ -251,8 +282,16 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	}
 	
 	@Override
+	public Categorie getCategorieById(long id) {
+		return categorieDAO.read(id);
+	}
+	
 	public List<Categorie> getAllCategories() {
 		return categorieDAO.findAll();
+	}
+	
+	public Adresse getAdresseById(long id) {
+		return adresseDAO.getByID(id);
 	}
 	
 	public List<Adresse> getAllAdressesRetrait(){
@@ -308,4 +347,5 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		derniereEnchere.setArticleAVendre(articleAVendreDAO.getByID(idArticle));
 		return derniereEnchere;
 	}
+
 }

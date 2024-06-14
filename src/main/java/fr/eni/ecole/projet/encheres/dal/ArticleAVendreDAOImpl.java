@@ -1,7 +1,9 @@
 package fr.eni.ecole.projet.encheres.dal;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +16,15 @@ import fr.eni.ecole.projet.encheres.bo.Adresse;
 import fr.eni.ecole.projet.encheres.bo.ArticleAVendre;
 import fr.eni.ecole.projet.encheres.bo.Categorie;
 import fr.eni.ecole.projet.encheres.bo.Utilisateur;
+import fr.eni.ecole.projet.encheres.exceptions.BusinessException;
 
 @Repository
 public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 
-	private static final String INSERT = "INSERT INTO ARTICLES_A_VENDRE(nom_article, description, date_debut_encheres, date_fin_encheres, statut_enchere, prix_initial, prix_vente, id_utilisateur, no_categorie, no_adresse_retrait) VALUES "
-			+ " (:nom, :description, :dateDebutEncheres, :dateFinEncheres, :statut, :prixInitial, :prixVente, :vendeur, :categorie, :adresse)";
+	private static final String INSERT_ARTICLE = "INSERT INTO ARTICLES_A_VENDRE(nom_article, description, date_debut_encheres, date_fin_encheres, statut_enchere, prix_initial, id_utilisateur, no_categorie, no_adresse_retrait) VALUES "
+			+ " (:nom, :description, :dateDebutEncheres, :dateFinEncheres, 0, :prixInitial, :vendeur, :categorie, :adresse)";
+	
+	private static final String UPDATE_ARTICLE = "UPDATE ARTICLES_A_VENDRE SET nom_article = :nom, description = :description, date_debut_encheres = :dateDebutEncheres, date_fin_encheres = :dateFinEncheres,prix_initial = :prixInitial, no_categorie = :categorie, no_adresse_retrait = :adresse WHERE no_article=:idArticle";
 
 	private static final String FIND_BY_ID = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_article = :id";
 
@@ -38,20 +43,49 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 
 	@Override
 	public void addArticle(ArticleAVendre articleAVendre) {
-		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-		namedParameters.addValue("nom", articleAVendre.getNom());
-		namedParameters.addValue("description", articleAVendre.getDescription());
-		namedParameters.addValue("dateDebutEncheres", articleAVendre.getDateDebutEncheres());
-		namedParameters.addValue("dateFinEncheres", articleAVendre.getDateFinEncheres());
-		namedParameters.addValue("statut", articleAVendre.getStatut());
-		namedParameters.addValue("prixInitial", articleAVendre.getPrixInitial());
-		namedParameters.addValue("prixVente", articleAVendre.getPrixVente());
-		namedParameters.addValue("vendeur", articleAVendre.getVendeur().getNom());
-		namedParameters.addValue("categorie", articleAVendre.getCategorie().getId());
-		namedParameters.addValue("adresse", articleAVendre.getAdresseRetrait().getId());
-		namedParameterJdbcTemplate.update(INSERT, namedParameters);
+		MapSqlParameterSource namedParameters = preparerParamValidationArticle(articleAVendre);
+		namedParameters.addValue("vendeur", articleAVendre.getVendeur().getPseudo());
+		namedParameterJdbcTemplate.update(INSERT_ARTICLE, namedParameters);
 	}
 	
+	@Override
+	public void updateArticle(ArticleAVendre articleAVendre) {
+		MapSqlParameterSource namedParameters = preparerParamValidationArticle(articleAVendre);
+		namedParameters.addValue("id", articleAVendre.getId());
+		BusinessException be = new BusinessException();
+		
+		if (articleExiste(articleAVendre.getId())) {
+		namedParameterJdbcTemplate.update(UPDATE_ARTICLE, namedParameters);
+		} else {
+	        throw be; 
+	    }
+	}
+	
+	private boolean articleExiste(long id) {
+		 String sql = "SELECT COUNT(*) FROM articles WHERE id = :id";
+		 MapSqlParameterSource parameters = new MapSqlParameterSource();
+		 parameters.addValue("id", id);
+		 int count = namedParameterJdbcTemplate.queryForObject(sql, parameters, Integer.class);
+		 return count > 0;
+	}
+	
+	private MapSqlParameterSource preparerParamValidationArticle(ArticleAVendre articleAVendre) {
+	    MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+	    namedParameters.addValue("nom", articleAVendre.getNom());
+	    namedParameters.addValue("description", articleAVendre.getDescription());
+	    namedParameters.addValue("dateDebutEncheres", convertirDate(articleAVendre.getDateDebutEncheres()));
+	    namedParameters.addValue("dateFinEncheres", convertirDate(articleAVendre.getDateFinEncheres()));
+	    namedParameters.addValue("prixInitial", articleAVendre.getPrixInitial());
+	    namedParameters.addValue("categorie", articleAVendre.getCategorie().getId());
+	    namedParameters.addValue("adresse", articleAVendre.getAdresseRetrait().getId());
+	    return namedParameters;
+	}
+	
+	public Date convertirDate(LocalDate localDate) {
+	    return Date.valueOf(localDate);
+	}
+	
+
 	@Override
 	public void updatePrixVente(long id, int montant) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
@@ -96,5 +130,6 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		return namedParameterJdbcTemplate.query(FIND_ALL_STATUT_EN_COURS, new ArticleAVendreRowMapper());
 
 	}
+
 
 }

@@ -12,6 +12,7 @@
 
 <body>
 	<main>
+	<!--   Si la vue est accédée par / -->
 		<h1>Nouvelle Vente</h1>
 
 		<form id="creer-vente-form" class="form" th:object="${articleAVendre}"
@@ -35,7 +36,7 @@
 
 					<div id="tag">
 						<label for="inputDescription">Description(*):</label>
-						<textarea id="inputDescription" th:field="*{description}"></textarea>
+						<textarea id="inputDescription" th:field="*{description}" required></textarea>
 					</div>
 				</div>
 
@@ -49,13 +50,13 @@
 					<div id="tag">
 						<label for="inputDateDebutEncheres">Début de l'enchère(*):</label>
 						<input type="date" id="inputDateDebutEncheres"
-							th:field="*{dateDebutEncheres}" />
+							th:field="*{dateDebutEncheres}" required/>
 					</div>
 
 					<div id="tag">
 						<label for="inputDateFinEncheres">Fin de l'enchère(*):</label> <input
 							type="date" id="inputDateFinEncheres"
-							th:field="*{dateFinEncheres}" />
+							th:field="*{dateFinEncheres}" required/>
 					</div>
 				</div>
 			</div>
@@ -74,11 +75,11 @@
                 <button type="button">Annuler la vente</button>
                 <button type="button">Annuler</button>
             </div>
-
+            
+             <ul data-th-if="${#fields.hasErrors('*')}" class="listErrors">
+				<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+			</ul>
 		</form>
-
-
-
 	</main>
 </body>
 

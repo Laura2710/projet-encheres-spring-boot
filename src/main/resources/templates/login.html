@@ -4,7 +4,7 @@
 			contenuPage=~{:: main}, 
 			ressourceSupp=~{})}">
 	<head>
-		<title>S'inscrire - Se connecter</title>
+		<title data-th-text="#{login.title}"></title>
 	</head>
 	<body>
 	<main>
@@ -13,18 +13,18 @@
 		<form data-th-action="@{/login}"  method="post" class="form">
 	<div data-th-if="${errorMessage}" th:text="${errorMessage}" class="listErrors"></div>
 			<div>
-				<label for="username">Identifiant: </label>
+				<label for="username" data-th-text="#{login.username}"></label>
 				<input type="text" name="username" id="username" required class="input">
 			</div>
 			<div>
-				<label for="password">Mot de passe: </label>
+				<label for="password" data-th-text="#{login.pwd}"></label>
 				<input type="password" name="password" id="password" required class="input">
 			</div>
 			<div>
 				<input type="submit" value="Connexion" class="btnPrimaire">
-				<a id="forgetPassword" href="">Mot de passe oublié</a>
+				<a id="forgetPassword" href="" data-th-text="#{login.pwd_oublie}"></a>
 			</div>
-		<a data-th-href="@{/utilisateur/creer-compte}" class="btnPrimaire btnSecondaire">Créer un compte</a> 
+		<a data-th-href="@{/utilisateur/creer-compte}" class="btnPrimaire btnSecondaire" data-th-text="#{login.creation}"></a> 
 		</form>
 		
 	</main>

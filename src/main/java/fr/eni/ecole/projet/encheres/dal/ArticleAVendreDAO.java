@@ -9,7 +9,11 @@ public interface ArticleAVendreDAO {
 	ArticleAVendre getByID(long id);
 	
 	void addArticle(ArticleAVendre articleAVendre);
+	
+	void updateArticle(ArticleAVendre articleAVendre);
+	
 	void updatePrixVente(long id, int montant);
+	
 	List<ArticleAVendre> findAllStatutEnCours();
 
 }
