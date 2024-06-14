@@ -3,82 +3,80 @@
 	data-th-replace="~{layouts/layout :: layout-enchere(
 			titrePage=~{:: title}, 
 			contenuPage=~{:: main}, 
-			ressourceSupp=~{:: link})}" >
-			
+			ressourceSupp=~{:: link})}"
+>
+
 <head>
 <title>Vendre Article</title>
-<link rel="stylesheet" data-th-href="@{/css/formulaire-vente.css}">
+<!--  <link rel="stylesheet" data-th-href="@{/css/formulaire-vente.css}">-->
 </head>
 
 <body>
 	<main>
+	<!--   Si la vue est accédée par / -->
 		<h1>Nouvelle Vente</h1>
 
-		<form id="creer-vente-form" class="form" th:object="${articleAVendre}"
-			data-th-action="@{/vendre}" method="post">
+		<form id="creer-vente-form" class="form" th:object="${articleAVendre}" data-th-action="@{/vendre}" method="post">
 
 			<div id="bloc">
 				<div id="bloc1">
 					<div id="tag">
-						<label for="inputNom">Article(*): </label> <input type="text"
-							id="inputNom" data-th-field="*{nom}" required />
+						<label for="inputNom">Article(*): </label>
+						<input type="text" id="inputNom" data-th-field="*{nom}" required />
 					</div>
 
 					<div id="tag">
-						<label for="inputCategorie">Catégorie(*): </label> <select
-							id="inputCategorie" data-th-field="*{categorie}" required>
-							<option th:each="categorie : ${categories}"
-								th:value="${categorie.id}" th:text="${categorie.libelle}">
-							</option>
+						<label for="inputCategorie">Catégorie(*): </label>
+						<select id="inputCategorie" data-th-field="*{categorie}" required>
+							<option th:each="categorie : ${categories}" th:value="${categorie.id}" th:text="${categorie.libelle}"></option>
 						</select>
 					</div>
 
 					<div id="tag">
 						<label for="inputDescription">Description(*):</label>
-						<textarea id="inputDescription" th:field="*{description}"></textarea>
+						<textarea id="inputDescription" th:field="*{description}" required></textarea>
 					</div>
 				</div>
 
 				<div id="bloc2">
 					<div id="tag">
-						<label for="inputPrixInitial">Mise à prix(*):</label> <input
-							type="number" id="inputPrixInitial"
-							data-th-field="*{prixInitial}" required />
+						<label for="inputPrixInitial">Mise à prix(*):</label>
+						<input type="number" id="inputPrixInitial" data-th-field="*{prixInitial}" required />
 					</div>
 
 					<div id="tag">
 						<label for="inputDateDebutEncheres">Début de l'enchère(*):</label>
 						<input type="date" id="inputDateDebutEncheres"
-							th:field="*{dateDebutEncheres}" />
+							th:field="*{dateDebutEncheres}" required/>
 					</div>
 
 					<div id="tag">
 						<label for="inputDateFinEncheres">Fin de l'enchère(*):</label> <input
 							type="date" id="inputDateFinEncheres"
-							th:field="*{dateFinEncheres}" />
+							th:field="*{dateFinEncheres}" required/>
 					</div>
 				</div>
 			</div>
 
 			<div>
 				<label for="inputRetrait">Retrait(*): </label>
-					<select id="inputRetrait" data-th-field="*{adresseRetrait}" required>
-						<option th:each="adresseRetrait : ${adressesRetrait}"
-							th:value="${adresseRetrait.id}" th:text="${adresseRetrait.rue + adresseRetrait.codePostal + adresseRetrait.ville}">
-						</option>
-					</select>
+				<select id="inputRetrait" data-th-field="*{adresseRetrait}" required>
+					<option th:each="adresseRetrait : ${adressesRetrait}" th:value="${adresseRetrait.id}"
+						th:text="${adresseRetrait.rue + adresseRetrait.codePostal + adresseRetrait.ville}"
+					></option>
+				</select>
 			</div>
-			
+
 			<div id="set">
                 <button type="submit">Suivant</button>
                 <button type="button">Annuler la vente</button>
                 <button type="button">Annuler</button>
             </div>
-
+            <!-- RAJOUTER ERREUR BLL + LIEN POUR ANNULER LA VENTE -->
+             <ul data-th-if="${#fields.hasErrors('*')}" class="listErrors">
+				<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+			</ul>
 		</form>
-
-
-
 	</main>
 </body>
 

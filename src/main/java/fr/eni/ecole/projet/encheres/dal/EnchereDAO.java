@@ -12,5 +12,6 @@ public interface EnchereDAO {
 
 	Enchere getEnchereByUtilisateurAndArticle(long id, String pseudo);
 
-	void updateEnchere(Enchere enchereExistante);
+	int getTotalOffre(long id);
+
 }

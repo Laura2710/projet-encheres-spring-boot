@@ -6,22 +6,22 @@
 			ressourceSupp=~{})}"
 >
 <head>
-<title>Créer un compte</title>
+<title data-th-text="#{view-creer-compte.title}"></title>
 </head>
 <body>
 	<main>
 		<form id="creer-compte-form" class="form" data-th-action="@{/utilisateur/creer-compte}"
 			data-th-object="${utilisateur}" method="post"
 		>
-			<h2>Nouveau Profil</h2>
+			<h2 data-th-text="#{view-creer-compte.h2}"></h2>
 
 			<div>
 				<div>
-					<label for="pseudo">Pseudo (*):</label>
+					<label for="pseudo" data-th-text="#{view-creer-compte.pseudo}"></label>
 					<input type="text" data-th-field="*{pseudo}" required class="input">
 				</div>
 				<div>
-					<label for="nom">Nom (*): </label>
+					<label for="nom" data-th-text="#{view-creer-compte.nom}"></label>
 					<input type="text" data-th-field="*{nom}" required class="input">
 				</div>
 			</div>
@@ -29,33 +29,33 @@
 			
 			<div>
 				<div>
-					<label for="prenom">Prenom (*): </label>
+					<label for="prenom" data-th-text="#{view-creer-compte.prenom}"></label>
 					<input type="text" data-th-field="*{prenom}" required class="input">
 				</div>
 				<div>
-					<label for="email">Email (*): </label>
+					<label for="email" data-th-text="#{view-creer-compte.email}"></label>
 					<input type="text" data-th-field="*{email}" required class="input">
 				</div>
 			</div>
 			<div>
 				<div>
-					<label for="telephone">Téléphone: </label>
+					<label for="telephone" data-th-text="#{view-creer-compte.telephone}"></label>
 					<input type="text" data-th-field="*{telephone}" class="input">
 				</div>
 			</div>
 			<div>
-				<label for="adresse">Adresse (*): </label>
+				<label for="adresse" data-th-text="#{view-creer-compte.adresse}"></label>
 				<input type="text" data-th-field="*{adresse.rue}" placeholder="Rue" class="input">
 				<input type="text" data-th-field="*{adresse.codePostal}" placeholder="Code Postal" class="input">
 				<input type="text" data-th-field="*{adresse.ville}" placeholder="Ville" class="input">
 			</div>
 			<div>
 				<div>
-					<label for="motDePasse">Mot de passe (*): </label>
+					<label for="motDePasse" data-th-text="#{view-creer-compte.pwd}"></label>
 					<input type="password" data-th-field="*{motDePasse}" required class="input">
 				</div>
 				<div>
-					<label for="confirmationMdp">Confirmation du mot de passe (*):</label>
+					<label for="confirmationMdp" data-th-text="#{view-creer-compte.pwd_confirmation}"></label>
 					<input type="password" name="confirmationMdp" id="confirmationMdp" required class="input">
 				</div>
 			</div>
@@ -68,10 +68,9 @@
 
 			<div class="btnActions">
 				<input type="submit" value="Créer" class="btnPrimaire">
-				<a href="/" class="btnPrimaire btnSecondaire">Annuler</a>
+				<a href="/" class="btnPrimaire btnSecondaire" data-th-text="#{view-creer-compte.annuler}"></a>
 			</div>
 		</form>
-		<script type="module" src="/js/index.js"></script>
 	</main>
 
 </body>

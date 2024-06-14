@@ -6,16 +6,19 @@
 			ressourceSupp=~{})}"
 >
 <head>
-<title>Detail vente</title>
+<title data-th-text="#{view-detail-vente.title}"></title>
 </head>
 <body>
 	<main class="main-detail-vente">
 		
+		<!-- SI L'ARTICLE N'EXISTE PAS -->
 		<th:block data-th-if="${errorBLL}">
 			<h2 data-th-each="err : ${errorBLL}" data-th-text="#{${err}}" class="main-h2"></h2>
 		</th:block>
 		
+		<!-- SI L'ARTICLE EXISTE -->
 		<th:block data-th-unless="${errorBLL}">
+		
 			<h2 data-th-text="${article.nom}" class="main-h2">Détail d'une vente</h2>
 			<article class="article-vente">
 				<section class="description-vente">
@@ -33,20 +36,24 @@
 							 <span data-th-text="'par ' + ${enchere.acquereur.pseudo}"></span>
 						</th:block>			
 						</li>
+						<!-- SI ENCHERE N'A PAS DEBUTEE -->
+						<li data-th-if="${article.statut == 0}">Début de l'enchère: <span data-th-text="${#temporals.format(article.dateDebutEncheres, 'dd/MM/yyyy')}"></span></li>
+
 						<li>Fin de l'enchère: <span data-th-text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"></span></li>
 					</ul>
 				</section>
 			</article>
 
-
+			<a class="btnPrimaire" data-th-href="@{/vendre/modifier(id=${article.id})}" data-th-if="${leVendeurEstConnecte and article.statut == 0}">Modifier</a>
 			<!-- SI UTILISATEUR CONNECTE DIFFERENT DU VENDEUR, AFFICHER FORMULAIRE"-->
-			<th:block data-th-unless="${leVendeurEstConnecte}" data-th-if="${utilisateur.credit >= enchere.montant}">
-				<form data-th-replace="~{fragments/fragment-form-enchere :: frag-form-enchere}"></form>
+			<th:block data-th-if="${utilisateur.credit >= enchere.montant and article.statut == 1 and !leVendeurEstConnecte}">
+				<form data-th-replace="~{fragments/fragment-form-enchere :: frag-form-enchere}"></form>				
 			</th:block>
-			<p class="warning" data-th-if="${utilisateur.credit < enchere.montant}">Vous n'avez pas plus assez de crédit pour enchérir</p>
+			<!-- SI UTILISATEUR N'A PAS ASSEZ DE CREDIT AFFICHER MESSAGE"-->
+			<p data-th-if="${utilisateur.credit < enchere.montant and !leVendeurEstConnecte}" class="warning" >Vous n'avez pas plus assez de crédit pour enchérir</p>
 			
 		</th:block>
-		<a href="/" class="btnPrimaire btnSecondaire">Retourner à l'accueil</a>
+		<a href="/">Retourner à l'accueil</a>
 	</main>
 
 </body>

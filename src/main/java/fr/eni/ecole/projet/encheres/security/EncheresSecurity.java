@@ -4,6 +4,7 @@ import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -41,6 +42,8 @@ public class EncheresSecurity {
 	SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.authorizeHttpRequests(auth -> {
 			auth.requestMatchers("/").permitAll()
+				.requestMatchers("/rechercher").permitAll()
+				.requestMatchers(HttpMethod.POST,"/rechercher").permitAll()
 				.requestMatchers("/utilisateur/creer-compte").permitAll()
 				.requestMatchers("/utilisateur/profil").hasRole("USER")
 				.requestMatchers("/encheres/detail").hasRole("USER")
@@ -48,6 +51,8 @@ public class EncheresSecurity {
 				.requestMatchers("/js/*").permitAll()
 				.requestMatchers("/images/*").permitAll()
 				.requestMatchers("/vendre").hasRole("USER")
+				.requestMatchers("/vente/annuler").hasRole("USER")
+				.requestMatchers("/vendre/modifier").hasRole("USER")
 				.anyRequest().authenticated();
 		});
 		httpSecurity.formLogin(form -> {
