@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil</title>
+    <link rel="stylesheet" href="view-profil.css">
+</head>
+<body>
+    <header>
+        <div class="vptitle">
+            <h1>Eni-Enchere</h1>
+        </div>
+        <div class="vpcategories">
+            <a href="#">Accueil</a>
+            <a href="#">Vendre un article</a>
+            <a href="#">Mon profil</a>
+            <a href="#">Se déconnecter</a>
+        </div>
+    </header>
+    <main>
+        <section class="profil">
+            <h2 data-th-text="${utilisateur.pseudo}"></h2>
+            <p data-th-text="${utilisateur.prenom}"></p>
+            <p data-th-text="${utilisateur.nom}"></p>
+            <p data-th-text="${utilisateur.email}"></p>
+            <p data-th-text="${utilisateur.telephone}"></p>
+            <button onclick="window.location.href='#'">Retour</button>
+        </section>
+    </main>
+</body>
+</html>
