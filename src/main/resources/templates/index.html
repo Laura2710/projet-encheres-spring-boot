@@ -3,52 +3,69 @@
 	data-th-replace="~{layouts/layout :: layout-enchere(
 			titrePage=~{:: title}, 
 			contenuPage=~{:: main}, 
-			ressourceSupp=~{:: link})}">
+			ressourceSupp=~{:: link})}"
+>
 <head>
 <title data-th-text="#{index.title}"></title>
 </head>
 <body>
 	<main>
 		<h1 data-th-text="#{index.h1}"></h1>
-		
-		<div class="filterSection">
-			<h2>Filtres : </h2>
-			<form data-th-action="@{/rechercher}" method="post">
-			<ul>
-				<li><input type="text" id="inputName" name="nomRecherche" placeholder="Le nom de l'article contient :" min='5' maxlength="30" data-th-value="${nomRecherche}"></li>
-				<li><input type="submit" value="Rechercher" class="btnFilter" ></li>
-			</ul>
-			<ul>
 
-				<li><label for="inputCategorie" >Catégories</label>
-					<select id="inputCategorie" name="categorieRecherche" data-th-value="${categorieRecherche}">
-						<option value="0">Toutes</option>
-						<option data-th-each="categorie : ${listCategorie}" data-th-text="${categorie.libelle}" data-th-value="${categorie.id}" th:selected="(${categorie.id} == ${categorieRecherche})"></option>
-					</select>
-				</li>
-			<li><a href="/" class="btnFilter">Annuler</a></li>
-			</ul>
-		</form>
+		<div class="filterSection">
+			<h2>Filtres :</h2>
+			<form data-th-action="@{/rechercher}" method="post">
+				<ul>
+					<li>
+						<input type="text" id="inputName" name="nomRecherche" placeholder="Le nom de l'article contient :" min='5'
+							maxlength="30" data-th-value="${nomRecherche}"
+						>
+					</li>
+					<li>
+						<input type="submit" value="Rechercher" class="btnFilter">
+					</li>
+				</ul>
+				<ul>
+
+					<li>
+						<label for="inputCategorie">Catégories</label>
+						<select id="inputCategorie" name="categorieRecherche" data-th-value="${categorieRecherche}">
+							<option value="0">Toutes</option>
+							<option data-th-each="categorie : ${listCategorie}" data-th-text="${categorie.libelle}"
+								data-th-value="${categorie.id}" th:selected="(${categorie.id} == ${categorieRecherche})"
+							></option>
+						</select>
+					</li>
+					<li>
+						<a href="/" class="btnFilter">Annuler</a>
+					</li>
+				</ul>
+			</form>
 		</div>
-		
+
 		<div class="listCard">
-		<div data-th-if="${articlesAVendre == null}"><h2>Aucun article disponible avec ces critères</h2> </div>
+			<div data-th-if="${articlesAVendre == null}">
+				<h2>Aucun article disponible avec ces critères</h2>
+			</div>
 			<div class="articleCard" data-th-each="article : ${articlesAVendre}">
 				<h2 data-th-text="${article.nom}"></h2>
-				<div class="articleCardDetails" >
-					<h3 data-th-text="#{index.prix}">
-						<span data-th-if="${article.prixVente != 0}" data-th-text="${article.prixVente}"></span>
-						<span data-th-if="${article.prixVente == 0}" data-th-text="${article.prixInitial}"></span> point(s)
+				<div class="articleCardDetails">
+					<h3>
+						<span data-th-text="#{index.prix}"></span> <span data-th-if="${article.prixVente != 0}"
+							data-th-text="${article.prixVente}"
+						></span> <span data-th-if="${article.prixVente == 0}" data-th-text="${article.prixInitial}"></span> point(s)
 					</h3>
-					<h3 data-th-text="#{index.fin_enchere}">
-						<span data-th-text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"></span>
+					<h3>
+						<span data-th-text="#{index.fin_enchere}"></span> <span
+							data-th-text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"
+						></span>
 					</h3>
-					<h3 data-th-text="#{index.vendeur}">
-						<span data-th-text="${article.vendeur.pseudo}"></span>
+					<h3>
+						<span data-th-text="#{index.vendeur}"></span> <span data-th-text="${article.vendeur.pseudo}"></span>
 					</h3>
 				</div>
 			</div>
-			
+
 		</div>
 
 
