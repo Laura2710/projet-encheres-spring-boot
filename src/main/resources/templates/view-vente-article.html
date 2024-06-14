@@ -13,6 +13,7 @@
 
 <body>
 	<main>
+	<!--   Si la vue est accédée par / -->
 		<h1>Nouvelle Vente</h1>
 
 		<form id="creer-vente-form" class="form" th:object="${articleAVendre}" data-th-action="@{/vendre}" method="post">
@@ -33,7 +34,7 @@
 
 					<div id="tag">
 						<label for="inputDescription">Description(*):</label>
-						<textarea id="inputDescription" th:field="*{description}"></textarea>
+						<textarea id="inputDescription" th:field="*{description}" required></textarea>
 					</div>
 				</div>
 
@@ -45,12 +46,14 @@
 
 					<div id="tag">
 						<label for="inputDateDebutEncheres">Début de l'enchère(*):</label>
-						<input type="date" id="inputDateDebutEncheres" th:field="*{dateDebutEncheres}" />
+						<input type="date" id="inputDateDebutEncheres"
+							th:field="*{dateDebutEncheres}" required/>
 					</div>
 
 					<div id="tag">
-						<label for="inputDateFinEncheres">Fin de l'enchère(*):</label>
-						<input type="date" id="inputDateFinEncheres" th:field="*{dateFinEncheres}" />
+						<label for="inputDateFinEncheres">Fin de l'enchère(*):</label> <input
+							type="date" id="inputDateFinEncheres"
+							th:field="*{dateFinEncheres}" required/>
 					</div>
 				</div>
 			</div>
@@ -65,18 +68,15 @@
 			</div>
 
 			<div id="set">
-				<button type="submit">Suivant</button>
-				<button type="button">Annuler la vente</button>
-				<button type="button">Annuler</button>
-			</div>
-
+                <button type="submit">Suivant</button>
+                <button type="button">Annuler la vente</button>
+                <button type="button">Annuler</button>
+            </div>
+            <!-- RAJOUTER ERREUR BLL + LIEN POUR ANNULER LA VENTE -->
+             <ul data-th-if="${#fields.hasErrors('*')}" class="listErrors">
+				<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+			</ul>
 		</form>
-
-		<th:block data-th-if="${errorBLL}">
-			<h2 data-th-each="err : ${errorBLL}" data-th-text="#{${err}}" class="main-h2"></h2>
-		</th:block>
-
-
 	</main>
 </body>
 

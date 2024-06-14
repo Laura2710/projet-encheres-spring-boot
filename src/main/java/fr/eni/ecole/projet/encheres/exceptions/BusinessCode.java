@@ -45,12 +45,14 @@ public class BusinessCode {
 	
 	public static final String VALIDATION_ARTICLE_A_VENDRE_NULL = "validation.article_a_vendre.null";
 	public static final String VALIDATION_ARTICLE_A_VENDRE_NOM_NULL = "validation.article_a_vendre.nom.blank";
+	public static final String VALIDATION_ARTICLE_A_VENDRE_NOM_LENGTH = "validation.article_a_vendre.nom.length";
 	public static final String VALIDATION_ARTICLE_A_VENDRE_DESCRIPTION_BLANK = "validation.article_a_vendre.description.blank";
-	public static final String VALIDATION_ARTICLE_A_VENDRE_DESCRIPTION_LENGTH = "validation.article_a_vendre.description.blank";
+	public static final String VALIDATION_ARTICLE_A_VENDRE_DESCRIPTION_LENGTH = "validation.article_a_vendre.description.length";
 	public static final String VALIDATION_ARTICLE_A_VENDRE_DATE_DEBUT_NULL = "validation.article_a_vendre.date_debut.null";
 	public static final String VALIDATION_ARTICLE_A_VENDRE_DATE_DEBUT_PASSE = "validation.article_a_vendre.date_debut.passe";
 	public static final String VALIDATION_ARTICLE_A_VENDRE_DATE_FIN_NULL = "validation.article_a_vendre.date_fin.null";
 	public static final String VALIDATION_ARTICLE_A_VENDRE_DATE_FIN_PASSE = "validation.article_a_vendre.date_fin.passe";
+	public static final String VALIDATION_ARTICLE_A_VENDRE_DATE_FIN_AVANT_DEBUT = "validation.article_a_vendre.categorie.avant_debut";
 	public static final String VALIDATION_ARTICLE_A_VENDRE_PRIX_INITIAL = "validation.article_a_vendre.prix_initial";
 	public static final String VALIDATION_ARTICLE_A_VENDRE_ADRESSE_NULL = "validation.article_a_vendre.adresse_retrait.null";
 	public static final String VALIDATION_ARTICLE_A_VENDRE_ADRESSE_INCONNU = "validation.article_a_vendre.adresse_retrait.id_inconnu";
@@ -64,6 +66,8 @@ public class BusinessCode {
 	public static final String VALIDATION_OFFRE_MONTANT = "validation.offre.montant";
 	public static final String VALIDATION_OFFRE_CREDIT = "validation.offre.credit";
 	public static final String VALIDATION_OFFRE_AJOUT_ENCHERE = "validation.offre.ajout.enchere";
+
+	public static final String VALIDATION_UTILISATEUR_NON_CREATEUR_VENTE = "validation.utilisateur.id_invalide";
 
 	public static final String VALIDATION_OFFRE_DONNEES_INACCESSIBLES = "validation.offre.donnees.inaccessibles";
 

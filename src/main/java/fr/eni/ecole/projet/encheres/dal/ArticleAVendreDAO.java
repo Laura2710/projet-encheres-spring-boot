@@ -20,4 +20,8 @@ public interface ArticleAVendreDAO {
 
 	void mettreStatutAUn(long id);
 
+	void updateArticle(ArticleAVendre articleAVendre);
+
+	List<ArticleAVendre> findAllWithParameters(String nomRecherche, int categorieRecherche);
+
 }

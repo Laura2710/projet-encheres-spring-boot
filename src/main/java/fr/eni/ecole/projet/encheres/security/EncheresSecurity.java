@@ -42,6 +42,8 @@ public class EncheresSecurity {
 	SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.authorizeHttpRequests(auth -> {
 			auth.requestMatchers("/").permitAll()
+				.requestMatchers("/rechercher").permitAll()
+				.requestMatchers(HttpMethod.POST,"/rechercher").permitAll()
 				.requestMatchers("/utilisateur/creer-compte").permitAll()
 				.requestMatchers("/encheres/detail").hasRole("USER")
 				.requestMatchers("/css/*").permitAll()
@@ -49,6 +51,7 @@ public class EncheresSecurity {
 				.requestMatchers("/images/*").permitAll()
 				.requestMatchers("/vendre").hasRole("USER")
 				.requestMatchers("/vente/annuler").hasRole("USER")
+				.requestMatchers("/vendre/modifier").hasRole("USER")
 				.anyRequest().authenticated();
 		});
 		httpSecurity.formLogin(form -> {
