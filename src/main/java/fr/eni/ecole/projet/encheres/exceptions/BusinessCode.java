@@ -64,4 +64,6 @@ public class BusinessCode {
 	public static final String VALIDATION_OFFRE_MONTANT = "validation.offre.montant";
 	public static final String VALIDATION_OFFRE_CREDIT = "validation.offre.credit";
 	public static final String VALIDATION_OFFRE_AJOUT_ENCHERE = "validation.offre.ajout.enchere";
+
+	public static final String VALIDATION_OFFRE_DONNEES_INACCESSIBLES = "validation.offre.donnees.inaccessibles";
 }
