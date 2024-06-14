@@ -1,5 +1,6 @@
 package fr.eni.ecole.projet.encheres.bll;
 
+
 import java.util.List;
 
 import fr.eni.ecole.projet.encheres.bo.Adresse;
@@ -14,7 +15,7 @@ public interface ArticleAVendreService {
 
 	ArticleAVendre getById(int idArticle);
 
-	void faireUneOffre(Enchere enchere);
+	void faireUneOffre(Enchere enchere, Utilisateur utilisateur);
 
 	Enchere getEnchereByIdArticle(int idArticle);
 
@@ -29,5 +30,10 @@ public interface ArticleAVendreService {
 	Adresse getAdresseById (long id);
 
 	List<Adresse> getAllAdressesRetrait();
+
+	List<ArticleAVendre> getArticlesAVendreAvecParamètres(String nomRecherche,
+			int categorieRecherche);
+
+
 
 }

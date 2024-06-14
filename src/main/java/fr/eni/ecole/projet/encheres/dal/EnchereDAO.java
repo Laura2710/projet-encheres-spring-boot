@@ -9,4 +9,9 @@ public interface EnchereDAO {
 	Enchere getDerniereEnchere(long id);
 
 	int addEnchere(Enchere enchere);
+
+	Enchere getEnchereByUtilisateurAndArticle(long id, String pseudo);
+
+	int getTotalOffre(long id);
+
 }

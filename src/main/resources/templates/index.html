@@ -11,7 +11,28 @@
 <body>
 	<main>
 		<h1 data-th-text="#{index.h1}"></h1>
+		
+		<div class="filterSection">
+			<h2>Filtres : </h2>
+			<form data-th-action="@{/rechercher}" method="post">
+			<ul>
+				<li><input type="text" id="inputName" name="nomRecherche" placeholder="Le nom de l'article contient :" min='5' maxlength="30" data-th-value="${nomRecherche}"></li>
+				<li><input type="submit" value="Rechercher" class="btnFilter" ></li>
+			</ul>
+			<ul>
+				<li><label for="inputCategorie" >Catégories</label>
+					<select id="inputCategorie" name="categorieRecherche" data-th-value="${categorieRecherche}">
+						<option value="0">Toutes</option>
+						<option data-th-each="categorie : ${listCategorie}" data-th-text="${categorie.libelle}" data-th-value="${categorie.id}" th:selected="(${categorie.id} == ${categorieRecherche})"></option>
+					</select>
+				</li>
+			<li><a href="/" class="btnFilter">Annuler</a></li>
+			</ul>
+		</form>
+		</div>
+		
 		<div class="listCard">
+		<div data-th-if="${articlesAVendre == null}"><h2>Aucun article disponible avec ces critères</h2> </div>
 			<div class="articleCard" data-th-each="article : ${articlesAVendre}">
 				<h2 data-th-text="${article.nom}"></h2>
 				<div class="articleCardDetails" >
@@ -27,6 +48,7 @@
 					</h3>
 				</div>
 			</div>
+			
 		</div>
 
 

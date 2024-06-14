@@ -68,4 +68,6 @@ public class BusinessCode {
 	public static final String VALIDATION_OFFRE_AJOUT_ENCHERE = "validation.offre.ajout.enchere";
 
 	public static final String VALIDATION_UTILISATEUR_NON_CREATEUR_VENTE = "validation.utilisateur.id_invalide";
+
+	public static final String VALIDATION_OFFRE_DONNEES_INACCESSIBLES = "validation.offre.donnees.inaccessibles";
 }

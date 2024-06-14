@@ -16,4 +16,6 @@ public interface ArticleAVendreDAO {
 	
 	List<ArticleAVendre> findAllStatutEnCours();
 
+	List<ArticleAVendre> findAllWithParameters(String nomRecherche, int categorieRecherche);
+
 }

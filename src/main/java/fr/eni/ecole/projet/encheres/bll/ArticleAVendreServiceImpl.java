@@ -23,11 +23,11 @@ import fr.eni.ecole.projet.encheres.exceptions.BusinessException;
 @Service
 public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 
-private ArticleAVendreDAO articleAVendreDAO;
-private AdresseDAO adresseDAO;
-private UtilisateurDAO utilisateurDAO;
-private CategorieDAO categorieDAO;
-private EnchereDAO enchereDAO;
+	private ArticleAVendreDAO articleAVendreDAO;
+	private AdresseDAO adresseDAO;
+	private UtilisateurDAO utilisateurDAO;
+	private CategorieDAO categorieDAO;
+	private EnchereDAO enchereDAO;
 
 
 public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO adresseDAO,
@@ -84,32 +84,32 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	    
 	    
 	    return isValid;
-	}
+	    }
 
 	// Validation pour mettre un article en vente
 
 	private boolean validerArticleAVendre(ArticleAVendre articleAVendre, BusinessException be) {
-		if (articleAVendre== null) {
+		if (articleAVendre == null) {
 			be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_NULL);
 			return false;
 		}
 		return true;
 	}
-	
+
 	private boolean validerNom(String nom, BusinessException be) {
-		if (nom== null || nom.isBlank()) {
+		if (nom == null || nom.isBlank()) {
 			be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_NOM_NULL);
 			return false;
 		}
-		
+
 		if (nom.length() < 5 || nom.length() > 30) {
 			be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_NOM_LENGTH);
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	private boolean validerDescription(String description, BusinessException be) {
 		if (description == null || description.isBlank()) {
 			be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_DESCRIPTION_BLANK);
@@ -118,92 +118,105 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		if (description.length() < 20 || description.length() > 300) {
 			be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_DESCRIPTION_LENGTH);
 			return false;
-			}
-		return true;
 		}
+		return true;
+	}
 
 	@Override
 	public List<ArticleAVendre> getArticlesAVendreEnCours() {
-		//Remonter la liste des article a vendre en cours depuis la DAL
+		// Remonter la liste des article a vendre en cours depuis la DAL
 		List<ArticleAVendre> articlesAVendreEnCours = articleAVendreDAO.findAllStatutEnCours();
-		
+
 		return articlesAVendreEnCours;
 	}
 	
-	
+
+	@Override
+	public List<ArticleAVendre> getArticlesAVendreAvecParamètres(String nomRecherche, int categorieRecherche) {
+		List<ArticleAVendre> articlesAVendreAvecParametres = articleAVendreDAO.findAllWithParameters(nomRecherche, categorieRecherche);
+
+		return articlesAVendreAvecParametres;
+	}
+
 	@Override
 	public ArticleAVendre getById(int idArticle) {
-		ArticleAVendre article = this.articleAVendreDAO.getByID(idArticle);
-		
-		Adresse adresse = this.adresseDAO.getByID(article.getAdresseRetrait().getId());
-		article.setAdresseRetrait(adresse);
-		
-		Categorie categorie = this.categorieDAO.read(article.getCategorie().getId());
-		article.setCategorie(categorie);
-		
-		return article;
-	
+		BusinessException be = new BusinessException();
+		try {
+			ArticleAVendre article = this.articleAVendreDAO.getByID(idArticle);
+
+			Adresse adresse = this.adresseDAO.getByID(article.getAdresseRetrait().getId());
+			article.setAdresseRetrait(adresse);
+
+			Categorie categorie = this.categorieDAO.read(article.getCategorie().getId());
+			article.setCategorie(categorie);
+
+			return article;
+		} catch (DataAccessException e) {
+			be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_NULL);
+			throw be;
+		}
+
 	}
 
 	@Transactional
 	@Override
-	public void faireUneOffre(Enchere enchere) {
+	public void faireUneOffre(Enchere enchere, Utilisateur utilisateur) {
 		BusinessException be = new BusinessException();
 		boolean isValid = true;
-		System.out.println(enchere);
-		LocalDate debut = enchere.getArticleAVendre().getDateDebutEncheres();
-		LocalDate fin = enchere.getArticleAVendre().getDateFinEncheres();
-		int credit = enchere.getAcquereur().getCredit();
-		int prixInitial = enchere.getArticleAVendre().getPrixInitial();
-		int prixVente = enchere.getArticleAVendre().getPrixVente();
+		ArticleAVendre article = this.articleAVendreDAO.getByID(enchere.getArticleAVendre().getId());
+		LocalDate debut = article.getDateDebutEncheres();
+		LocalDate fin = article.getDateFinEncheres();
+		int prixInitial = article.getPrixInitial();
+		int prixVente = article.getPrixVente();
+		int credit = utilisateur.getCredit();
 		int montant = enchere.getMontant();
-		
+		enchere.setAcquereur(utilisateur);
+
 		isValid &= verifierDatesEnchere(debut, fin, be);
 		isValid &= verifierMontant(montant, prixInitial, prixVente, be);
 		isValid &= verifierCreditSuffisant(montant, credit, be);
-		
-		if (isValid) {	
-			// 1) trouver le dernier enchérisseur s'il existe et récréditer son compte
-			Enchere derniereEnchere = this.enchereDAO.getDerniereEnchere(enchere.getArticleAVendre().getId());
-			if (derniereEnchere != null) {
-				int montantArecrediter = derniereEnchere.getMontant();
-				Utilisateur dernierEnrichisseur = utilisateurDAO.getByPseudo(derniereEnchere.getAcquereur().getPseudo());
-				dernierEnrichisseur.setCredit(montantArecrediter + dernierEnrichisseur.getCredit());
+
+		if (isValid) {
+
+			// Récréditer le compte du dernier enchérisseur s'il existe
+			// Compter le nombre d'offre existant pour l'article
+			int count = this.enchereDAO.getTotalOffre(enchere.getArticleAVendre().getId());
+
+			if (count > 0) {
+				Enchere derniereEnchere = this.enchereDAO.getDerniereEnchere(enchere.getArticleAVendre().getId());
+				Utilisateur dernierEnrichisseur = utilisateurDAO.getByPseudo(
+						derniereEnchere.getAcquereur().getPseudo());
+				dernierEnrichisseur.setCredit(derniereEnchere.getMontant() + dernierEnrichisseur.getCredit());
 				this.utilisateurDAO.updateCredit(dernierEnrichisseur.getPseudo(), dernierEnrichisseur.getCredit());
 			}
-			
-			// 2) Debiter le nouveau acquéreur 
-			enchere.getAcquereur().setCredit(credit - montant);
-			this.utilisateurDAO.updateCredit(enchere.getAcquereur().getPseudo(), enchere.getAcquereur().getCredit());
-			
-			// 3) Modifier le prix de vente
+
+			// Debiter le nouveau acquéreur
+			utilisateur.setCredit(credit - montant);
+			this.utilisateurDAO.updateCredit(utilisateur.getPseudo(), utilisateur.getCredit());
+
+			// Mettre à jour le prix de vente de l'article
 			this.articleAVendreDAO.updatePrixVente(enchere.getArticleAVendre().getId(), montant);
 			enchere.getArticleAVendre().setPrixVente(montant);
-			
-			// 4) Enregistrer l'enchere
+
+			// Ajouter l'enchère
 			int nbrEnchere = enchereDAO.addEnchere(enchere);
 			if (nbrEnchere == 0) {
 				be.add(BusinessCode.VALIDATION_OFFRE_AJOUT_ENCHERE);
 				throw be;
 			}
-
-		}
-		else {
+		} else {
 			throw be;
 		}
-		
 	}
 
-
-
 	private boolean verifierCreditSuffisant(int montant, int credit, BusinessException be) {
-		if (credit < montant || credit - montant < 0 ) {
+		if (credit < montant) {
 			be.add(BusinessCode.VALIDATION_OFFRE_CREDIT);
 			return false;
 		}
 		return true;
 	}
-	
+
 	private boolean validerDateDebutEncheres(LocalDate dateDebutEncheres, BusinessException be) {
 		LocalDate today = LocalDate.now();
 		if (dateDebutEncheres == null) {
@@ -217,7 +230,6 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	        }
 		return true;
 	}
-	
 
 	private boolean validerDateFinEncheres(LocalDate dateFinEncheres, LocalDate dateDebutEncheres, BusinessException be) {
 		 if (dateFinEncheres == null) {
@@ -231,13 +243,12 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	        }
 	        
 	        if (dateFinEncheres.isBefore(dateDebutEncheres) || dateFinEncheres.equals(dateDebutEncheres)) {
-	        	// TODO rajouter un bon business code 
 	        	be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_DATE_FIN_AVANT_DEBUT);
 	            return false;
 	        }
 		return true;
 	}
-	
+
 	private boolean validerPrixInitial(int prixInitial, BusinessException be) {
 		if (prixInitial < 1) {
 			be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_PRIX_INITIAL);
@@ -245,9 +256,9 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		}
 		return true;
 	}
-	
+
 	private boolean validerAdresseRetrait(Adresse adresseRetrait, BusinessException be) {
-		
+
 		if (adresseRetrait == null) {
 			be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_ADRESSE_NULL);
 			return false;
@@ -263,7 +274,7 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		}
 		return true;
 	}
-	
+
 	private boolean validerCategorie(Categorie categorie, BusinessException be) {
 		if (categorie == null) {
 			be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_CATEGORIE_NULL);
@@ -280,7 +291,7 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		}
 		return true;
 	}
-	
+
 	@Override
 	public Categorie getCategorieById(long id) {
 		return categorieDAO.read(id);
@@ -289,20 +300,20 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	public List<Categorie> getAllCategories() {
 		return categorieDAO.findAll();
 	}
+
 	
 	public Adresse getAdresseById(long id) {
 		return adresseDAO.getByID(id);
 	}
 	
-	public List<Adresse> getAllAdressesRetrait(){
+	public List<Adresse> getAllAdressesRetrait() {
 		return adresseDAO.findAll();
 	}
-	
-	// Méthodes pour enchères
 
+	// Méthodes pour enchères
 	private boolean verifierMontant(int montant, int prixInitial, int prixVente, BusinessException be) {
 		if (prixVente > prixInitial) {
-			if (montant < prixVente) {
+			if (montant <= prixVente) {
 				be.add(BusinessCode.VALIDATION_OFFRE_MONTANT);
 				return false;
 			}
@@ -316,36 +327,37 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		return true;
 	}
 
-
-
 	private boolean verifierDatesEnchere(LocalDate debut, LocalDate fin, BusinessException be) {
 		LocalDate today = LocalDate.now();
-		if(debut.isAfter(today)) {
-        	be.add(BusinessCode.VALIDATION_OFFRE_DATE_DEBUT);
-        	return false;
+
+		if (debut.isAfter(today)) {
+			be.add(BusinessCode.VALIDATION_OFFRE_DATE_DEBUT);
+			return false;
 		}
-		if(fin.isBefore(today)) {
+
+		if (fin.isBefore(today)) {
 			be.add(BusinessCode.VALIDATION_OFFRE_DATE_FIN);
 			return false;
 		}
 		return true;
 	}
-	
-
 
 	@Override
 	public Enchere getEnchereByIdArticle(int idArticle) {
-		Enchere derniereEnchere = this.enchereDAO.getDerniereEnchere(idArticle);		
-		if (derniereEnchere != null) {
-			derniereEnchere.setAcquereur(utilisateurDAO.getByPseudo(derniereEnchere.getAcquereur().getPseudo()));
+		int count = this.enchereDAO.getTotalOffre(idArticle);
+		ArticleAVendre articleAVendre = this.articleAVendreDAO.getByID(idArticle);
+		if (count > 0) {
+			Enchere derniereEnchere = this.enchereDAO.getDerniereEnchere(idArticle);
+			Utilisateur acquereur = derniereEnchere.getAcquereur();
+			acquereur = utilisateurDAO.getByPseudo(acquereur.getPseudo());
+			derniereEnchere.setMontant(derniereEnchere.getMontant() + 1);
+			derniereEnchere.setArticleAVendre(articleAVendre);
+			derniereEnchere.setAcquereur(acquereur);
+			return derniereEnchere;
 		}
-		else {
-			derniereEnchere = new Enchere();
-			derniereEnchere.setAcquereur(new Utilisateur());
-			
-		}
-		derniereEnchere.setArticleAVendre(articleAVendreDAO.getByID(idArticle));
-		return derniereEnchere;
+		Enchere enchere = new Enchere();
+		enchere.setMontant(articleAVendre.getPrixInitial());
+		enchere.setArticleAVendre(articleAVendre);
+		return enchere;
 	}
-
 }
