@@ -6,7 +6,6 @@
 			ressourceSupp=~{:: link})}">
 <head>
 <title data-th-text="#{index.title}"></title>
-<link rel="stylesheet" data-th-href="@{/css/article-card.css}">
 </head>
 <body>
 	<main>
@@ -37,14 +36,17 @@
 			<div class="articleCard" data-th-each="article : ${articlesAVendre}">
 				<h2 data-th-text="${article.nom}"></h2>
 				<div class="articleCardDetails" >
-					<h3 data-th-text="#{index.prix}">
+					<h3>
+					<span data-th-text="#{index.prix}"></span>
 						<span data-th-if="${article.prixVente != 0}" data-th-text="${article.prixVente}"></span>
 						<span data-th-if="${article.prixVente == 0}" data-th-text="${article.prixInitial}"></span> point(s)
 					</h3>
-					<h3 data-th-text="#{index.fin_enchere}">
+					<h3>
+					<span data-th-text="#{index.fin_enchere}"></span>
 						<span data-th-text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"></span>
 					</h3>
-					<h3 data-th-text="#{index.vendeur}">
+					<h3>
+					<span data-th-text="#{index.vendeur}"></span>
 						<span data-th-text="${article.vendeur.pseudo}"></span>
 					</h3>
 				</div>
