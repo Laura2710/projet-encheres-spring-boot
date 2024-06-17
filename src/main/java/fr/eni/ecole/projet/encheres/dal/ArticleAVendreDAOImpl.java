@@ -30,8 +30,12 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	private static final String UPDATE_PRIX_VENTE = "UPDATE articles_a_vendre SET prix_vente=:prixVente WHERE no_article=:idArticle";
 	private static final String FIND_ALL_STATUT_EN_COURS = "SELECT * FROM ARTICLES_A_VENDRE WHERE statut_enchere = 1";
 	private static final String DELETE_VENTE = "UPDATE articles_a_vendre SET statut_enchere=100 WHERE no_article=:idArticle";
-	private static final String GET_VENTE_NON_COMMENCEES_DU_JOUR = "SELECT * FROM articles_a_vendre WHERE statut_enchere=0";
-	private static final String UPDATE_STATUS_TO_ONE = "UPDATE articles_a_vendre SET statut_enchere=1 WHERE no_article=:idArticle";
+	private static final String GET_VENTE_NON_COMMENCEES_DU_JOUR = "SELECT * FROM articles_a_vendre WHERE statut_enchere=0 AND date_debut_encheres=CAST(GETDATE() as DATE)";
+	private static final String ACTIVER_VENTE = "UPDATE articles_a_vendre SET statut_enchere=1 WHERE no_article=:idArticle";
+	private static final String GET_VENTE_TERMINEES_DU_JOUR = "SELECT * FROM articles_a_vendre WHERE statut_enchere=1 AND date_fin_encheres=CAST(GETDATE() as DATE)";
+	private static final String CLOTURER_VENTE = "UPDATE articles_a_vendre SET statut_enchere=2 WHERE no_article=:idArticle";
+
+	private static final String LIVRER_VENTE = "UPDATE articles_a_vendre SET statut_enchere=3 WHERE no_article=:idArticle";
 
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -146,10 +150,10 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	}
 
 	@Override
-	public void mettreStatutAUn(long idArticle) {
+	public int activerVente(long idArticle) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("idArticle", idArticle);
-		namedParameterJdbcTemplate.update(UPDATE_STATUS_TO_ONE, params);
+		return namedParameterJdbcTemplate.update(ACTIVER_VENTE, params);
 	}
 
 	public List<ArticleAVendre> findAllWithParameters(String nomRecherche, int categorieRecherche) {
@@ -171,6 +175,25 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		return namedParameterJdbcTemplate.query(FIND_ALL_WITH_PARAMETERS.toString(), namedParameters,
 				new ArticleAVendreRowMapper());
 
+	}
+
+	@Override
+	public List<ArticleAVendre> getVentesTerminees() {
+		return namedParameterJdbcTemplate.query(GET_VENTE_TERMINEES_DU_JOUR, new ArticleAVendreRowMapper());
+	}
+
+	@Override
+	public int cloturerVente(long idArticle) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("idArticle", idArticle);
+		return namedParameterJdbcTemplate.update(CLOTURER_VENTE, params);
+	}
+
+	@Override
+	public int livrerVente(long idArticle) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("idArticle", idArticle);
+		return namedParameterJdbcTemplate.update(LIVRER_VENTE, params);
 	}
 
 }

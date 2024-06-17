@@ -41,5 +41,11 @@ public interface ArticleAVendreService {
 	List<ArticleAVendre> getArticlesAVendreAvecParamètres(String nomRecherche,
 			int categorieRecherche);
 
+	List<ArticleAVendre> getVentesTerminees();
+
+	void cloturerVente(long id);
+
+	void effectuerRetrait(ArticleAVendre article, String name);
+
 
 }

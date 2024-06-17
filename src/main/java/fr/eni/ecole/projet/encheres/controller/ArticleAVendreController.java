@@ -185,22 +185,27 @@ public class ArticleAVendreController {
 	
 	@GetMapping("/vente/annuler") 
 	public String annulerVente(@RequestParam("id") int idArticle, Principal principal, Model model) {
-		ArticleAVendre article = this.articleAVendreService.getById(idArticle);
-		// Vérifier que le vendeur est l'utilisateur connecté
-		if (article.getVendeur().getPseudo().equals(principal.getName())) {
-			try {
-				this.articleAVendreService.annulerVente(article);
-			}
-			catch (BusinessException e) {
-				List<String> errors = new ArrayList<String>();
-				e.getClefsExternalisations().forEach(key -> {
-					errors.add(key);
-				});
-				model.addAttribute("errorBLL", errors);
-				return "view-vente-article";
-			}
+		try {
+			ArticleAVendre article = this.articleAVendreService.getById(idArticle);
+			// Vérifier que le vendeur est l'utilisateur connecté
+			if (article.getVendeur().getPseudo().equals(principal.getName())) {
+				try {
+					this.articleAVendreService.annulerVente(article);
+				}
+				catch (BusinessException e) {
+					List<String> errors = new ArrayList<String>();
+					e.getClefsExternalisations().forEach(key -> {
+						errors.add(key);
+					});
+					model.addAttribute("errorBLL", errors);
+					model.addAttribute("articleAVendre", article);
+					return "view-vente-article";
+				}
+			}			
 		}
-
+		catch (BusinessException e) {
+			return afficherVueErreur(e, model);
+		}
 		return "redirect:/";
 	}
 
@@ -211,20 +216,59 @@ public class ArticleAVendreController {
 			ArticleAVendre article = this.articleAVendreService.getById(idArticle);
 			Enchere enchere = this.articleAVendreService.getEnchereByIdArticle(idArticle);
 			injecterDonneesEnchere(model, utilisateur, article, enchere);
-
+			
+			// SI UNE VENTE EST N'A PAS COMMENCE
+			if (article.getStatut() == 0) {
+				model.addAttribute("showNomArticle", true);
+			}
+			
+			
+			// SI UNE VENTE EST EN COURS
 			if (article.getStatut() == 1) {
 				model.addAttribute("enchereForm", enchere);
+				model.addAttribute("showNomArticle", true);
 			}
+			
+			// SI UNE VENTE EST CLOTUREE
+			if (article.getStatut() == 2) {
+				// S'il y a un acquéreur et que l'acquéreur est connecté
+				if (enchere.getAcquereur() != null && enchere.getAcquereur().getPseudo().equals(utilisateur.getPseudo())) {
+					model.addAttribute("cloture", true);	
+					model.addAttribute("showTelephone", true);
+				}
+				// S'il y a un acquéreur et que le vendeur connecté
+				if (enchere.getAcquereur() != null && article.getVendeur().getPseudo().equals(utilisateur.getPseudo())) {
+					model.addAttribute("clotureVendeur", true);
+					model.addAttribute("showTelephone", true);
+					model.addAttribute("acquereur", enchere.getAcquereur().getPseudo());
+				}
+				 // S'il n'y a pas eu d'acquéreur et que c'est le vendeur connecté
+			    if (enchere.getAcquereur() == null && article.getVendeur().getPseudo().equals(utilisateur.getPseudo())) {
+			        model.addAttribute("clotureVendeurSansAcquereur", true);
+			    }
+			}
+			
+			// SI UNE VENTE A ETE LIVREE
+			if (article.getStatut() == 3) {
+				// S'il y a un acquéreur et que le vendeur connecté
+				if (enchere.getAcquereur() != null && article.getVendeur().getPseudo().equals(utilisateur.getPseudo())) {
+					model.addAttribute("livraison", true);
+					model.addAttribute("acquereur", enchere.getAcquereur().getPseudo());
+					model.addAttribute("showTelephone", true);
+				}
+				
+			}
+			
+			// SI UNE VENTE A ETE ANNULEE
+			if (article.getStatut() == 100 && article.getVendeur().getPseudo().equals(utilisateur.getPseudo())) {
+				model.addAttribute("annulee", true);
+			}
+		
 
 			return "view-detail-vente";
 
 		} catch (BusinessException e) {
-			List<String> errors = new ArrayList<String>();
-			e.getClefsExternalisations().forEach(key -> {
-				errors.add(key);
-			});
-			model.addAttribute("errorBLL", errors);
-			return "view-detail-vente";
+			return afficherVueErreur(e, model);
 		}
 	}
 
@@ -261,16 +305,35 @@ public class ArticleAVendreController {
 	            handleBusinessException(e, bindingResult, model, utilisateur, idArticle);
 				return "view-detail-vente";
 			} catch (RuntimeException e) { // Capturer l'exception venant de @Transactionnal
-				handleRuntimeException(e, model);
-				return "view-detail-vente";
+				 model.addAttribute("errorBLL", "validation.offre.donnees.inaccessibles");
+				return "view-errors";
 			}
 
 		} catch (BusinessException e) {
-	        handleBusinessException(e, model);
-			return "view-detail-vente";
+	        return afficherVueErreur(e, model);
 		}
 
 		return "redirect:/encheres/detail?id=" + enchereSoumise.getArticleAVendre().getId();
+	}
+	
+	
+	@GetMapping("/encheres/retrait")
+	public String retraitEnchere(@RequestParam("id") int idArticle, Principal principal, Model model) {
+		try {
+		    // Récupération de l'article s'il existe 
+		 	ArticleAVendre article = articleAVendreService.getById(idArticle);
+		 	
+		 	if (article.getVendeur().getPseudo().equals(principal.getName())) {
+		 		this.articleAVendreService.effectuerRetrait(article, principal.getName());
+		 	}
+		 
+		}
+		catch (BusinessException e) {
+	        return afficherVueErreur(e, model);
+		}
+		
+		return "redirect:/";
+	
 	}
 
 	private void injecterDonneesEnchere(Model model, Utilisateur utilisateur, ArticleAVendre article, Enchere enchere) {
@@ -287,23 +350,23 @@ public class ArticleAVendreController {
 	    injecterDonneesEnchere(model, utilisateur, article, enchere);
 	}
 	
-	
-	private void handleBusinessException(BusinessException e, Model model) {
-	    List<String> errors = e.getClefsExternalisations();
-	    model.addAttribute("errorBLL", errors);
-	}
 
 	private void handleBusinessException(BusinessException e, BindingResult bindingResult, Model model,
 	                                      Utilisateur utilisateur, int idArticle) {
-	    List<String> errors = e.getClefsExternalisations();
-	    errors.forEach(key -> {
+	    e.getClefsExternalisations().forEach(key -> {
 	        ObjectError error = new ObjectError("globalError", key);
 	        bindingResult.addError(error);
 	    });
 	    preparerDonneesEnchere(model, utilisateur, idArticle);
 	}
 
-	private void handleRuntimeException(RuntimeException e, Model model) {
-	    model.addAttribute("errorBLL", "validation.offre.donnees.inaccessibles");
+
+	private String afficherVueErreur(BusinessException e, Model model) {
+		List<String> errors = new ArrayList<String>();
+		e.getClefsExternalisations().forEach(key -> {
+			errors.add(key);
+		});
+		model.addAttribute("errorBLL", errors);
+		return "view-errors";
 	}
 }

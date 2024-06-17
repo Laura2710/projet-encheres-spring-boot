@@ -102,6 +102,18 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
 
 
+	@Override
+	public int crediterVendeur(String pseudo, int credit) {
+		String sql = "UPDATE utilisateurs SET credit=:credit WHERE pseudo=:pseudo";
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("pseudo", pseudo);
+		param.addValue("credit", credit);
+		return namedParameterJdbcTemplate.update(sql, param);
+	}
+
+
+
+
 
 
 
