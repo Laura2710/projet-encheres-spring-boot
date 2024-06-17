@@ -1,47 +1,44 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html xmlns:th="http://www.thymeleaf.org"
+	data-th-replace="~{layouts/layout :: layout-enchere(
+			titrePage=~{:: title}, 
+			contenuPage=~{:: main}, 
+			ressourceSupp=~{:: link})}"
+>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma Deuxième Page</title>
-    <link rel="stylesheet" href="view-profil-form.css">
+<title>Modifier mon profil</title>
+<link rel="stylesheet" data-th-href="@{/css/view-profil-form.css}">
+
+<!--  <link rel="stylesheet" data-th-href="@{/css/formulaire-vente.css}">-->
 </head>
+
 <body>
-    <header>
-        <div class="vpftitle">
-            <h1>Eni-Enchere</h1>
-        </div>
-        <div class="vpfcategories">
-            <a href="#">Accueil</a>
-            <a href="#">Vendre un article</a>
-            <a href="#">Mon profil</a>
-            <a href="#">Se déconnecter</a>
-        </div>
-    </header>
-    <main>
+	<main>
         <h2>Mon Profil</h2>
         <div class="profile-details">
             <div class="left-column">
                 <div class="profile-info">
                     <div class="vpfcategory-info">
                         <p class="vpfcategory">Pseudo:</p>
-                        <p>coach_toto</p>
+                        <p data-th-text="${utilisateur.pseudo}"></p>
                     </div>
                     <div class="vpfcategory-info">
                         <p class="vpfcategory">Prénom:</p>
-                        <p>Lexa</p>
+                        <p data-th-text="${utilisateur.prenom}"></p>
                     </div>
                     <div class="vpfcategory-info">
                         <p class="vpfcategory">Téléphone:</p>
-                        <p>0123456789</p>
+                        <th:block data-th-if="${utilisateur.telephone != null}"><p data-th-text="${utilisateur.telephone}"></p></th:block>
+                         <th:block data-th-if="${utilisateur.telephone == null}"><p>Non renseigné</p></th:block>
                     </div>
                     <div class="vpfcategory-info">
                         <p class="vpfcategory">Adresse:</p>
-                        <p>123 Rue de la Paix</p>
+                        <p></p>
                     </div>
                     <div class="vpfcategory-info">
                         <p class="vpfcategory">Mon crédit:</p>
-                        <p>12 point(s)</p>
+                        <p data-th-text="${utilisateur.credit}"></p>
                     </div>
                 </div>
             </div>
@@ -49,11 +46,11 @@
                 <div class="profile-info">
                     <div class="vpfcategory-info">
                         <p class="vpfcategory">Nom:</p>
-                        <p>Estco</p>
+                        <p data-th-text="${utilisateur.nom}"></p>
                     </div>
                     <div class="vpfcategory-info">
                         <p class="vpfcategory">Email:</p>
-                        <p>lexa.estco@example.com</p>
+                        <p data-th-text="${utilisateur.email}"></p>
                     </div>
                 </div>
             </div>

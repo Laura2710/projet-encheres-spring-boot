@@ -46,6 +46,8 @@ public class EncheresSecurity {
 				.requestMatchers(HttpMethod.POST,"/rechercher").permitAll()
 				.requestMatchers("/utilisateur/creer-compte").permitAll()
 				.requestMatchers("/utilisateur/profil").hasRole("USER")
+				.requestMatchers("/utilisateur/modifierprofil").hasRole("USER")
+				.requestMatchers("/utilisateur/modifiermotdepasse").hasRole("USER")
 				.requestMatchers("/encheres/detail").hasRole("USER")
 				.requestMatchers("/css/*").permitAll()
 				.requestMatchers("/js/*").permitAll()
