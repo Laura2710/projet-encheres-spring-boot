@@ -20,14 +20,14 @@
 					<label for="pseudo" data-th-text="#{view-creer-compte.pseudo}"></label>
 					<input type="text" data-th-field="*{pseudo}" required class="input">
 					<ul data-th-if="${#fields.hasErrors('pseudo')}" class="listErrors">
-						<li th:each="err : ${#fields.errors('pseudo')}" th:text="#{${err}}"></li>
+						<li th:each="err : ${#fields.errors('pseudo')}" th:text="${err}"></li>
 					</ul>
 				</div>
 				<div>
 					<label for="nom" data-th-text="#{view-creer-compte.nom}"></label>
 					<input type="text" data-th-field="*{nom}" required class="input">
 					<ul data-th-if="${#fields.hasErrors('nom')}" class="listErrors">
-						<li th:each="err : ${#fields.errors('nom')}" th:text="#{${err}}"></li>
+						<li th:each="err : ${#fields.errors('nom')}" th:text="${err}"></li>
 					</ul>
 				</div>
 				
@@ -39,14 +39,14 @@
 					<label for="prenom" data-th-text="#{view-creer-compte.prenom}"></label>
 					<input type="text" data-th-field="*{prenom}" required class="input">
 					<ul data-th-if="${#fields.hasErrors('prenom')}" class="listErrors">
-						<li th:each="err : ${#fields.errors('prenom')}" th:text="#{${err}}"></li>
+						<li th:each="err : ${#fields.errors('prenom')}" th:text="${err}"></li>
 					</ul>
 				</div>
 				<div>
 					<label for="email" data-th-text="#{view-creer-compte.email}"></label>
 					<input type="text" data-th-field="*{email}" required class="input">
 					<ul data-th-if="${#fields.hasErrors('email')}" class="listErrors">
-						<li th:each="err : ${#fields.errors('email')}" th:text="#{${err}}"></li>
+						<li th:each="err : ${#fields.errors('email')}" th:text="${err}"></li>
 					</ul>
 				</div>
 			</div>
@@ -55,7 +55,7 @@
 					<label for="telephone" data-th-text="#{view-creer-compte.telephone}"></label>
 					<input type="text" data-th-field="*{telephone}" class="input">
 					<ul data-th-if="${#fields.hasErrors('telephone')}" class="listErrors">
-						<li th:each="err : ${#fields.errors('telephone')}" th:text="#{${err}}"></li>
+						<li th:each="err : ${#fields.errors('telephone')}" th:text="${err}"></li>
 					</ul>
 				</div>
 			</div>
@@ -66,7 +66,7 @@
 				<input type="text" data-th-field="*{adresse.ville}" placeholder="Ville" class="input">
 			</div>
 				<ul data-th-if="${#fields.hasErrors('adresse.*')}" class="listErrors">
-						<li th:each="err : ${#fields.errors('adresse.*')}" th:text="#{${err}}"></li>
+						<li th:each="err : ${#fields.errors('adresse.*')}" th:text="${err}"></li>
 				</ul>
 			<div class="container-div-input">
 				<div>
@@ -79,11 +79,11 @@
 				</div>
 			</div>
 				<ul data-th-if="${#fields.hasErrors('motDePasse')}" class="listErrors">
-						<li th:each="err : ${#fields.errors('motDePasse')}" th:text="#{${err}}"></li>
+						<li th:each="err : ${#fields.errors('motDePasse')}" th:text="${err}"></li>
 				</ul>
 			<!-- Affichage des Exceptions -->
 			<ul data-th-if="${#fields.hasErrors('global')}" class="listErrors">
-				<li th:each="err : ${#fields.errors('global')}" th:text="#{${err}}"></li>
+				<li th:each="err : ${#fields.errors('global')}" th:text="${err}"></li>
 			</ul>
 	
 

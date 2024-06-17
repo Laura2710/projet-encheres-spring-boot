@@ -76,12 +76,8 @@ public class ArticleAVendreController {
 		try {
 			String pseudo = principal.getName();
 			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
-			List<Categorie> categories = this.articleAVendreService.getAllCategories();
-			List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
 			if(utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
 				model.addAttribute("articleAVendre", new ArticleAVendre());
-				model.addAttribute("categories", categories);
-				model.addAttribute("adressesRetrait", adressesRetrait);
 				model.addAttribute("modeModif", false);
 				model.addAttribute("action", "/vendre");
 				return "view-vente-article";
@@ -111,8 +107,13 @@ public class ArticleAVendreController {
 
 		String pseudo = principal.getName();
 		Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
-		List<Categorie> categories = this.articleAVendreService.getAllCategories();
-		List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("articleAVendre", articleAVendre);
+		    model.addAttribute("modeModif", false);
+			model.addAttribute("action", "/vendre");
+		}
+		
 		if (utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
 	        if (!bindingResult.hasErrors()) {
 	            try {
@@ -133,11 +134,20 @@ public class ArticleAVendreController {
 	        bindingResult.addError(error);
 	        return "redirect:/";
 	    }
-
-	    model.addAttribute("categories", categories);
-	    model.addAttribute("adressesRetrait", adressesRetrait);
 	    return "view-vente-article";
 	}
+	
+	@ModelAttribute("categories")
+	public List<Categorie> injecteCategorie() {
+		List<Categorie> categories = this.articleAVendreService.getAllCategories();
+		return categories;
+	} 
+	
+	@ModelAttribute("adressesRetrait")
+	public List<Adresse> injecteAdresse() {
+		List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
+		return adressesRetrait;
+	} 
 	
 	@GetMapping("/vendre/modifier")
 	public String modifierArticle(@RequestParam("id") int idArticle, Model model, Principal principal) {
@@ -145,31 +155,29 @@ public class ArticleAVendreController {
 			ArticleAVendre article = this.articleAVendreService.getById(idArticle);
 			if((article.getStatut() == 0) && principal.getName().equals(article.getVendeur().getPseudo())) {
 			
-			List<Categorie> categories = this.articleAVendreService.getAllCategories();
-			List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
-			
 			System.out.println(article);
 				model.addAttribute("articleAVendre", article);
-				model.addAttribute("categories", categories);
-				model.addAttribute("adressesRetrait", adressesRetrait);
 				model.addAttribute("modeModif", true);
 				model.addAttribute("action", "/vendre/modifier");
 				return "view-vente-article";
 			} else {
-				return "redirect:/index";
+				return "redirect:/";
 			}
 		} catch (Exception e) {
 			model.addAttribute("error", "Impossible de modifier la vente");
-			return "view-vente-article";		
+			return "redirect:/";		
 		}
 	}
 	
 	@PostMapping("/vendre/modifier")
-	public String modifierArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, BindingResult bindingResult, Principal principal) {
+	public String modifierArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, BindingResult bindingResult, Principal principal, Model model) {
+		if(bindingResult.hasErrors()) {
+		    model.addAttribute("modeModif", true);
+			model.addAttribute("action", "/vendre/modifier");
+		    return "view-vente-article";
+		}
 		try {
-			ArticleAVendre article = this.articleAVendreService.getById((int) articleAVendre.getId());
-			System.out.println(articleAVendre);
-			if (article.getStatut() == 0 && principal.getName().equals(article.getVendeur().getPseudo())) {
+			if (articleAVendre.getStatut() == 0 && principal.getName().equals(articleAVendre.getVendeur().getPseudo())) {
 				if (!bindingResult.hasErrors()) {
 					try {
 						articleAVendreService.modifierArticleEnVente(articleAVendre);
@@ -192,7 +200,6 @@ public class ArticleAVendreController {
 				bindingResult.addError(error);
 			});
 		}
-
 		return "index";
 	}
 	
