@@ -18,10 +18,17 @@ public interface ArticleAVendreDAO {
 
 	List<ArticleAVendre> getVentesNonCommencees();
 
-	void mettreStatutAUn(long id);
+	int activerVente(long id);
 
 	void updateArticle(ArticleAVendre articleAVendre);
 
 	List<ArticleAVendre> findAllWithParameters(String nomRecherche, int categorieRecherche);
+
+	List<ArticleAVendre> getVentesTerminees();
+
+	int cloturerVente(long id);
+
+	int livrerVente(long id);
+
 
 }

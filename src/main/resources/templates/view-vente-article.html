@@ -72,11 +72,18 @@
 
 			<div id="set">
                 <button type="submit">Suivant</button>
-                <button type="button">Annuler la vente</button>
+                <a data-th-href="@{/vente/annuler(id=*{id})}" class="btnPrimaire btnAnnuler">Annuler la vente</a>
                 <button type="button">Annuler</button>
             </div>
-            <!-- RAJOUTER ERREUR BLL + LIEN POUR ANNULER LA VENTE -->
-            
+
+             <ul data-th-if="${#fields.hasErrors('*')}" class="listErrors">
+				<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+			</ul>
+			
+			<ul data-th-if="${errorBLL}" class="listErrors">
+				<li th:each="err : ${errorBLL}" th:text="#{${err}}"></li>
+			</ul>
+			
 		</form>
 		
 	</main>
