@@ -24,7 +24,7 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	private static final String INSERT_ARTICLE = "INSERT INTO ARTICLES_A_VENDRE(nom_article, description, date_debut_encheres, date_fin_encheres, statut_enchere, prix_initial, id_utilisateur, no_categorie, no_adresse_retrait) VALUES "
 			+ " (:nom, :description, :dateDebutEncheres, :dateFinEncheres, 0, :prixInitial, :vendeur, :categorie, :adresse)";
 	
-	private static final String UPDATE_ARTICLE = "UPDATE ARTICLES_A_VENDRE SET nom_article = :nom, description = :description, date_debut_encheres = :dateDebutEncheres, date_fin_encheres = :dateFinEncheres,prix_initial = :prixInitial, no_categorie = :categorie, no_adresse_retrait = :adresse WHERE no_article=:idArticle";
+	private static final String UPDATE_ARTICLE = "UPDATE ARTICLES_A_VENDRE SET nom_article = :nom, description = :description, date_debut_encheres = :dateDebutEncheres, date_fin_encheres = :dateFinEncheres,prix_initial = :prixInitial, no_categorie = :categorie, no_adresse_retrait = :adresse WHERE no_article=:id";
 
 	private static final String FIND_BY_ID = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_article = :id";
 	private static final String UPDATE_PRIX_VENTE = "UPDATE articles_a_vendre SET prix_vente=:prixVente WHERE no_article=:idArticle";
@@ -67,7 +67,7 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	}
 	
 	private boolean articleExiste(long id) {
-		 String sql = "SELECT COUNT(*) FROM articles WHERE id = :id";
+		 String sql = "SELECT COUNT(*) FROM articles_a_vendre WHERE no_article = :id";
 		 MapSqlParameterSource parameters = new MapSqlParameterSource();
 		 parameters.addValue("id", id);
 		 int count = namedParameterJdbcTemplate.queryForObject(sql, parameters, Integer.class);
