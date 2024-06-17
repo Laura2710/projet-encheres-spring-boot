@@ -404,30 +404,22 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		return true;
 	}
 
-	@Override
-	public List<ArticleAVendre> getVentesNonCommencees() {
-		return this.articleAVendreDAO.getVentesNonCommencees();
-	}
 
 	@Override
-	public void activerVente(long id) {
+	public void activerVente() {
 		BusinessException be = new BusinessException();
-		int nbr = this.articleAVendreDAO.activerVente(id);
+		int nbr = this.articleAVendreDAO.activerVente();
 		if (nbr == 0) {
 			be.add(BusinessCode.VALIDATION_ACTIVER_VENTE);
 			throw be;
 		}
 	}
 
-	@Override
-	public List<ArticleAVendre> getVentesTerminees() {
-		return this.articleAVendreDAO.getVentesTerminees();
-	}
 
 	@Override
-	public void cloturerVente(long id) {
+	public void cloturerVente() {
 		BusinessException be = new BusinessException();
-		int nbr = this.articleAVendreDAO.cloturerVente(id);
+		int nbr = this.articleAVendreDAO.cloturerVente();
 		if (nbr == 0) {
 			be.add(BusinessCode.VALIDATION_CLOTURER_VENTE);
 			throw be;

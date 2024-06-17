@@ -65,9 +65,16 @@
 				<input type="text" data-th-field="*{adresse.codePostal}" placeholder="Code Postal" class="input">
 				<input type="text" data-th-field="*{adresse.ville}" placeholder="Ville" class="input">
 			</div>
-				<ul data-th-if="${#fields.hasErrors('adresse.*')}" class="listErrors">
-						<li th:each="err : ${#fields.errors('adresse.*')}" th:text="${err}"></li>
+			
+			<div>
+				<ul data-th-if="${#fields.hasErrors('adresse.codePostal')}" class="listErrors">
+						<li th:each="err : ${#fields.errors('adresse.codePostal')}" th:text="${err}"></li>
 				</ul>
+				<ul data-th-if="${#fields.hasErrors('adresse.ville')}" class="listErrors">
+						<li th:each="err : ${#fields.errors('adresse.ville')}" th:text="${err}"></li>
+				</ul>
+				
+			</div>
 			<div class="container-div-input">
 				<div>
 					<label for="motDePasse" data-th-text="#{view-creer-compte.pwd}"></label>
