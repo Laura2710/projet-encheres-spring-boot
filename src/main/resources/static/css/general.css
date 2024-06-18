@@ -35,12 +35,7 @@ h1 {
 	font-size: 3.366rem;
 	align-self: center;
 }
-<<<<<<< HEAD
- 
-=======
 
-
->>>>>>> 538bd7e65ec16722f5f6b3b2cf00e13e974fa065
 /* Fragment Entete */
 header {
 	display: flex;
@@ -89,17 +84,7 @@ main {
 	flex-direction: column;
 	padding: 0.8%;
 }
-<<<<<<< HEAD
- 
-main a {
-	text-decoration: underline;
-}
- 
- 
-=======
 
-
->>>>>>> 538bd7e65ec16722f5f6b3b2cf00e13e974fa065
 footer {
 	background-color: var(--primary);
 	color: white;
@@ -180,15 +165,7 @@ a {
 	text-align: center;
 	width: auto;
 }
-<<<<<<< HEAD
- 
-.form .input {
-	padding: 8px;
-}
- 
-=======
 
->>>>>>> 538bd7e65ec16722f5f6b3b2cf00e13e974fa065
 .main-detail-vente {
 	display: flex;
 	align-items: center;
@@ -239,13 +216,9 @@ a {
 	padding: 1em 2em;
 	border-radius: 8px;
 }
-<<<<<<< HEAD
- 
-.main-h2 {
-=======
+
 
 .main-title {
->>>>>>> 538bd7e65ec16722f5f6b3b2cf00e13e974fa065
 	margin-bottom: 32px;
 	text-align: center;
 }
@@ -419,13 +392,8 @@ h1 {
 	border: none;
 	color: white;
 }
-<<<<<<< HEAD
- 
-#set button:nth-child(2) {
-=======
 
 .btnAnnuler {
->>>>>>> 538bd7e65ec16722f5f6b3b2cf00e13e974fa065
 	background: var(--secondary);
 	border: none;
 	width: auto;
