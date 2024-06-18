@@ -73,24 +73,35 @@ public class UtilisateurController {
 		return "view-profil";
 	}
 	
-	@GetMapping("/modifierprofil")
-	public String modifiermonProfil(@RequestParam(name = "id", required = false) String pseudoParam, Model model,
-			Principal principal) {
+	@GetMapping("/modifier-profil")
+	public String modifiermonProfil(Model model,Principal principal) {
 		String pseudo = principal.getName();
-		if (pseudoParam == null || (pseudoParam != null && pseudoParam.equals(pseudo))) {
-			Utilisateur utilisateurSession = this.utilisateurService.getInfoUtilisateur(pseudo);
-			model.addAttribute("utilisateur", utilisateurSession);
-			//model.addAttribute
-		}
-		if (pseudoParam != null && pseudoParam != pseudo) {
-			Utilisateur utilisateur = this.utilisateurService.getInfoUtilisateur(pseudoParam);
-			model.addAttribute("utilisateur", utilisateur);
-	
-		}
+		Utilisateur utilisateurSession = this.utilisateurService.getInfoUtilisateur(pseudo);
+		model.addAttribute("utilisateur", utilisateurSession); 
 		return "view-profil-form";
 	}
 	
-	@GetMapping("/modifiermotdepasse")
+	@PostMapping("/modifier-profil")
+	public String modifierProfilUtilisateur(@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult, Principal principal, Model model) {
+		
+		if (bindingResult.hasErrors()) {
+			return "view-profil-form";
+		}
+		
+		try {
+			this.utilisateurService.miseAjourProfil(utilisateur, principal.getName() );			
+		}
+		catch (BusinessException e) {
+			e.getClefsExternalisations().forEach(key -> {
+				ObjectError error = new ObjectError("globalError", key);
+				bindingResult.addError(error);
+			});
+		}
+		
+		return "view-profil-form";
+	}
+	
+	@GetMapping("/modifier-mot-de-passe")
 	public String modifiermotdePasse(@RequestParam(name = "id", required = false) String pseudoParam, Model model,
 			Principal principal) {
 		String pseudo = principal.getName();

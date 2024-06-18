@@ -8,20 +8,25 @@
 
 <head>
 <title>Mon profil</title>
-<link rel="stylesheet" data-th-href="@{/css/view-profil.css}"> 
+<!-- <link rel="stylesheet" data-th-href="@{/css/view-profil.css}"> -->
 <!--  <link rel="stylesheet" data-th-href="@{/css/formulaire-vente.css}">-->
 </head>
 
 <body>
 	<main>
         <section class="profil">
-            <h2 data-th-text="${utilisateur.pseudo}"></h2>
-            <p data-th-text="${utilisateur.prenom}"></p>
-            <p data-th-text="${utilisateur.nom}"></p>
-            <p data-th-text="${utilisateur.email}"></p>
-            <p data-th-text="${utilisateur.telephone}"></p>
-            <a data-th-href="@{/}"><button>Retour</button></a>
-            <a data-th-href="@{/}"><button>Modifier</button></a>
+            <h1 data-th-text="${utilisateur.pseudo}"></h1>
+            <p>Prénom: <span data-th-text="${utilisateur.prenom}"></span></p>
+            <p>Nom: <span data-th-text="${utilisateur.nom}"></span></p>
+            <p>Email: <span data-th-text="${utilisateur.email}"></span></p>
+            <p>Téléphone: <span data-th-text="${utilisateur.telephone}"></span></p>
+            <div class="btnActions">
+	            <th:block data-th-if="${utilisateur.pseudo == #authentication.name}">
+	            	<a data-th-href="@{/utilisateur/modifier-profil}" class="btnPrimaire">Modifier</a>
+	            </th:block>
+            
+	            <a data-th-href="@{/}" class="btnPrimaire btnSecondaire">Retour</a>
+            </div>
         </section>
     </main>
 </body>

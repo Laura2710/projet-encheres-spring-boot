@@ -244,4 +244,39 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		return true;
 	}
 
+	@Transactional(rollbackFor = BusinessException.class)
+	@Override
+	public void miseAjourProfil(Utilisateur utilisateur, String pseudo) {
+		BusinessException be = new BusinessException();
+		boolean isValid = true;
+		
+		isValid &= verifierNom(utilisateur.getNom(), be);
+		isValid &= verifierPrenom(utilisateur.getPrenom(), be);
+		isValid &= verifierEmail(utilisateur.getEmail(), be);
+		isValid &= verifierTelephone(utilisateur.getTelephone(), be);
+		isValid &= verifierRue(utilisateur.getAdresse().getRue(), be);
+		isValid &= verifierCodePostal(utilisateur.getAdresse().getCodePostal(), be);
+		isValid &= verifierVille(utilisateur.getAdresse().getVille(), be);
+		
+		if (isValid) {
+			
+			utilisateur.setPseudo(pseudo);
+			int count = this.utilisateurDAO.updateProfil(utilisateur);
+			
+			//utilisateur.getAdresse().setRue(null);
+			count += this.adresseDAO.updateAdresse(utilisateur.getAdresse());
+			
+			if (count != 2) {
+				be.add(BusinessCode.VALIDATION_UPDATE_PROFIL_ERROR);
+				throw be;
+			}
+			
+		}
+		else {
+			throw be;
+		}
+		
+		
+	}
+
 }

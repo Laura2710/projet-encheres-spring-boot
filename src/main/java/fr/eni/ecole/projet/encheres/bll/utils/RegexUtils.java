@@ -31,7 +31,7 @@ public class RegexUtils {
 	}
 	
 	public static boolean isEmail(String email) {
-        String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]+(\\.[a-zA-Z]{2,})+$";
+        String regex =  "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9\\-]+(\\.[a-zA-Z]{2,})+$";
         return callMatcher(regex, email);
 	}
 	

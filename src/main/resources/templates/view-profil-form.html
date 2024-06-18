@@ -8,59 +8,91 @@
 
 <head>
 <title>Modifier mon profil</title>
-<link rel="stylesheet" data-th-href="@{/css/view-profil-form.css}">
-
-<!--  <link rel="stylesheet" data-th-href="@{/css/formulaire-vente.css}">-->
 </head>
 
 <body>
 	<main>
-        <h2>Mon Profil</h2>
-        <div class="profile-details">
-            <div class="left-column">
-                <div class="profile-info">
-                    <div class="vpfcategory-info">
-                        <p class="vpfcategory">Pseudo:</p>
-                        <p data-th-text="${utilisateur.pseudo}"></p>
-                    </div>
-                    <div class="vpfcategory-info">
-                        <p class="vpfcategory">Prénom:</p>
-                        <p data-th-text="${utilisateur.prenom}"></p>
-                    </div>
-                    <div class="vpfcategory-info">
-                        <p class="vpfcategory">Téléphone:</p>
-                        <th:block data-th-if="${utilisateur.telephone != null}"><p data-th-text="${utilisateur.telephone}"></p></th:block>
-                         <th:block data-th-if="${utilisateur.telephone == null}"><p>Non renseigné</p></th:block>
-                    </div>
-                    <div class="vpfcategory-info">
-                        <p class="vpfcategory">Adresse:</p>
-                        <p data-th-text="${utilisateur.adresse.rue+' '+utilisateur.adresse.codePostal}"></p>
-                    </div>
-                    <div class="vpfcategory-info">
-                        <p class="vpfcategory">Mon crédit:</p>
-                        <p data-th-text="${utilisateur.credit}"></p>
-                    </div>
-                </div>
-            </div>
-            <div class="right-column">
-                <div class="profile-info">
-                    <div class="vpfcategory-info">
-                        <p class="vpfcategory">Nom:</p>
-                        <p data-th-text="${utilisateur.nom}"></p>
-                    </div>
-                    <div class="vpfcategory-info">
-                        <p class="vpfcategory">Email:</p>
-                        <p data-th-text="${utilisateur.email}"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="buttons">
-            <button class="modifier">Modifier</button>
-            <button class="modifier-mdp">Modifier Mot de Passe</button>
-            <button class="supprimer">Supprimer Mon Compte</button>
-        </div>
-    </main>
-    <footer></footer>
+
+		<h1>Modifier profil</h1>
+		<form class="form" method="post" data-th-action="@{/utilisateur/modifier-profil}" data-th-object="${utilisateur}">
+			<div>
+				<p>
+					Pseudo : <span data-th-text="${#authentication.name}"></span>
+				</p>
+				<div>
+					<label id="nom">Nom(*): </label>
+					<input type="text" data-th-field="*{nom}" required>
+					<ul data-th-if="${#fields.hasErrors('nom')}" class="listErrors">
+						<li th:each="err : ${#fields.errors('nom')}" th:text="${err}"></li>
+					</ul>
+				</div>
+
+			</div>
+
+			<div>
+				<div>
+					<label id="prenom">Prénom(*): </label>
+					<input type="text" data-th-field="*{prenom}" required>
+					<ul data-th-if="${#fields.hasErrors('prenom')}" class="listErrors">
+						<li th:each="err : ${#fields.errors('prenom')}" th:text="${err}"></li>
+					</ul>
+				</div>
+				<div>
+					<label id="email">Email(*): </label>
+					<input type="email" data-th-field="*{email}" required>
+					<ul data-th-if="${#fields.hasErrors('email')}" class="listErrors">
+						<li th:each="err : ${#fields.errors('email')}" th:text="${err}"></li>
+					</ul>
+				</div>
+			</div>
+			<div>
+				<label id="telephone">Telephone: </label>
+				<input type="tel" data-th-field="*{telephone}">
+				<ul data-th-if="${#fields.hasErrors('telephone')}" class="listErrors">
+					<li th:each="err : ${#fields.errors('telephone')}" th:text="${err}"></li>
+				</ul>
+			</div>
+			<div>
+				<label id="adresse.rue">Adresse(*): </label>
+				<div>
+					<input data-th-field="*{adresse.rue}">
+					<ul data-th-if="${#fields.hasErrors('adresse.rue')}" class="listErrors">
+						<li th:each="err : ${#fields.errors('adresse.rue')}" th:text="${err}"></li>
+					</ul>
+				</div>
+				<div>
+					<input data-th-field="*{adresse.codePostal}">
+					<ul data-th-if="${#fields.hasErrors('adresse.codePostal')}" class="listErrors">
+						<li th:each="err : ${#fields.errors('adresse.codePostal')}" th:text="${err}"></li>
+					</ul>
+				</div>
+				<div>
+					<input data-th-field="*{adresse.ville}">
+					<ul data-th-if="${#fields.hasErrors('adresse.ville')}" class="listErrors">
+						<li th:each="err : ${#fields.errors('adresse.ville')}" th:text="${err}"></li>
+					</ul>
+				</div>
+			</div>
+			<div>
+				<p>
+					Mon crédit : <span data-th-text="${utilisateur.credit}"></span> point(s)
+				</p>
+				<input type="hidden" data-th-field="*{credit}">
+			</div>
+
+			<!-- Affichage des Exceptions -->
+			<ul data-th-if="${#fields.hasErrors('global')}" class="listErrors">
+				<li th:each="err : ${#fields.errors('global')}" th:text="#{${err}}"></li>
+			</ul>
+
+			<div>
+				<input type="submit" value="Modifier" class="btnPrimaire">
+				<a data-th-href="@{/utilisateur/modifier-mot-de-passe}" class="btnPrimaire btnSecondaire">Modifier mot de passe</a>
+				<a data-th-href="@{/utilisateur/profil}" class="btnPrimaire btnAnnuler">Annuler</a>
+			</div>
+		</form>
+
+	</main>
+
 </body>
 </html>

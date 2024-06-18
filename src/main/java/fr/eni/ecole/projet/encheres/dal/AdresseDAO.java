@@ -11,4 +11,6 @@ public interface AdresseDAO {
 
 	List<Adresse> findAll();
 
+	int updateAdresse(Adresse adresse);
+
 }

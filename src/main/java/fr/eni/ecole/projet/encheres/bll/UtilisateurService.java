@@ -11,4 +11,7 @@ public interface UtilisateurService {
 	void creerUnCompte(Utilisateur utilisateur);
 
 	Utilisateur getInfoUtilisateur(String pseudoParam);
+
+	void miseAjourProfil(Utilisateur utilisateur, String name);
+
 }

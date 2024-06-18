@@ -111,4 +111,16 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		return namedParameterJdbcTemplate.update(sql, param);
 	}
 
+	@Override
+	public int updateProfil(Utilisateur utilisateur) {
+		String sql = "UPDATE utilisateurs SET nom=:nom, prenom=:prenom, email=:email, telephone=:telephone WHERE pseudo=:pseudo";
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("nom", utilisateur.getNom());
+		params.addValue("prenom", utilisateur.getPrenom());
+		params.addValue("email", utilisateur.getEmail());
+		params.addValue("telephone", utilisateur.getTelephone());
+		params.addValue("pseudo", utilisateur.getPseudo());
+		return namedParameterJdbcTemplate.update(sql, params);
+	}
+
 }
