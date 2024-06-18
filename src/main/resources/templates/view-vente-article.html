@@ -93,7 +93,7 @@
 
 			<div id="set">
                 <button type="submit">Suivant</button>
-                <a data-th-href="@{/vente/annuler(id=*{id})}" class="btnPrimaire btnAnnuler">Annuler la vente</a>
+                <a data-th-if="${modeModif}" data-th-href="@{/vente/annuler(id=*{id})}" class="btnPrimaire btnAnnuler">Annuler la vente</a>
                 <button type="button">Annuler</button>
             </div>
 
