@@ -40,37 +40,63 @@ public class ArticleAVendreController {
 	}
 
 	@GetMapping
-	public String afficherArticleAVendre(Model model) {
+	public String afficherArticleAVendre(Model model, Principal principal) {
+		
 		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreEnCours();
 		model.addAttribute("articlesAVendre", articlesAVendre);
 		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
 		model.addAttribute("listCategorie",listCategorie);
-		//Ajout au model ma variable "nomRecherché" qui contiendra la chaine de caractère a retrouver dans le nom des articles
+		//Ajout au model ma variable "nomRecherche" qui contiendra la chaine de caractère a retrouver dans le nom des articles
 		String nomRecherche = null;
 		model.addAttribute("nomRecherche", nomRecherche);
-		//Ajout au model de ma variable categorieRecherché qui contiendra l'id de la catégorie a rechercher
+		//Ajout au model de ma variable categorieRecherche qui contiendra l'id de la catégorie a rechercher
 		int categorieRecherche = 0 ;
 		model.addAttribute("categorieRecherche", categorieRecherche);
+//		Ajout de la condition "est connecté"
+		if (principal != null) {
+			String pseudo = principal.getName();
+			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
+			//Ajout des parametres utiles aux filtres si l'utilisateurs est connecté et non Admin.
+			if(utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
+			//Parametre pour les input Select
+			int casUtilisationFiltres = 0;
+			model.addAttribute("casUtilisationFiltres", casUtilisationFiltres);
+			}
+		}
 		return "index";
 	}
 
-	@GetMapping("/profil")
-	public String afficherMonProfil(Model model, Principal principal) {
-		String pseudo = principal.getName();
-		Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
-
-		List<Categorie> categories = this.articleAVendreService.getAllCategories();
-		List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
-		if(utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
-			model.addAttribute("articleAVendre", new ArticleAVendre());
-			model.addAttribute("categories", categories);
-			model.addAttribute("adressesRetrait", adressesRetrait);
-			return "view-profil";
-		} else {
-			return "redirect:/index";
-		}
-	}
 	
+	//TODO Ajoux des liens si connecté sur les artciles
+	//TODO Mutualisation de code
+	//TODO Methode GetAllCategorie en attribut
+	//TODO Sécurité et Validation
+	//TODO Css et JS pour enable les select en fonction du radio (statutRecherche et mesEncheresRecherche = defaut si enable)
+	
+	
+	@PostMapping("/rechercher")
+	public String afficherArticleAVendre(@RequestParam(value = "nomRecherche") String nomRecherche,@RequestParam(value = "categorieRecherche") int categorieRecherche,
+			@RequestParam(value = "casUtilisationFiltres") int casUtilisationFiltres,
+			Model model, Principal principal) {
+		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreAvecParamètres(nomRecherche, categorieRecherche, casUtilisationFiltres, principal);
+		model.addAttribute("articlesAVendre", articlesAVendre);
+		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
+		model.addAttribute("listCategorie",listCategorie);
+		model.addAttribute("nomRecherche", nomRecherche);
+		model.addAttribute("categorieRecherche", categorieRecherche);
+		
+		if (principal != null) {
+			String pseudo = principal.getName();
+			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
+			//Ajout des parametres utiles aux filtres si l'utilisateurs est connecté et non Admin.
+			if(utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
+			//Parametre pour les input select
+			model.addAttribute("casUtilisationFiltres", casUtilisationFiltres);
+			}
+		}
+		return "index";
+		
+	}
 	@GetMapping("/vendre")
 	public String vendreArticle(Model model, Principal principal) {
 		try {
@@ -90,17 +116,6 @@ public class ArticleAVendreController {
 		return "view-vente-article";
 	}
 		
-	@PostMapping("/rechercher")
-	public String afficherArticleAVendre(@RequestParam(value = "nomRecherche") String nomRecherche,@RequestParam(value = "categorieRecherche") int categorieRecherche,Model model) {
-		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreAvecParamètres(nomRecherche, categorieRecherche);
-		model.addAttribute("articlesAVendre", articlesAVendre);
-		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
-		model.addAttribute("listCategorie",listCategorie);
-		model.addAttribute("nomRecherche", nomRecherche);
-		model.addAttribute("categorieRecherche", categorieRecherche);
-		return "index";
-		
-	}
 
 	@PostMapping("/vendre")
 	public String vendreArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, BindingResult bindingResult, Principal principal, Model model) {
@@ -237,6 +252,12 @@ public class ArticleAVendreController {
 			Enchere enchere = this.articleAVendreService.getEnchereByIdArticle(idArticle);
 			injecterDonneesEnchere(model, utilisateur, article, enchere);
 			
+			boolean isAcquereur = enchere.getAcquereur() != null;
+			boolean isAcquereurConnecte = isAcquereur && enchere.getAcquereur().getPseudo().equals(utilisateur.getPseudo());
+			boolean isVendeurConnecte = article.getVendeur().getPseudo().equals(utilisateur.getPseudo());
+
+			model.addAttribute("leVendeurEstConnecte", isVendeurConnecte);
+			
 			// SI UNE VENTE EST N'A PAS COMMENCE
 			if (article.getStatut() == 0) {
 				model.addAttribute("showNomArticle", true);
@@ -249,39 +270,37 @@ public class ArticleAVendreController {
 				model.addAttribute("showNomArticle", true);
 			}
 			
-			// SI UNE VENTE EST CLOTUREE
+
 			if (article.getStatut() == 2) {
-				// S'il y a un acquéreur et que l'acquéreur est connecté
-				if (enchere.getAcquereur() != null && enchere.getAcquereur().getPseudo().equals(utilisateur.getPseudo())) {
-					model.addAttribute("cloture", true);	
-					model.addAttribute("showTelephone", true);
-				}
-				// S'il y a un acquéreur et que le vendeur connecté
-				if (enchere.getAcquereur() != null && article.getVendeur().getPseudo().equals(utilisateur.getPseudo())) {
-					model.addAttribute("clotureVendeur", true);
-					model.addAttribute("showTelephone", true);
-					model.addAttribute("acquereur", enchere.getAcquereur().getPseudo());
-				}
-				 // S'il n'y a pas eu d'acquéreur et que c'est le vendeur connecté
-			    if (enchere.getAcquereur() == null && article.getVendeur().getPseudo().equals(utilisateur.getPseudo())) {
-			        model.addAttribute("clotureVendeurSansAcquereur", true);
+			    if (isAcquereurConnecte) {
+			        model.addAttribute("cloture", "acquereur");
+			        model.addAttribute("showTelephone", true);
+			    } else if (isAcquereur && isVendeurConnecte) {
+			        model.addAttribute("cloture", "vendeur");
+			        model.addAttribute("showTelephone", true);
+			        model.addAttribute("acquereur", enchere.getAcquereur().getPseudo());
+			        model.addAttribute("btnRetrait", true);
+			    } else if (!isAcquereur && isVendeurConnecte) {
+			        model.addAttribute("cloture", "vendeurSansAcquereur");
+			    }
+			    else {
+					model.addAttribute("showNomArticle", true);
 			    }
 			}
+
 			
 			// SI UNE VENTE A ETE LIVREE
 			if (article.getStatut() == 3) {
-				// S'il y a un acquéreur et que le vendeur connecté
-				if (enchere.getAcquereur() != null && article.getVendeur().getPseudo().equals(utilisateur.getPseudo())) {
-					model.addAttribute("livraison", true);
-					model.addAttribute("acquereur", enchere.getAcquereur().getPseudo());
-					model.addAttribute("showTelephone", true);
-				}
-				
+			    if (isAcquereur && isVendeurConnecte) {
+			        model.addAttribute("statut", "livraison");
+			        model.addAttribute("acquereur", enchere.getAcquereur().getPseudo());
+			        model.addAttribute("showTelephone", true);
+			    }
 			}
 			
 			// SI UNE VENTE A ETE ANNULEE
-			if (article.getStatut() == 100 && article.getVendeur().getPseudo().equals(utilisateur.getPseudo())) {
-				model.addAttribute("annulee", true);
+			if (article.getStatut() == 100 && isVendeurConnecte) {
+			    model.addAttribute("statut", "annulee");
 			}
 		
 

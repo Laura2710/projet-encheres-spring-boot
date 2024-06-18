@@ -1,5 +1,6 @@
 package fr.eni.ecole.projet.encheres.dal;
 
+
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -150,25 +151,45 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		return namedParameterJdbcTemplate.update(ACTIVER_VENTE, new MapSqlParameterSource());
 	}
 
-	public List<ArticleAVendre> findAllWithParameters(String nomRecherche, int categorieRecherche) {
-		// Création de mon String Builder avec la requete de base
-		StringBuilder FIND_ALL_WITH_PARAMETERS = new StringBuilder(
-				"SELECT * FROM ARTICLES_A_VENDRE WHERE statut_enchere = 1 ");
-
+	public List<ArticleAVendre> findAllWithParameters(String nomRecherche, int categorieRecherche, int statutRecherche,
+			int casUtilisationFiltres, String pseudoUtilisateurEnSession) {
 		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+		// Création de mon String Builder avec la requete de base
+		StringBuilder FIND_ALL_WITH_PARAMETERS = new StringBuilder("SELECT * FROM ARTICLES_A_VENDRE ");
+
+		// Ajout du filtre des articles sur lequelles l'utilisateur a enchérit
+		if (casUtilisationFiltres == 1 || casUtilisationFiltres == 2 ) {
+			FIND_ALL_WITH_PARAMETERS.append("INNER JOIN ENCHERES ON ARTICLES_A_VENDRE.no_article = ENCHERES.no_article ");
+		}
+		
+		// Ajout du parametre du Statut recherché
+		namedParameters.addValue("statutRecherche", statutRecherche);
+		FIND_ALL_WITH_PARAMETERS.append("WHERE statut_enchere = :statutRecherche ");
+
+		// Ajout du filtres des article vendu par l'utilisateur
+		if(pseudoUtilisateurEnSession != null) {
+			namedParameters.addValue("pseudoUtilisateurEnSession", pseudoUtilisateurEnSession);
+			if (casUtilisationFiltres == 1 || casUtilisationFiltres == 2 ) {
+				FIND_ALL_WITH_PARAMETERS.append(" AND ENCHERES.id_utilisateur = :pseudoUtilisateurEnSession ");
+			}else {
+			FIND_ALL_WITH_PARAMETERS.append(" AND id_utilisateur = :pseudoUtilisateurEnSession ");
+			}
+		}
+
+
 		if (nomRecherche != "") {
-			//Ajout des % a mon nom recherché pour la requete SQL
+			// Ajout des % a mon nom recherché pour la requete SQL
 			String SQLNomRecherche = "%" + nomRecherche + '%';
-			namedParameters.addValue("SQLNomRecherche",SQLNomRecherche);
+			namedParameters.addValue("SQLNomRecherche", SQLNomRecherche);
 			FIND_ALL_WITH_PARAMETERS.append("AND nom_article LIKE :SQLNomRecherche ");
 		}
+
 		if (categorieRecherche != 0) {
 			namedParameters.addValue("categorieRecherche", categorieRecherche);
 			FIND_ALL_WITH_PARAMETERS.append("AND no_categorie = :categorieRecherche ");
 		}
 		return namedParameterJdbcTemplate.query(FIND_ALL_WITH_PARAMETERS.toString(), namedParameters,
 				new ArticleAVendreRowMapper());
-
 	}
 
 

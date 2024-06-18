@@ -67,6 +67,9 @@
 			</div>
 			
 			<div>
+				<ul data-th-if="${#fields.hasErrors('adresse.rue')}" class="listErrors">
+						<li th:each="err : ${#fields.errors('adresse.rue')}" th:text="${err}"></li>
+				</ul>
 				<ul data-th-if="${#fields.hasErrors('adresse.codePostal')}" class="listErrors">
 						<li th:each="err : ${#fields.errors('adresse.codePostal')}" th:text="${err}"></li>
 				</ul>

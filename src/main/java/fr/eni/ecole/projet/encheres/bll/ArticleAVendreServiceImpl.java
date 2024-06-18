@@ -1,5 +1,6 @@
 package fr.eni.ecole.projet.encheres.bll;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -132,8 +133,26 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	
 
 	@Override
-	public List<ArticleAVendre> getArticlesAVendreAvecParamètres(String nomRecherche, int categorieRecherche) {
-		List<ArticleAVendre> articlesAVendreAvecParametres = articleAVendreDAO.findAllWithParameters(nomRecherche, categorieRecherche);
+	public List<ArticleAVendre> getArticlesAVendreAvecParamètres(String nomRecherche, int categorieRecherche, int casUtilisationFiltres, Principal principal) {
+		int statutRecherche = 1;
+		String pseudoUtilisateurEnSession = null;
+		if(principal != null) {
+		switch (casUtilisationFiltres) {
+		case 1, 3:
+			pseudoUtilisateurEnSession = principal.getName();
+			break;
+		case 4:
+			statutRecherche = 0;
+			pseudoUtilisateurEnSession = principal.getName();
+			break;
+		case 2, 5:
+			statutRecherche = 2;
+			pseudoUtilisateurEnSession = principal.getName();
+			break;
+			
+		}}
+		
+		List<ArticleAVendre> articlesAVendreAvecParametres = articleAVendreDAO.findAllWithParameters(nomRecherche, categorieRecherche,statutRecherche,casUtilisationFiltres,pseudoUtilisateurEnSession);
 
 		return articlesAVendreAvecParametres;
 	}
