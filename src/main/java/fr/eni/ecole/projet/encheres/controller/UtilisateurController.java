@@ -78,12 +78,12 @@ public class UtilisateurController {
 			Principal principal) {
 		String pseudo = principal.getName();
 		if (pseudoParam == null || (pseudoParam != null && pseudoParam.equals(pseudo))) {
-			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
+			Utilisateur utilisateurSession = this.utilisateurService.getInfoUtilisateur(pseudo);
 			model.addAttribute("utilisateur", utilisateurSession);
 			//model.addAttribute
 		}
 		if (pseudoParam != null && pseudoParam != pseudo) {
-			Utilisateur utilisateur = this.utilisateurService.getByPseudo(pseudoParam);
+			Utilisateur utilisateur = this.utilisateurService.getInfoUtilisateur(pseudoParam);
 			model.addAttribute("utilisateur", utilisateur);
 	
 		}

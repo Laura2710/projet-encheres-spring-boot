@@ -24,6 +24,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		MapSqlParameterSource param = new MapSqlParameterSource();
 		param.addValue("pseudo", pseudo);
 		return namedParameterJdbcTemplate.queryForObject(sql, param, new UtilisateurRowMapper());
+		
 	}
 	
 	@Override
@@ -96,18 +97,8 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			utilisateur.setAdresse(adresse);
 			return utilisateur;
 		}
+		
 
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 }
