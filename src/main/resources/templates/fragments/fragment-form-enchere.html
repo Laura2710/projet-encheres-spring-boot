@@ -7,9 +7,13 @@
 		<input type="number" th:min="*{montant}" th:max="${utilisateur.credit}" data-th-field="*{montant}" class="input">
 		<input class="btnPrimaire" type="submit" value="Enchérir">
 	</div>
-	<!-- Affichage des Exceptions -->
-	<ul data-th-if="${#fields.hasErrors('*')}" class="listErrors">
-		<li th:each="err : ${#fields.errors('*')}" th:text="#{${err}}"></li>
+		<!-- Affichage des Exceptions BO -->
+	<ul data-th-if="${#fields.hasErrors('montant')}" class="listErrors">
+		<li th:each="err : ${#fields.errors('montant')}" th:text="${err}"></li>
+	</ul>
+	<!-- Affichage des Exceptions GLOBAL -->
+	<ul data-th-if="${#fields.hasErrors('global')}" class="listErrors">
+		<li th:each="err : ${#fields.errors('global')}" th:text="#{${err}}"></li>
 	</ul>
 
 </form>
