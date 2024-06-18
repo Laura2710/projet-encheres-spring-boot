@@ -1,3 +1,9 @@
+@media all and (max-width:1024px) {
+	#creer-compte-form {
+		width: 80%;
+	}
+}
+
 @media all and (max-width:768px) {
 	.form>div:not(.btnActions) {
 		align-items: center;
@@ -71,26 +77,25 @@
 		transform: rotate(45deg);
 		transform-origin: center;
 		position: absolute;
+		width: 50% !important;
 	}
 	.rotateMinus45 {
 		transform: rotate(-45deg);
 		transform-origin: center;
 		position: absolute;
+		width: 50% !important;
 	}
-	
 	#menu .hide {
 		display: none;
 	}
-	
-	
+	#creer-compte-form {
+		width: 90%;
+	}
 }
-
 
 /* Responsive */
 @media screen and (max-width: 750px) {
-
 }
-
 
 @media all and (max-width: 576px) {
 	.form {
@@ -101,11 +106,17 @@
 		flex-direction: column;
 		width: 100%;
 	}
+	.btnActions {
+		row-gap: 16px;
+	}
 	.form>div:not(.btnActions) {
 		align-items: flex-start;
 		width: inherit;
 		justify-content: inherit;
 		align-items: inherit;
+	}
+	#creer-compte-form .container-div-input {
+		grid-template-columns: 1fr;
 	}
 	.listErrors {
 		width: auto !important;
@@ -114,7 +125,7 @@
 		margin-bottom: 32px;
 		align-self: flex-end;
 	}
-	.btnPrimaire {
+	.form .btnPrimaire {
 		width: -webkit-fill-available;
 	}
 	.article-vente {
@@ -126,5 +137,11 @@
 	.warning {
 		width: 100%;
 		text-align: center;
+	}
+	#creer-compte-form {
+		width: 100%;
+	}
+	#set button {
+		width: 100%;
 	}
 }

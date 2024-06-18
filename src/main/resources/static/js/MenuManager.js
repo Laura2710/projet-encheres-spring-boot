@@ -2,7 +2,7 @@
 
 export default class MenuManager {
 	static toggle() {
-		const menuBtn = document.getElementById("menu");
+		const menu = document.getElementById("menu");
 		const navContainer = document.getElementById("navContainer");
 		const menuBar1 = document.getElementById("menuBar1");
 		const menuBar2 = document.getElementById("menuBar2");

@@ -1,5 +1,6 @@
 package fr.eni.ecole.projet.encheres.bll;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -132,8 +133,26 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	
 
 	@Override
-	public List<ArticleAVendre> getArticlesAVendreAvecParamètres(String nomRecherche, int categorieRecherche) {
-		List<ArticleAVendre> articlesAVendreAvecParametres = articleAVendreDAO.findAllWithParameters(nomRecherche, categorieRecherche);
+	public List<ArticleAVendre> getArticlesAVendreAvecParamètres(String nomRecherche, int categorieRecherche, int casUtilisationFiltres, Principal principal) {
+		int statutRecherche = 1;
+		String pseudoUtilisateurEnSession = null;
+		if(principal != null) {
+		switch (casUtilisationFiltres) {
+		case 1, 3:
+			pseudoUtilisateurEnSession = principal.getName();
+			break;
+		case 4:
+			statutRecherche = 0;
+			pseudoUtilisateurEnSession = principal.getName();
+			break;
+		case 2, 5:
+			statutRecherche = 2;
+			pseudoUtilisateurEnSession = principal.getName();
+			break;
+			
+		}}
+		
+		List<ArticleAVendre> articlesAVendreAvecParametres = articleAVendreDAO.findAllWithParameters(nomRecherche, categorieRecherche,statutRecherche,casUtilisationFiltres,pseudoUtilisateurEnSession);
 
 		return articlesAVendreAvecParametres;
 	}
@@ -366,11 +385,16 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	public void annulerVente(ArticleAVendre article) {
 		BusinessException be = new BusinessException();
 		boolean isValid = true;
-
+		
+		// tests erreurs
+		// article.setDateDebutEncheres(article.getDateDebutEncheres().minusDays(1));;
+		
+		
 		isValid &= validerAnnulationDateDebutEnchere(article.getDateDebutEncheres(), be);
-
+		isValid &= validerStatutVente(article.getStatut(), be);
+		
+		// Si l'enchère n'a pas débuté et que son statut est bien à 0
 		if (isValid) {
-			System.out.println(article);
 			int count = this.articleAVendreDAO.annulerVente(article.getId());
 			if (count == 0) {
 				be.add(BusinessCode.VALIDATION_ANNULER_VENTE);
@@ -382,6 +406,14 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 
 	}
 
+	private boolean validerStatutVente(int statut, BusinessException be) {
+		if (statut > 0) {
+			be.add(BusinessCode.VALIDATION_ANNULER_VENTE_STATUT);
+			return false;
+		}
+		return true;
+	}
+
 	private boolean validerAnnulationDateDebutEnchere(LocalDate dateDebutEncheres, BusinessException be) {
 		LocalDate today = LocalDate.now();
 		if (dateDebutEncheres.isBefore(today) || dateDebutEncheres.equals(today)) {
@@ -391,15 +423,70 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		return true;
 	}
 
+
 	@Override
-	public List<ArticleAVendre> getVentesNonCommencees() {
-		return this.articleAVendreDAO.getVentesNonCommencees();
+	public void activerVente() {
+		BusinessException be = new BusinessException();
+		int nbr = this.articleAVendreDAO.activerVente();
+		if (nbr == 0) {
+			be.add(BusinessCode.VALIDATION_ACTIVER_VENTE);
+			throw be;
+		}
 	}
 
-	@Override
-	public void activerVente(long id) {
-		this.articleAVendreDAO.mettreStatutAUn(id);
 
+	@Override
+	public void cloturerVente() {
+		BusinessException be = new BusinessException();
+		int nbr = this.articleAVendreDAO.cloturerVente();
+		if (nbr == 0) {
+			be.add(BusinessCode.VALIDATION_CLOTURER_VENTE);
+			throw be;
+		}
+	}
+
+	@Transactional(rollbackFor = BusinessException.class)
+	@Override
+	public void effectuerRetrait(ArticleAVendre article, String pseudoVendeur) {
+		BusinessException be = new BusinessException();
+		boolean isValid = true;
+		
+		// verifier que le status de l'article est 2
+		isValid &= verifierStatutNonLivre(article.getStatut(), be);
+		
+		if(isValid) {
+			// Créditer vendeur
+			int count = crediterVendeur(article, pseudoVendeur);
+			if (count < 1) {
+				be.add(BusinessCode.VALIDATION_CREDITER_VENDEUR);
+				throw be;
+			}
+			// Mettre à jour statut de l'article à 3
+			count += this.articleAVendreDAO.livrerVente(article.getId());
+			if (count < 2) {
+				be.add(BusinessCode.VALIDATION_LIVRER_ARTICLE);
+				throw be;
+			}
+		}
+		
+	}
+
+	private int crediterVendeur(ArticleAVendre article, String pseudoVendeur) {
+		Utilisateur utilisateur = this.utilisateurDAO.getByPseudo(pseudoVendeur);
+		Enchere enchere = this.enchereDAO.getDerniereEnchere(article.getId());
+		int montantAcrediter = enchere.getMontant();
+		int creditActuel = utilisateur.getCredit();
+		utilisateur.setCredit(creditActuel + montantAcrediter);
+		int count = this.utilisateurDAO.crediterVendeur(utilisateur.getPseudo(), utilisateur.getCredit()); 
+		return count;
+	}
+
+	private boolean verifierStatutNonLivre(int statut, BusinessException be) {
+		if (statut != 2) {
+			be.add(BusinessCode.VALIDATION_STATUT_NON_LIVRE);
+			return false;
+		}
+		return true;
 	}
 
 

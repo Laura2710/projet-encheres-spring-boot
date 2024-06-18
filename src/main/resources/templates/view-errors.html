@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	data-th-replace="~{layouts/layout :: layout-enchere(
+			titrePage=~{:: title}, 
+			contenuPage=~{:: main}, 
+			ressourceSupp=~{:: link})}"
+>
+<head>
+<title data-th-text="#{index.title}"></title>
+</head>
+<body>
+	<main class="main-errors">
+		<th:block data-th-if="${errorBLL}">
+			<h2 data-th-each="err : ${errorBLL}" data-th-text="#{${err}}" class="main-h2"></h2>
+		</th:block>
+			<a href="/">Retourner à l'accueil</a>
+	</main>
+</body>
+</html>
