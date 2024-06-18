@@ -74,4 +74,17 @@ public class BusinessCode {
 	public static final String VALIDATION_ANNULER_VENTE_DATE_DEBUT = "validation.annuler.vente.date.debut";
 
 	public static final String VALIDATION_ANNULER_VENTE = "validation.annuler.vente";
+
+
+	public static final String VALIDATION_ACTIVER_VENTE = "Activation de l'enchère impossible";
+
+	public static final String VALIDATION_CLOTURER_VENTE ="Clôture de l'enchère impossible";
+
+	public static final String VALIDATION_STATUT_NON_LIVRE = "validation.statut.non.livre";
+
+	public static final String VALIDATION_CREDITER_VENDEUR = "validation.crediter.vendeur";
+
+	public static final String VALIDATION_LIVRER_ARTICLE = "validation.livrer.article";
+
+	public static final String VALIDATION_ANNULER_VENTE_STATUT = "validation.annuler.vente.statut";
 }

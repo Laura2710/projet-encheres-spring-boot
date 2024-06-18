@@ -14,15 +14,21 @@
 <body>
 	<main>
 	<!--   Si la vue est accédée par / -->
-		<h1>Nouvelle Vente</h1>
+		<th:block data-th-if="${!modeModif}"><h1>Nouvelle Vente</h1></th:block>
+		<th:block data-th-if="${modeModif}"><h1>Modification de la  Vente</h1></th:block>
 
-		<form id="creer-vente-form" class="form" th:object="${articleAVendre}" data-th-action="@{/vendre}" method="post">
+		<form id="creer-vente-form" class="form" th:object="${articleAVendre}" data-th-action="@{${action}}" method="post">
+		
+		<input type="hidden" data-th-field="*{id}">
 
 			<div id="bloc">
 				<div id="bloc1">
 					<div id="tag">
 						<label for="inputNom">Article(*): </label>
 						<input type="text" id="inputNom" data-th-field="*{nom}" required />
+						<ul data-th-if="${#fields.hasErrors('nom')}" class="listErrors">
+							<li th:each="err : ${#fields.errors('nom')}" th:text="${err}"></li>
+						</ul>
 					</div>
 
 					<div id="tag">
@@ -30,11 +36,17 @@
 						<select id="inputCategorie" data-th-field="*{categorie}" required>
 							<option th:each="categorie : ${categories}" th:value="${categorie.id}" th:text="${categorie.libelle}"></option>
 						</select>
+						<ul data-th-if="${#fields.hasErrors('categorie')}" class="listErrors">
+							<li th:each="err : ${#fields.errors('categorie')}" th:text="${err}"></li>
+						</ul>
 					</div>
 
 					<div id="tag">
 						<label for="inputDescription">Description(*):</label>
 						<textarea id="inputDescription" th:field="*{description}" required></textarea>
+						<ul data-th-if="${#fields.hasErrors('description')}" class="listErrors">
+							<li th:each="err : ${#fields.errors('description')}" th:text="${err}"></li>
+						</ul>
 					</div>
 				</div>
 
@@ -42,18 +54,27 @@
 					<div id="tag">
 						<label for="inputPrixInitial">Mise à prix(*):</label>
 						<input type="number" id="inputPrixInitial" data-th-field="*{prixInitial}" required />
+						<ul data-th-if="${#fields.hasErrors('prixInitial')}" class="listErrors">
+							<li th:each="err : ${#fields.errors('prixInitial')}" th:text="${err}"></li>
+						</ul>
 					</div>
 
 					<div id="tag">
 						<label for="inputDateDebutEncheres">Début de l'enchère(*):</label>
-						<input type="date" id="inputDateDebutEncheres"
-							th:field="*{dateDebutEncheres}" required/>
+						<input type="date" id="inputDateDebutEncheres" name="dateDebutEncheres"
+							th:value="${articleAVendre.dateDebutEncheres}" required/>
+							<ul data-th-if="${#fields.hasErrors('dateDebutEncheres')}" class="listErrors">
+								<li th:each="err : ${#fields.errors('dateDebutEncheres')}" th:text="${err}"></li>
+							</ul>
 					</div>
 
 					<div id="tag">
 						<label for="inputDateFinEncheres">Fin de l'enchère(*):</label> <input
-							type="date" id="inputDateFinEncheres"
-							th:field="*{dateFinEncheres}" required/>
+							type="date" id="inputDateFinEncheres" name="dateFinEncheres"
+							th:value="${articleAVendre.dateFinEncheres}" required/>
+							<ul data-th-if="${#fields.hasErrors('dateFinEncheres')}" class="listErrors">
+								<li th:each="err : ${#fields.errors('dateFinEncheres')}" th:text="${err}"></li>
+							</ul>
 					</div>
 				</div>
 			</div>
@@ -62,21 +83,26 @@
 				<label for="inputRetrait">Retrait(*): </label>
 				<select id="inputRetrait" data-th-field="*{adresseRetrait}" required>
 					<option th:each="adresseRetrait : ${adressesRetrait}" th:value="${adresseRetrait.id}"
-						th:text="${adresseRetrait.rue + adresseRetrait.codePostal + adresseRetrait.ville}"
-					></option>
+						th:text="${adresseRetrait.rue + ' ' + adresseRetrait.codePostal + ' ' + adresseRetrait.ville}">
+					</option>
 				</select>
+				<ul data-th-if="${#fields.hasErrors('adresseRetrait')}" class="listErrors">
+					<li th:each="err : ${#fields.errors('adresseRetrait')}" th:text="${err}"></li>
+				</ul>
 			</div>
 
 			<div id="set">
                 <button type="submit">Suivant</button>
-                <button type="button">Annuler la vente</button>
+                <a data-th-if="${modeModif}" data-th-href="@{/vente/annuler(id=*{id})}" class="btnPrimaire btnAnnuler">Annuler la vente</a>
                 <button type="button">Annuler</button>
             </div>
-            <!-- RAJOUTER ERREUR BLL + LIEN POUR ANNULER LA VENTE -->
+
              <ul data-th-if="${#fields.hasErrors('*')}" class="listErrors">
-				<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+				<li>Veuillez vérifier vos champs</li>
 			</ul>
+			
 		</form>
+		
 	</main>
 </body>
 

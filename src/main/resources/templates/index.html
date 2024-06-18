@@ -3,7 +3,8 @@
 	data-th-replace="~{layouts/layout :: layout-enchere(
 			titrePage=~{:: title}, 
 			contenuPage=~{:: main}, 
-			ressourceSupp=~{:: link})}">
+			ressourceSupp=~{:: link})}"
+>
 <head>
 <title data-th-text="#{index.title}"></title>
 </head>
@@ -48,28 +49,30 @@
 				
 			</form>
 		</div>
-		
+
 		<div class="listCard">
-		<div data-th-if="${articlesAVendre == null}"><h2>Aucun article disponible avec ces critères</h2> </div>
+			<div data-th-if="${articlesAVendre == null}">
+				<h2>Aucun article disponible avec ces critères</h2>
+			</div>
 			<div class="articleCard" data-th-each="article : ${articlesAVendre}">
 				<h2 data-th-text="${article.nom}"></h2>
-				<div class="articleCardDetails" >
+				<div class="articleCardDetails">
 					<h3>
-					<span data-th-text="#{index.prix}"></span>
-						<span data-th-if="${article.prixVente != 0}" data-th-text="${article.prixVente}"></span>
-						<span data-th-if="${article.prixVente == 0}" data-th-text="${article.prixInitial}"></span> point(s)
+						<span data-th-text="#{index.prix}"></span> <span data-th-if="${article.prixVente != 0}"
+							data-th-text="${article.prixVente}"
+						></span> <span data-th-if="${article.prixVente == 0}" data-th-text="${article.prixInitial}"></span> point(s)
 					</h3>
 					<h3>
-					<span data-th-text="#{index.fin_enchere}"></span>
-						<span data-th-text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"></span>
+						<span data-th-text="#{index.fin_enchere}"></span> <span
+							data-th-text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"
+						></span>
 					</h3>
 					<h3>
-					<span data-th-text="#{index.vendeur}"></span>
-						<span data-th-text="${article.vendeur.pseudo}"></span>
+						<span data-th-text="#{index.vendeur}"></span> <span data-th-text="${article.vendeur.pseudo}"></span>
 					</h3>
 				</div>
 			</div>
-			
+
 		</div>
 
 

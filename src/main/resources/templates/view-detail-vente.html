@@ -10,16 +10,31 @@
 </head>
 <body>
 	<main class="main-detail-vente">
-		
-		<!-- SI L'ARTICLE N'EXISTE PAS -->
-		<th:block data-th-if="${errorBLL}">
-			<h2 data-th-each="err : ${errorBLL}" data-th-text="#{${err}}" class="main-h2"></h2>
-		</th:block>
-		
-		<!-- SI L'ARTICLE EXISTE -->
-		<th:block data-th-unless="${errorBLL}">
-		
-			<h2 data-th-text="${article.nom}" class="main-h2">Détail d'une vente</h2>
+			<th:block data-th-if="${showNomArticle}">
+			    <h1 data-th-text="${article.nom}" class="main-title"></h1>
+			</th:block>
+			
+			<th:block data-th-switch="${cloture}">
+			    <th:block data-th-case="'acquereur'">
+			        <h1>Vous avez remporté la vente</h1>
+			    </th:block>
+			    <th:block data-th-case="'vendeur'">
+			        <h1><a data-th-href="@{/profil(id=${acquereur})}" data-th-text="${acquereur}"></a> a remporté la vente</h1>
+			    </th:block>
+			    <th:block data-th-case="'vendeurSansAcquereur'">
+			        <h1>Aucun individu ne s'est porté acquéreur :(</h1>
+			    </th:block>
+			</th:block>
+
+			<th:block data-th-switch="${statut}">
+			    <th:block data-th-case="'livraison'">
+			        <h1>Vous avez livré à <span data-th-text="${acquereur}"></span></h1>
+			    </th:block>
+			    <th:block data-th-case="'annulee'">
+			        <h1 data-th-text="${article.nom + ' (annulée)'}" class="main-h2"></h1>
+			    </th:block>
+			</th:block>
+			
 			<article class="article-vente">
 				<section class="description-vente">
 					<p>Article: <span data-th-text="${article.nom}"></span></p>
@@ -27,6 +42,9 @@
 					<p>Description: <span data-th-text="${article.description}"></span></p>
 					<p>Retrait: <span data-th-text="${article.adresseRetrait.rue + ', ' + article.adresseRetrait.codePostal + ' ' + article.adresseRetrait.ville}"></span></p>
 					<p>Vendeur: <span data-th-text="${article.vendeur.pseudo}"></span></p>
+					<th:block data-th-if="${showTelephone}">
+						<p>Téléphone: <span data-th-text="${article.vendeur.telephone != null ? article.vendeur.telephone : 'non renseigné'}"></span></p>
+					</th:block>
 				</section>
 				<section >
 					<ul class="detail-vente">
@@ -45,14 +63,18 @@
 			</article>
 
 			<a class="btnPrimaire" data-th-href="@{/vendre/modifier(id=${article.id})}" data-th-if="${leVendeurEstConnecte and article.statut == 0}">Modifier</a>
+			
 			<!-- SI UTILISATEUR CONNECTE DIFFERENT DU VENDEUR, AFFICHER FORMULAIRE"-->
 			<th:block data-th-if="${utilisateur.credit >= enchere.montant and article.statut == 1 and !leVendeurEstConnecte}">
 				<form data-th-replace="~{fragments/fragment-form-enchere :: frag-form-enchere}"></form>				
 			</th:block>
-			<!-- SI UTILISATEUR N'A PAS ASSEZ DE CREDIT AFFICHER MESSAGE"-->
-			<p data-th-if="${utilisateur.credit < enchere.montant and !leVendeurEstConnecte}" class="warning" >Vous n'avez pas plus assez de crédit pour enchérir</p>
 			
-		</th:block>
+			<!-- SI UTILISATEUR N'A PAS ASSEZ DE CREDIT AFFICHER MESSAGE"-->
+			<p data-th-if="${utilisateur.credit < enchere.montant and !leVendeurEstConnecte and article.statut == 1}" class="warning" >Vous n'avez pas assez de crédit pour enchérir</p>
+			
+			<th:block data-th-if="${btnRetrait}">
+				<a data-th-href="@{/encheres/retrait(id=${article.id})}" class="btnPrimaire">Retrait effectué</a>
+			</th:block>
 		<a href="/">Retourner à l'accueil</a>
 	</main>
 

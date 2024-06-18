@@ -35,12 +35,13 @@ public interface ArticleAVendreService {
 	void annulerVente(ArticleAVendre article);
 
 
-	List<ArticleAVendre> getVentesNonCommencees();
-
-	void activerVente(long id);
-
 	List<ArticleAVendre> getArticlesAVendreAvecParamètres(String nomRecherche,
 			int categorieRecherche, int casUtilisationFiltres, Principal principal);
 
+	void activerVente();
+
+	void cloturerVente();
+
+	void effectuerRetrait(ArticleAVendre article, String name);
 
 }
