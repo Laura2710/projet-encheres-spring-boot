@@ -1,6 +1,7 @@
 package fr.eni.ecole.projet.encheres.bll;
 
 
+import java.security.Principal;
 import java.util.List;
 
 import fr.eni.ecole.projet.encheres.bo.Adresse;
@@ -35,7 +36,7 @@ public interface ArticleAVendreService {
 
 
 	List<ArticleAVendre> getArticlesAVendreAvecParamètres(String nomRecherche,
-			int categorieRecherche);
+			int categorieRecherche, int casUtilisationFiltres, Principal principal);
 
 	void activerVente();
 

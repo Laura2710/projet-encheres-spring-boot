@@ -40,21 +40,63 @@ public class ArticleAVendreController {
 	}
 
 	@GetMapping
-	public String afficherArticleAVendre(Model model) {
+	public String afficherArticleAVendre(Model model, Principal principal) {
+		
 		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreEnCours();
 		model.addAttribute("articlesAVendre", articlesAVendre);
 		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
 		model.addAttribute("listCategorie",listCategorie);
-		//Ajout au model ma variable "nomRecherché" qui contiendra la chaine de caractère a retrouver dans le nom des articles
+		//Ajout au model ma variable "nomRecherche" qui contiendra la chaine de caractère a retrouver dans le nom des articles
 		String nomRecherche = null;
 		model.addAttribute("nomRecherche", nomRecherche);
-		//Ajout au model de ma variable categorieRecherché qui contiendra l'id de la catégorie a rechercher
+		//Ajout au model de ma variable categorieRecherche qui contiendra l'id de la catégorie a rechercher
 		int categorieRecherche = 0 ;
 		model.addAttribute("categorieRecherche", categorieRecherche);
+//		Ajout de la condition "est connecté"
+		if (principal != null) {
+			String pseudo = principal.getName();
+			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
+			//Ajout des parametres utiles aux filtres si l'utilisateurs est connecté et non Admin.
+			if(utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
+			//Parametre pour les input Select
+			int casUtilisationFiltres = 0;
+			model.addAttribute("casUtilisationFiltres", casUtilisationFiltres);
+			}
+		}
 		return "index";
 	}
 
 	
+	//TODO Ajoux des liens si connecté sur les artciles
+	//TODO Mutualisation de code
+	//TODO Methode GetAllCategorie en attribut
+	//TODO Sécurité et Validation
+	//TODO Css et JS pour enable les select en fonction du radio (statutRecherche et mesEncheresRecherche = defaut si enable)
+	
+	
+	@PostMapping("/rechercher")
+	public String afficherArticleAVendre(@RequestParam(value = "nomRecherche") String nomRecherche,@RequestParam(value = "categorieRecherche") int categorieRecherche,
+			@RequestParam(value = "casUtilisationFiltres") int casUtilisationFiltres,
+			Model model, Principal principal) {
+		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreAvecParamètres(nomRecherche, categorieRecherche, casUtilisationFiltres, principal);
+		model.addAttribute("articlesAVendre", articlesAVendre);
+		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
+		model.addAttribute("listCategorie",listCategorie);
+		model.addAttribute("nomRecherche", nomRecherche);
+		model.addAttribute("categorieRecherche", categorieRecherche);
+		
+		if (principal != null) {
+			String pseudo = principal.getName();
+			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
+			//Ajout des parametres utiles aux filtres si l'utilisateurs est connecté et non Admin.
+			if(utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
+			//Parametre pour les input select
+			model.addAttribute("casUtilisationFiltres", casUtilisationFiltres);
+			}
+		}
+		return "index";
+		
+	}
 	@GetMapping("/vendre")
 	public String vendreArticle(Model model, Principal principal) {
 		try {
@@ -74,17 +116,6 @@ public class ArticleAVendreController {
 		return "view-vente-article";
 	}
 		
-	@PostMapping("/rechercher")
-	public String afficherArticleAVendre(@RequestParam(value = "nomRecherche") String nomRecherche,@RequestParam(value = "categorieRecherche") int categorieRecherche,Model model) {
-		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreAvecParamètres(nomRecherche, categorieRecherche);
-		model.addAttribute("articlesAVendre", articlesAVendre);
-		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
-		model.addAttribute("listCategorie",listCategorie);
-		model.addAttribute("nomRecherche", nomRecherche);
-		model.addAttribute("categorieRecherche", categorieRecherche);
-		return "index";
-		
-	}
 
 	@PostMapping("/vendre")
 	public String vendreArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, BindingResult bindingResult, Principal principal, Model model) {

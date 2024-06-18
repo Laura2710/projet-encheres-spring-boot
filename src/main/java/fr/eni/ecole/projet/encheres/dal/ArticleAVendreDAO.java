@@ -1,5 +1,6 @@
 package fr.eni.ecole.projet.encheres.dal;
 
+
 import java.util.List;
 
 import fr.eni.ecole.projet.encheres.bo.ArticleAVendre;
@@ -18,7 +19,7 @@ public interface ArticleAVendreDAO {
 
 	void updateArticle(ArticleAVendre articleAVendre);
 
-	List<ArticleAVendre> findAllWithParameters(String nomRecherche, int categorieRecherche);
+	List<ArticleAVendre> findAllWithParameters(String nomRecherche, int categorieRecherche, int statutRecherche, int casUtilisationFiltres, String pseudoUtilisateurEnSession);
 
 	int livrerVente(long id);
 

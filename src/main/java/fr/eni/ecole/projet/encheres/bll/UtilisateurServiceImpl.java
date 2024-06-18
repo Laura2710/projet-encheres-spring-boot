@@ -38,6 +38,14 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		return this.adresseDAO.getByID(id);
 	}
 
+	@Override
+	public Utilisateur getInfoUtilisateur(String pseudo) {
+		Utilisateur utilisateur= this.getByPseudo(pseudo);
+		Adresse adresse= this.getAdresseByID(utilisateur.getAdresse().getId());
+		System.out.println(adresse);
+		utilisateur.setAdresse(adresse);
+		return utilisateur;
+	} 
 	@Transactional
 	@Override
 	public void creerUnCompte(Utilisateur utilisateur) {

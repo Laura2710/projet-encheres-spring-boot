@@ -11,35 +11,42 @@
 <body>
 	<main>
 		<h1 data-th-text="#{index.h1}"></h1>
-
+		
 		<div class="filterSection">
-			<h2>Filtres :</h2>
+			<h2>Filtres : </h2>
 			<form data-th-action="@{/rechercher}" method="post">
+			<ul>
+				<li><input type="text" id="inputName" name="nomRecherche" placeholder="Le nom de l'article contient :" min='5' maxlength="30" data-th-value="${nomRecherche}"></li>
+				<li><input type="submit" value="Rechercher" class="btnFilter" ></li>
+			</ul>
+			<ul>
+				<li><label for="inputCategorie" >Catégories</label>
+					<select id="inputCategorie" name="categorieRecherche" data-th-value="${categorieRecherche}">
+						<option value="0">Toutes</option>
+						<option data-th-each="categorie : ${listCategorie}" data-th-text="${categorie.libelle}" data-th-value="${categorie.id}" th:selected="(${categorie.id} == ${categorieRecherche})"></option>
+					</select>
+				</li>
+			</ul>
+			<ul>
+			<li><a href="/" class="btnFilter">Annuler</a></li>
+			</ul>
 				<ul>
-					<li>
-						<input type="text" id="inputName" name="nomRecherche" placeholder="Le nom de l'article contient :" min='5'
-							maxlength="30" data-th-value="${nomRecherche}"
-						>
-					</li>
-					<li>
-						<input type="submit" value="Rechercher" class="btnFilter">
-					</li>
+					<li><input type="radio" id="achats" name="buySell" checked> <label for="achats">Achats</label> </li>
+					<li><input type="radio" id="ventes" name="buySell"> <label for="ventes">Mes Ventes</label> </li>
 				</ul>
 				<ul>
-
-					<li>
-						<label for="inputCategorie">Catégories</label>
-						<select id="inputCategorie" name="categorieRecherche" data-th-value="${categorieRecherche}">
-							<option value="0">Toutes</option>
-							<option data-th-each="categorie : ${listCategorie}" data-th-text="${categorie.libelle}"
-								data-th-value="${categorie.id}" th:selected="(${categorie.id} == ${categorieRecherche})"
-							></option>
-						</select>
-					</li>
-					<li>
-						<a href="/" class="btnFilter">Annuler</a>
-					</li>
+				<li>
+				<select id="inputcasUtilisationFiltres" name="casUtilisationFiltres" data-th-value="${casUtilisationFiltres}">
+					<option value="0" selected>Enchères ouvertes</option>
+					<option value="1" >Mes enchères en cours</option>
+					<option value="2" >Mes enchères remportées</option>
+					<option value="3" >Mes ventes en cours</option>
+					<option value="4">Mes ventes non débutées</option>
+					<option value="5">Mes ventes terminées</option>
+					</select>
+				</li>
 				</ul>
+				
 			</form>
 		</div>
 
@@ -68,7 +75,7 @@
 
 		</div>
 
-
+<a data-th-href="@{/utilisateur/profil(id='coach_titi')}">coach_titi_test</a>
 	</main>
 </body>
 </html>
