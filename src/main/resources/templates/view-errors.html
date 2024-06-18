@@ -10,6 +10,9 @@
 </head>
 <body>
 	<main class="main-errors">
+	
+	<img data-th-src="@{/images/logoErreur.png}" alt="logo d'erreur" class="logo-erreur">
+	
 		<th:block data-th-if="${errorBLL}">
 			<h1 data-th-each="err : ${errorBLL}" data-th-text="#{${err}}" class="main-title"></h1>
 		</th:block>
