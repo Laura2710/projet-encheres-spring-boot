@@ -14,4 +14,5 @@ public interface EnchereDAO {
 
 	int getTotalOffre(long id);
 
+
 }

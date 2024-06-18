@@ -1,5 +1,6 @@
 package fr.eni.ecole.projet.encheres.dal;
 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -84,6 +85,8 @@ public class EnchereDAOImpl implements EnchereDAO {
 		namedParameters.addValue("idArticle", id);
 		return jdbcTemplate.queryForObject(COMPTER_OFFRES_PAR_ARTICLE, namedParameters, Integer.class);
 	}
+
+
 
 
 }
