@@ -146,6 +146,7 @@ a {
     align-items: center;
     min-width: 200px;
     height: 42px;
+    width: 100%;
 }
  
 .btnSecondaire {
@@ -427,4 +428,22 @@ h1 {
 
 .main-errors a {
 	text-align: center;
+}
+
+.profil {
+    text-align: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.profil h2 {
+    margin-top: 0;
+}
+
+.profil p {
+    margin: 10px 0;
 }

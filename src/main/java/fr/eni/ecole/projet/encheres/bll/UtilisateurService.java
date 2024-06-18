@@ -9,4 +9,9 @@ public interface UtilisateurService {
 	Adresse getAdresseByID(long id);
 	
 	void creerUnCompte(Utilisateur utilisateur);
+
+	Utilisateur getInfoUtilisateur(String pseudoParam);
+
+	void miseAjourProfil(Utilisateur utilisateur, String name);
+
 }

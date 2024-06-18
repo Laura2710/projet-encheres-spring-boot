@@ -69,4 +69,17 @@ public class AdresseDAOImpl implements AdresseDAO {
 
 	}
 
+	@Override
+	public int updateAdresse(Adresse adresse) {
+		String sql = "UPDATE adresses SET rue=:rue, code_postal=:codePostal, ville=:ville WHERE no_adresse=:id";
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("rue", adresse.getRue());
+		params.addValue("codePostal", adresse.getCodePostal());
+		params.addValue("ville", adresse.getVille());
+		params.addValue("id", adresse.getId());
+		
+		return namedParameterJdbcTemplate.update(sql, params);
+		
+	}
+
 }
