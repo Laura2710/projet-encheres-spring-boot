@@ -15,4 +15,6 @@ public interface UtilisateurDAO {
 
 	int crediterVendeur(String pseudo, int credit);
 
+	int updateProfil(Utilisateur utilisateur);
+
 }

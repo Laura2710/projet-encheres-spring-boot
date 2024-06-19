@@ -1,0 +1,26 @@
+<article xmlns:th="http://www.thymeleaf.org" data-th-fragment="frag-detail-vente" class="article-vente">
+		<section class="description-vente">
+			<p>Article: <span data-th-text="${article.nom}"></span></p>
+			<p>Catégorie: <span data-th-text="${article.categorie.libelle}"></span></p>
+			<p>Description: <span data-th-text="${article.description}"></span></p>
+			<p>Retrait: <span data-th-text="${article.adresseRetrait.rue + ', ' + article.adresseRetrait.codePostal + ' ' + article.adresseRetrait.ville}"></span></p>
+			<p>Vendeur: <span data-th-text="${article.vendeur.pseudo}"></span></p>
+			<th:block data-th-if="${showTelephone}">
+				<p>Téléphone: <span data-th-text="${article.vendeur.telephone != null ? article.vendeur.telephone : 'non renseigné'}"></span></p>
+			</th:block>
+		</section>
+		<section >
+			<ul class="detail-vente">
+				<li>Mise à prix: <span data-th-text="${article.prixInitial + ' point(s)'}"></span></li>
+				<li>Meilleure offre: <span data-th-text="${article.prixVente + ' point(s)'}"></span> 
+					<th:block data-th-if="${enchere.acquereur != null}">
+						<span data-th-text="'par ' + ${enchere.acquereur.pseudo}"></span>
+					</th:block>			
+				</li>
+				<!-- SI ENCHERE N'A PAS DEBUTEE -->
+				<li data-th-if="${article.statut == 0}">Début de l'enchère: <span data-th-text="${#temporals.format(article.dateDebutEncheres, 'dd/MM/yyyy')}"></span></li>
+
+				<li>Fin de l'enchère: <span data-th-text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"></span></li>
+			</ul>
+		</section>
+</article>

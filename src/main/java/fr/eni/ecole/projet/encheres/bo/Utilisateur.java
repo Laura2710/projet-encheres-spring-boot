@@ -12,9 +12,9 @@ import jakarta.validation.constraints.Size;
 public class Utilisateur implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@NotBlank
+	/*@NotBlank
 	@Size(min = 8, max = 30)
-	@Pattern(regexp = "^[a-zA-Z0-9_]+$")
+	@Pattern(regexp = "^[a-zA-Z0-9_]+$")*/
 	private String pseudo;
 	
 	@NotBlank

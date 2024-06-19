@@ -10,9 +10,28 @@
 </head>
 <body>
 	<main class="main-errors">
+	
+	<img data-th-src="@{/images/logoErreur.png}" alt="logo d'erreur" class="logo-erreur">
+	
 		<th:block data-th-if="${errorBLL}">
-			<h2 data-th-each="err : ${errorBLL}" data-th-text="#{${err}}" class="main-h2"></h2>
+			<h1 data-th-each="err : ${errorBLL}" data-th-text="#{${err}}" class="main-title"></h1>
 		</th:block>
+		
+		<th:block data-th-switch="${status}">
+			<th:block data-th-case="403">
+				<h1>403 - Accès refusé</h1>		
+			</th:block>
+			<th:block data-th-case="404">
+				<h1>404 - Page introuvable</h1>		
+			</th:block>
+			<th:block data-th-case="500">
+				<h1>500 - Erreur interne du serveur</h1>
+			</th:block>
+			<th:block data-th-case="503">
+				<h1>503 - Le serveur n'est pas disponible. Réessayez demain.</h1>
+			</th:block>
+		</th:block>
+		
 			<a href="/">Retourner à l'accueil</a>
 	</main>
 </body>
