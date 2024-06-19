@@ -1,44 +1,57 @@
 
-<form xmlns:th="http://www.thymeleaf.org" data-th-action="@{/rechercher}" method="post" data-th-fragment="frag-filtre">
+<form xmlns:th="http://www.thymeleaf.org"
+	data-th-action="@{/rechercher}" method="post"
+	data-th-fragment="frag-filtre">
 
-	<ul>
-				<li><input type="text" id="inputName" name="nomRecherche" placeholder="Le nom de l'article contient :" maxlength="30" data-th-value="${nomRecherche}"></li>
-				<li><input type="submit" value="Rechercher" class="btnFilter" ></li>
-			</ul>
-			<ul>
-				<li><label for="inputCategorie" >Catégories</label>
-					<select id="inputCategorie" name="categorieRecherche" data-th-value="${categorieRecherche}">
-						<option value="0">Toutes</option>
-						<option data-th-each="categorie : ${categories}" data-th-text="${categorie.libelle}" data-th-value="${categorie.id}" th:selected="(${categorie.id} == ${categorieRecherche})"></option>
-					</select>
-				</li>
-			</ul>
-			<ul>
-			<li><a href="/" class="btnFilter">Annuler</a></li>
-			</ul>
+	<div>
+		<input type="text" id="inputName" name="nomRecherche"
+			placeholder="Le nom de l'article contient :" maxlength="30"
+			data-th-value="${nomRecherche}">
 
-				<input data-th-if="${#authorization.expression('isAuthenticated()')}" type="hidden" id="filtresIsAuth" name="filtresIsAuth">
-				<ul id="inputRadio">
-					
-					<li><input type="radio" id="achats" name="buySell" value="achats" > <label for="achats">Achats</label> </li>
-					<li><input type="radio" id="ventes" name="buySell" value="ventes" > <label for="ventes">Mes Ventes</label> </li>
-				</ul>
-				<ul id="selectsFiltres">
-				<li>
-				<input type="hidden" id="valeurSelect" data-th-value="${casUtilisationFiltres}" name="valeurSelect">
-				<select id="selectAchats" name="casUtilisationFiltres" data-th-value="${casUtilisationFiltres}">
-					<option value="0" >Enchères ouvertes</option>
-					<option value="1" >Mes enchères en cours</option>
-					<option value="2" >Mes enchères remportées</option>
-					</select>
-				</li>
-				<li>
-					<select id="selectVentes" name="casUtilisationFiltres" data-th-value="${casUtilisationFiltres}">
-					<option value="3" >Mes ventes en cours</option>
-					<option value="4">Mes ventes non débutées</option>
-					<option value="5">Mes ventes terminées</option>
-					</select>
-				</li>
-				</ul>
+		<div class="row">
+			<label for="inputCategorie">Catégories</label> <select
+				id="inputCategorie" name="categorieRecherche"
+				data-th-value="${categorieRecherche}">
+				<option value="0">Toutes</option>
+				<option data-th-each="categorie : ${categories}"
+					data-th-text="${categorie.libelle}" data-th-value="${categorie.id}"
+					th:selected="(${categorie.id} == ${categorieRecherche})"></option>
+			</select>
+		</div>
+	</div>
+	<div>
+		<input type="submit" value="Rechercher" class="btnPrimaire"> 
+		<a href="/" class="btnNeutre">Annuler</a>
+	</div>
+
+	<input data-th-if="${#authorization.expression('isAuthenticated()')}"
+		type="hidden" id="filtresIsAuth" name="filtresIsAuth">
+	<div class="radiosContainer" id="inputRadio">
+
+		<div>
+			<input type="radio" id="achats" name="buySell" value="achats">
+			<label for="achats">Achats</label>
+		</div>
+		<div>
+			<input type="radio" id="ventes" name="buySell" value="ventes">
+			<label for="ventes">Mes Ventes</label>
+		</div>
+	</div>
+	<div class="select-filtre" id="selectsFiltres">
+		<input type="hidden" id="valeurSelect"
+			data-th-value="${casUtilisationFiltres}" name="valeurSelect">
+		<select id="selectAchats" name="casUtilisationFiltres"
+			data-th-value="${casUtilisationFiltres}">
+			<option value="0">Enchères ouvertes</option>
+			<option value="1">Mes enchères en cours</option>
+			<option value="2">Mes enchères remportées</option>
+		</select> 
+		<select id="selectVentes" name="casUtilisationFiltres"
+			data-th-value="${casUtilisationFiltres}">
+			<option value="3">Mes ventes en cours</option>
+			<option value="4">Mes ventes non débutées</option>
+			<option value="5">Mes ventes terminées</option>
+		</select>
+	</div>
 
 </form>
