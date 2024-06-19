@@ -28,7 +28,6 @@ public class EnchereManager {
 		try {		
 			articleAVendreService.activerVente();
 			articleAVendreService.cloturerVente();
-			System.out.println("methode appelée");
 		} catch (BusinessException e) {
 			e.getClefsExternalisations().forEach(key -> {
 				System.out.println("Une erreur est survenue: " + key);
