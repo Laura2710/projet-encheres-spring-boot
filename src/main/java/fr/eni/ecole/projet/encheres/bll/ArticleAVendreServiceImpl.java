@@ -138,14 +138,16 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		String pseudoUtilisateurEnSession = null;
 		if(principal != null) {
 		switch (casUtilisationFiltres) {
-		case 1, 3:
+		case 1:
+		case 3:
 			pseudoUtilisateurEnSession = principal.getName();
 			break;
 		case 4:
 			statutRecherche = 0;
 			pseudoUtilisateurEnSession = principal.getName();
 			break;
-		case 2, 5:
+		case 2:
+		case 5:
 			statutRecherche = 2;
 			pseudoUtilisateurEnSession = principal.getName();
 			break;

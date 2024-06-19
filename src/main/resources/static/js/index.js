@@ -6,3 +6,4 @@ MenuManager.toggle();
 if (window.location.pathname.includes("creer-compte")) {
 	UtilisateurManager.verifierMdp();
 }
+

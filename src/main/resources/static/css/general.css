@@ -428,3 +428,7 @@ h1 {
 .main-errors a {
 	text-align: center;
 }
+
+.hide {
+	display: none;
+}
