@@ -7,7 +7,7 @@
 
 			<li>
 				<!-- A declencher quand la méthode pour enregistrer les membres en session sera OK -->
-			 <th:block data-th-if="${#authorization.expression('isAuthenticated()')}">Participant : <span data-th-text="${#authentication.name}"></span>
+			 <th:block data-th-if="${#authorization.expression('isAuthenticated()')}"><span data-th-text="#{frag-encart.tag}"></span><span data-th-text="${#authentication.name}"></span>
 			</th:block> 
 			</li>
 

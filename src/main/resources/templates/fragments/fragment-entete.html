@@ -11,23 +11,23 @@
 </button>
 <nav id="navContainer" class="hideMobile">
 	<ul>
-			<li ><a href="/">Accueil</a></li>
+			<li ><a href="/" data-th-text="#{frag-entete.a.accueil}"></a></li>
 			
 			<!-- A declencher quand la méthode pour enregistrer les membres en session sera OK -->
 			<li data-th-if="${!#authorization.expression('isAuthenticated()')}">
-				<a href="/login">S'inscrire - Se Connecter</a>
+				<a href="/login" data-th-text="#{frag-entete.a.connecter}"></a>
 			</li>
 			
 			<li data-th-if="${#authorization.expression('isAuthenticated()')}">
-				<a href="/vendre">Vendre un article</a>
+				<a href="/vendre" data-th-text="#{frag-entete.a.vendre}"></a>
 			</li>
 			
 			<li data-th-if="${#authorization.expression('isAuthenticated()')}">
-				<a href="/utilisateur/profil">Mon profil</a>
+				<a href="/utilisateur/profil" data-th-text="#{frag-entete.a.profil}"></a>
 			</li>
 			
 			<li data-th-if="${#authorization.expression('isAuthenticated()')}">
-				<a href="/logout">Se déconnecter</a>
+				<a href="/logout" data-th-text="#{frag-entete.a.deconnecter}"></a>
 			</li>
 			
 			
