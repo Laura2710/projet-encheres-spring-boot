@@ -148,13 +148,15 @@ public class ArticleAVendreController {
 
 	@ModelAttribute("adressesRetrait")
 	public List<Adresse> injecteAdresse(Principal principal) {
-		Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(principal.getName());
-		Adresse adressePerso = this.articleAVendreService.getAdresseById(utilisateurSession.getAdresse().getId());
 		List<Adresse> adressesRetrait = new ArrayList<Adresse>();
-		adressesRetrait.add(adressePerso);
-		this.articleAVendreService.getAllAdressesRetrait().forEach(a -> {
-			adressesRetrait.add(a);
-		});;
+		if (principal != null) {
+			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(principal.getName());
+			Adresse adressePerso = this.articleAVendreService.getAdresseById(utilisateurSession.getAdresse().getId());
+			adressesRetrait.add(adressePerso);			
+			this.articleAVendreService.getAllAdressesRetrait().forEach(a -> {
+				adressesRetrait.add(a);
+			});;
+		}
 		return adressesRetrait;
 	}
 
