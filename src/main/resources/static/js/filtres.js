@@ -1,34 +1,26 @@
-
-if (!document.getElementById("filtresIsAuth")){
+if (!document.getElementById("filtresIsAuth")) {
 	document.getElementById("selectsFiltres").setAttribute("class", "hide");
 	document.getElementById("inputRadio").setAttribute("class", "hide");
-	
-}else {
+
+} else {
 	var option0 = document.getElementById("selectAchats").options[0];
-var option1 = document.getElementById("selectAchats").options[1];
-var option2 = document.getElementById("selectAchats").options[2];
-var option3 = document.getElementById("selectVentes").options[0];
-var option4 = document.getElementById("selectVentes").options[1];
-var option5 = document.getElementById("selectVentes").options[2];
+	var option1 = document.getElementById("selectAchats").options[1];
+	var option2 = document.getElementById("selectAchats").options[2];
+	var option3 = document.getElementById("selectVentes").options[0];
+	var option4 = document.getElementById("selectVentes").options[1];
+	var option5 = document.getElementById("selectVentes").options[2];
 
-var valeurSelect = document.getElementById("valeurSelect").value;
-console.log(valeurSelect);
+	var valeurSelect = document.getElementById("valeurSelect").value;
+	initFiltres();
 
-
-initFiltres();
-
-var selected;
-document.getElementById('achats').addEventListener("change", function() {
-	affichageFiltres();
-})
-document.getElementById('ventes').addEventListener("change", function() {
-	affichageFiltres();
-})
+	var selected;
+	document.getElementById('achats').addEventListener("change", function() {
+		affichageFiltres();
+	})
+	document.getElementById('ventes').addEventListener("change", function() {
+		affichageFiltres();
+	})
 }
-
-
-
-
 
 function initFiltres() {
 	switch (valeurSelect) {
@@ -48,7 +40,6 @@ function initFiltres() {
 	affichageFiltres()
 }
 
-
 function affichageFiltres() {
 	selected = document.querySelector('input[name="buySell"]:checked');
 	if (selected.value == "achats") {
@@ -58,7 +49,6 @@ function affichageFiltres() {
 	} else if (selected.value == "ventes") {
 		document.getElementById("selectAchats").setAttribute("disabled", true);
 		document.getElementById("selectVentes").removeAttribute("disabled", true);
-
 	}
 }
 

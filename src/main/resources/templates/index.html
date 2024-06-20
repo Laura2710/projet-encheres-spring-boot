@@ -39,7 +39,8 @@
 						></span>
 					</h3>
 					<h3>
-						<span data-th-text="#{index.vendeur}"></span> <span data-th-text="${article.vendeur.pseudo}"></span> 
+						<span data-th-text="#{index.vendeur}"></span> <span data-th-if="${!#authorization.expression('isAuthenticated()')}" data-th-text="${article.vendeur.pseudo}"></span>
+						<a data-th-if="${#authorization.expression('isAuthenticated()')}" data-th-href="@{/utilisateur/profil(id=${article.vendeur.pseudo})}"><span data-th-text="${article.vendeur.pseudo}"></span></a>  
 					</h3>
 				</div>
 			</div>
