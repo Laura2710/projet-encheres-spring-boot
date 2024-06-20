@@ -23,7 +23,7 @@ h2 {
 label {
     font-weight: bold;
     margin-bottom: 5px; 
-    display: block;
+    display: flex;
 }
 
 input {
