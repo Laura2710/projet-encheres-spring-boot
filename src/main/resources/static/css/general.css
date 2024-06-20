@@ -458,3 +458,11 @@ h1 {
 #encartMobile {
 	display: none;
 }
+
+.hide div {
+	display: none;
+}
+
+.hide select {
+	display: none;
+}

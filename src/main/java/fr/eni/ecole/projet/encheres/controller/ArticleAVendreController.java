@@ -43,10 +43,7 @@ public class ArticleAVendreController {
 
 		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreEnCours();
 		model.addAttribute("articlesAVendre", articlesAVendre);
-		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
-		model.addAttribute("listCategorie", listCategorie);
-		// Ajout au model ma variable "nomRecherche" qui contiendra la chaine de
-		// caractère a retrouver dans le nom des articles
+		//Ajout au model ma variable "nomRecherche" qui contiendra la chaine de caractère a retrouver dans le nom des articles
 		String nomRecherche = null;
 		model.addAttribute("nomRecherche", nomRecherche);
 		// Ajout au model de ma variable categorieRecherche qui contiendra l'id de la
@@ -55,26 +52,17 @@ public class ArticleAVendreController {
 		model.addAttribute("categorieRecherche", categorieRecherche);
 //		Ajout de la condition "est connecté"
 		if (principal != null) {
-			String pseudo = principal.getName();
-			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
-			// Ajout des parametres utiles aux filtres si l'utilisateurs est connecté et non
-			// Admin.
-			if (utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
-				// Parametre pour les input Select
-				int casUtilisationFiltres = 0;
-				model.addAttribute("casUtilisationFiltres", casUtilisationFiltres);
-			}
+			//Ajout des parametres utiles aux filtres si l'utilisateurs est connecté et non Admin.
+			//Parametre pour les input Select
+			int casUtilisationFiltres = 0;
+			model.addAttribute("casUtilisationFiltres", casUtilisationFiltres);
 		}
 		return "index";
 	}
-
-	// TODO Ajoux des liens si connecté sur les artciles
-	// TODO Mutualisation de code
-	// TODO Methode GetAllCategorie en attribut
-	// TODO Sécurité et Validation
-	// TODO Css et JS pour enable les select en fonction du radio (statutRecherche
-	// et mesEncheresRecherche = defaut si enable)
-
+	
+	//TODO Ajoux des liens si connecté sur les artciles
+	
+	
 	@PostMapping("/rechercher")
 	public String afficherArticleAVendre(@RequestParam(value = "nomRecherche") String nomRecherche,
 			@RequestParam(value = "categorieRecherche") int categorieRecherche,
@@ -83,20 +71,13 @@ public class ArticleAVendreController {
 		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreAvecParamètres(nomRecherche,
 				categorieRecherche, casUtilisationFiltres, principal);
 		model.addAttribute("articlesAVendre", articlesAVendre);
-		List<Categorie> listCategorie = articleAVendreService.getAllCategories();
-		model.addAttribute("listCategorie", listCategorie);
 		model.addAttribute("nomRecherche", nomRecherche);
 		model.addAttribute("categorieRecherche", categorieRecherche);
 
 		if (principal != null) {
-			String pseudo = principal.getName();
-			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
-			// Ajout des parametres utiles aux filtres si l'utilisateurs est connecté et non
-			// Admin.
-			if (utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
-				// Parametre pour les input select
-				model.addAttribute("casUtilisationFiltres", casUtilisationFiltres);
-			}
+			//Ajout des parametres utiles aux filtres si l'utilisateurs est connecté et non Admin.
+			//Parametre pour les input select
+			model.addAttribute("casUtilisationFiltres", casUtilisationFiltres);
 		}
 		return "index";
 
