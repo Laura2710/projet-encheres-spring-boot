@@ -42,7 +42,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	public Utilisateur getInfoUtilisateur(String pseudo) {
 		Utilisateur utilisateur= this.getByPseudo(pseudo);
 		Adresse adresse= this.getAdresseByID(utilisateur.getAdresse().getId());
-		System.out.println(adresse);
 		utilisateur.setAdresse(adresse);
 		return utilisateur;
 	} 

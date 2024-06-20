@@ -19,8 +19,8 @@
 		</div>
 
 		<div class="listCard">
-			<div data-th-if="${articlesAVendre == null}">
-				<h2>Aucun article disponible avec ces critères</h2>
+			<div data-th-if="${articlesAVendre.isEmpty}">
+				<h2>Aucun article disponible avec ces critères.</h2>
 			</div>
 			<div class="articleCard" data-th-each="article : ${articlesAVendre}">
 				<h2>
@@ -46,8 +46,6 @@
 			</div>
 
 		</div>
-
-<a data-th-href="@{/utilisateur/profil(id='coach_titi')}">coach_titi_test</a>
 	</main>
 </body>
 </html>
