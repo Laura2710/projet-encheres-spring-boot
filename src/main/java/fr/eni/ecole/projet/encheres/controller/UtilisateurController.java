@@ -1,6 +1,8 @@
 package fr.eni.ecole.projet.encheres.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -116,20 +118,18 @@ public class UtilisateurController {
 		return "view-mdp";
 	}
 	
-//	@PostMapping("/modifier-mot-de-passe")
-//	public String confirmMotDePasse(@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult) {
-//	System.out.println(utilisateur);
-//	return "view-mdp";
-//	}
 	
-	@PostMapping("/utilisateur/modifier-mot-de-passe")
+	@PostMapping("/modifier-mot-de-passe")
 	public String modifierMotDePasse(@RequestParam("ancienMotDePasse") String ancienMotDePasse,
-	                                 @RequestParam("nouveauMotDePasse") String nouveauMotDePasse,
+	                                 @RequestParam("motDePasse") String nouveauMotDePasse,
 	                                 @RequestParam("confirmationMdp") String confirmationMdp,
 	                                 Principal principal,
 	                                 Model model) {
+		
+		List<String> errors = new ArrayList<>();
 	    if (!nouveauMotDePasse.equals(confirmationMdp)) {
-	        model.addAttribute("errorMessage", "les mots de passe de correspondent pas");
+	    	errors.add("Les mots de passe de correspondent pas");
+	        model.addAttribute("errorBLL", errors);
 	        return "view-mdp";
 	    }
 
@@ -138,11 +138,16 @@ public class UtilisateurController {
 
 	    try {
 	    	this.utilisateurService.updateMotDePasse(ancienMotDePasse,nouveauMotDePasse,utilisateur);
+	    	return "redirect:/logout";
 	    }
-	    catch(BusinessException e) {
+	    catch(BusinessException e) {    	
+	    	e.getClefsExternalisations().forEach(key -> {
+	    		errors.add(key);
+	    	});
+	    	model.addAttribute("errorBLL", errors);
+	    	return "view-mdp";
 	    }
 
-	    return "redirect:/";
 	}
 }
 	

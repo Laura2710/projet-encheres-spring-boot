@@ -124,13 +124,21 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	}
 
 	@Override
-	public int findOldPwd(String ancienMotDePasse, String pseudo) {
-		String sql= "SELECT count(*) FROM utilisateurs WHERE pseudo= :pseudo AND mot_de_passe= :mdp";
+	public String findOldPwd(String pseudo) {
+		String sql= "SELECT mot_de_passe FROM utilisateurs WHERE pseudo=:pseudo";
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("pseudo", pseudo);
-		params.addValue("mdp", ancienMotDePasse);
-		return namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
+		return namedParameterJdbcTemplate.queryForObject(sql, params, String.class);
 		
+	}
+
+	@Override
+	public void updateMdp(String pseudo, String hashedPassword) {
+		String sql = "UPDATE utilisateurs SET mot_de_passe=:mdp WHERE pseudo=:pseudo";
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("pseudo", pseudo);
+		params.addValue("mdp", hashedPassword);
+		namedParameterJdbcTemplate.update(sql, params);		
 	}
 
 }
