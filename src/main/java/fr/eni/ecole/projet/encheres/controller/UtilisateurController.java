@@ -1,6 +1,8 @@
 package fr.eni.ecole.projet.encheres.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -115,7 +117,40 @@ public class UtilisateurController {
 		}
 		return "view-mdp";
 	}
+	
+	
+	@PostMapping("/modifier-mot-de-passe")
+	public String modifierMotDePasse(@RequestParam("ancienMotDePasse") String ancienMotDePasse,
+	                                 @RequestParam("motDePasse") String nouveauMotDePasse,
+	                                 @RequestParam("confirmationMdp") String confirmationMdp,
+	                                 Principal principal,
+	                                 Model model) {
+		
+		List<String> errors = new ArrayList<>();
+	    if (!nouveauMotDePasse.equals(confirmationMdp)) {
+	    	errors.add("Les mots de passe de correspondent pas");
+	        model.addAttribute("errorBLL", errors);
+	        return "view-mdp";
+	    }
+
+	    String pseudo = principal.getName();
+	    Utilisateur utilisateur = utilisateurService.getByPseudo(pseudo);
+
+	    try {
+	    	this.utilisateurService.updateMotDePasse(ancienMotDePasse,nouveauMotDePasse,utilisateur);
+	    	return "redirect:/logout";
+	    }
+	    catch(BusinessException e) {    	
+	    	e.getClefsExternalisations().forEach(key -> {
+	    		errors.add(key);
+	    	});
+	    	model.addAttribute("errorBLL", errors);
+	    	return "view-mdp";
+	    }
+
 	}
+}
+	
 
 			
 

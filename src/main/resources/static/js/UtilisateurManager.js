@@ -1,14 +1,17 @@
 'use strict'
 
 export default class UtilisateurManager {
-	static verifierMdp() {
-		let form = document.getElementById("creer-compte-form");
-		form.addEventListener("submit", (e) => {
+	constructor(idForm){
+		this.form=document.getElementById(idForm);
+	}
+	verifierMdp() {
+		//let form = document.getElementById("creer-compte-form");
+		this.form.addEventListener("submit", (e) => {
 			e.preventDefault();
 
 			UtilisateurManager.deleteErrorsMsg();
 
-			const inputs = form.elements;
+			const inputs = this.form.elements;
 			const password = inputs["motDePasse"].value;
 			const confirmPassword = inputs["confirmationMdp"].value;
 			const regex = /(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&\-_=+])(?=.*[a-z]).{8,}/gm;

@@ -84,4 +84,6 @@ public class BusinessCode {
 	public static final String VALIDATION_ANNULER_VENTE_STATUT = "validation.annuler.vente.statut";
 
 	public static final String VALIDATION_UPDATE_PROFIL_ERROR = "validation.update.profil.error";
+
+	public static final String VALIDATION_PROFIL_ANCIEN_MDP = "validation.profil.ancien.mdp";
 }

@@ -181,4 +181,8 @@
 		padding: 1em;
 		border-radius: 8px;
 	}
+
+	#modifer-mot-de-passe label {
+		align-items:start;
+	}
 }

@@ -33,7 +33,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("pseudo", utilisateur.getPseudo());
 		params.addValue("nom", utilisateur.getNom());
-		params.addValue("prenom", utilisateur.getNom());
+		params.addValue("prenom", utilisateur.getPrenom());
 		params.addValue("email", utilisateur.getEmail());
 		params.addValue("telephone", utilisateur.getTelephone());
 		params.addValue("motDePasse", utilisateur.getMotDePasse());
@@ -121,6 +121,24 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		params.addValue("telephone", utilisateur.getTelephone());
 		params.addValue("pseudo", utilisateur.getPseudo());
 		return namedParameterJdbcTemplate.update(sql, params);
+	}
+
+	@Override
+	public String findOldPwd(String pseudo) {
+		String sql= "SELECT mot_de_passe FROM utilisateurs WHERE pseudo=:pseudo";
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("pseudo", pseudo);
+		return namedParameterJdbcTemplate.queryForObject(sql, params, String.class);
+		
+	}
+
+	@Override
+	public void updateMdp(String pseudo, String hashedPassword) {
+		String sql = "UPDATE utilisateurs SET mot_de_passe=:mdp WHERE pseudo=:pseudo";
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("pseudo", pseudo);
+		params.addValue("mdp", hashedPassword);
+		namedParameterJdbcTemplate.update(sql, params);		
 	}
 
 }

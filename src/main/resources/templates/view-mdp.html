@@ -1,38 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	data-th-replace="~{layouts/layout :: layout-enchere(
-			titrePage=~{:: title}, 
-			contenuPage=~{:: main}, 
-			ressourceSupp=~{:: link})}"
+    data-th-replace="~{layouts/layout :: layout-enchere(
+        titrePage=~{:: title}, 
+        contenuPage=~{:: main}, 
+        ressourceSupp=~{:: link})}"
 >
 
 <head>
+
 <title>Modifier mon mot de passe</title>
 <link rel="stylesheet" data-th-href="@{/css/view-mdp.css}">
+
 </head>
 
 <body>
-	<main>
-        <h2>Modifier mon mot de passe</h2>
-        <div class="password-change-form">
-            <div class="form-group">
-                <label for="current-password">Mot de passe actuel:</label>
-                <input type="password" id="current-password" name="current-password">
+    <main>
+        <h1>Modifier mot de passe</h1>
+        <form id="modifer-mot-de-passe" class="form" method="post" data-th-action="@{/utilisateur/modifier-mot-de-passe}">
+            <div>
+                <label id="motdepasse">Mot de passe actuel (*): </label>
+                <input type="password" name="ancienMotDePasse" required>
             </div>
-            <div class="form-group">
-                <label for="new-password">Nouveau mot de passe:</label>
-                <input type="password" id="new-password" name="new-password">
+            <div>
+                <label for="newMotDePasse">Nouveau mot de passe (*): </label>
+                <input id="newMotDePasse" type="password" name="motDePasse" required>
             </div>
-            <div class="form-group">
-                <label for="confirm-password">Confirmation:</label>
-                <input type="password" id="confirm-password" name="confirm-password">
+            <div>
+                <label for="confirmMotDePasse">Confirmation mot de passe (*): </label>
+                <input id="confirmMotDePasse" type="password" name="confirmationMdp" required>
             </div>
-            <div class="form-buttons">
-                <button type="submit">Modifier</button>
-                <button type="button" onclick="window.location.href='index.html'">Annuler</button>
+          	<div class="btnActions">
+                <input type="submit" value="modifier" class="btnPrimaire">
+                <a data-th-href="@{/}" class="btnNeutre">Annuler</a>
             </div>
-        </div>
+			<ul data-th-if="${errorBLL}" class="listErrors">
+				<li data-th-each="err : ${errorBLL}" data-th-text="#{${err}}"></li>
+			</ul>	
+        </form>
     </main>
     <footer></footer>
 </body>
+
 </html>

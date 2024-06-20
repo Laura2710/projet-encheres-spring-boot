@@ -1,5 +1,6 @@
 package fr.eni.ecole.projet.encheres.bll;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -276,6 +277,35 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		}
 		
 		
+	}
+
+	@Override
+	public void updateMotDePasse(String ancienMotDePasse, String nouveauMotDePasse, Utilisateur utilisateur) {
+		BusinessException be=new BusinessException();
+		boolean isValid = true;
+		isValid &= verifierMotPasse(nouveauMotDePasse, be);
+		isValid &= verifierMotPasse(ancienMotDePasse, be);
+		isValid &= verifierCorrespondanceAncienMotPasse(ancienMotDePasse, utilisateur.getPseudo(), be);
+		if(isValid) {		
+			String hashedPassword = passwordEncoder.encode(nouveauMotDePasse);
+			this.utilisateurDAO.updateMdp(utilisateur.getPseudo(), hashedPassword);	
+		}
+		else {
+			throw be;
+		}
+		
+	}
+
+	private boolean verifierCorrespondanceAncienMotPasse(String ancienMotDePasse, String pseudo, BusinessException be) {
+		String hashInBdd = this.utilisateurDAO.findOldPwd(pseudo);
+		String hashSanitize = hashInBdd.substring(8);
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		boolean isSame = encoder.matches(ancienMotDePasse, hashSanitize);  
+		if(!isSame) {
+			be.add(BusinessCode.VALIDATION_PROFIL_ANCIEN_MDP);
+			return false;
+		}
+		return true;
 	}
 
 }
