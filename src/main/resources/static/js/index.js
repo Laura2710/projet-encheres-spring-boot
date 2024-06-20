@@ -22,6 +22,6 @@ if (window.location.pathname.includes("ajouter-photo")) {
 	photoManager.previewPhoto();
 }
 
-if (window.location.pathname == "/") {
+if (window.location.pathname == "/" || window.location.pathname.includes("rechercher")) {
 	FiltreManager.toggleFiltre();
 }
