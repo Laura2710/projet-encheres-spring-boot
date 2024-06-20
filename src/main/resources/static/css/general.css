@@ -268,11 +268,12 @@ main, header, #encart {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
-	align-items: center;
+	align-items: flex-start;
 }
 
 .filterSection .row {
 	flex-direction: row;
+	width: 100%;
 }
 
 input, select, form a {
@@ -485,3 +486,7 @@ h1 {
 .hide select {
 	display: none;
 }
+
+#btnFiltre {
+		display: none;
+	}

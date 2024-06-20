@@ -153,7 +153,12 @@
 		width: 100%;
 	}
 	.filterSection {
-		width: 100%;
+        width: 100%;
+        position: absolute;
+        background-color: white;
+        left: 0;
+        padding: 3em;
+        box-shadow: 1px 7px 10px #ccc;
 	}
 	.filterSection form {
 		grid-template-columns: 1fr;
@@ -184,5 +189,9 @@
 
 	#modifer-mot-de-passe label {
 		align-items:start;
+	}
+	
+	#btnFiltre {
+		display: block;
 	}
 }

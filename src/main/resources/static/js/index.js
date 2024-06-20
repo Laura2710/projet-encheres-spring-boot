@@ -1,6 +1,7 @@
 import MenuManager from './MenuManager.js'
 import UtilisateurManager from './UtilisateurManager.js'
 import PhotoManager from './PhotoManager.js'
+import FiltreManager from './FiltreManager.js'
 
 MenuManager.toggle();
 
@@ -21,3 +22,6 @@ if (window.location.pathname.includes("ajouter-photo")) {
 	photoManager.previewPhoto();
 }
 
+if (window.location.pathname == "/") {
+	FiltreManager.toggleFiltre();
+}

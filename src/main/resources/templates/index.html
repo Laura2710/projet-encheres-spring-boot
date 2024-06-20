@@ -13,7 +13,8 @@
 	<main>
 		<h1 data-th-text="#{index.h1}"></h1>
 		
-		<div class="filterSection">
+		<button id="btnFiltre" class="btnNeutre">Filtre</button>
+		<div id="containerFiltre" class="filterSection hideMobile">
 			<h2>Filtres : </h2>
 			<form data-th-replace="~{/fragments/fragment-filtres :: frag-filtre}"></form>
 		</div>
