@@ -199,10 +199,9 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		LocalDate fin = article.getDateFinEncheres();
 		int prixInitial = article.getPrixInitial();
 		int prixVente = article.getPrixVente();
-		int credit = utilisateur.getCredit();
 		int montant = enchere.getMontant();
 		enchere.setAcquereur(utilisateur);
-
+		int credit = utilisateur.getCredit();
 		isValid &= verifierDatesEnchere(debut, fin, be);
 		isValid &= verifierMontant(montant, prixInitial, prixVente, be);
 		isValid &= verifierCreditSuffisant(montant, credit, be);
@@ -211,18 +210,26 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 
 			// Récréditer le compte du dernier enchérisseur s'il existe
 			// Compter le nombre d'offre existant pour l'article
+			boolean isSameAcquereur = false;
 			int count = this.enchereDAO.getTotalOffre(enchere.getArticleAVendre().getId());
-
+			
 			if (count > 0) {
 				Enchere derniereEnchere = this.enchereDAO.getDerniereEnchere(enchere.getArticleAVendre().getId());
 				Utilisateur dernierEnrichisseur = utilisateurDAO.getByPseudo(
 						derniereEnchere.getAcquereur().getPseudo());
 				dernierEnrichisseur.setCredit(derniereEnchere.getMontant() + dernierEnrichisseur.getCredit());
 				this.utilisateurDAO.updateCredit(dernierEnrichisseur.getPseudo(), dernierEnrichisseur.getCredit());
+				if(dernierEnrichisseur.getPseudo().equals(utilisateur.getPseudo())) {
+					utilisateur.setCredit(dernierEnrichisseur.getCredit());
+					isSameAcquereur = true;
+				}
 			}
-
+			if(isSameAcquereur == true) {
+				credit = utilisateur.getCredit();				
+			}
 			// Debiter le nouveau acquéreur
-			utilisateur.setCredit(credit - montant);
+			utilisateur.setCredit(credit - montant);				
+			
 			this.utilisateurDAO.updateCredit(utilisateur.getPseudo(), utilisateur.getCredit());
 
 			// Mettre à jour le prix de vente de l'article
