@@ -455,6 +455,25 @@ h1 {
 	width: auto;
 }
 
+/* Page erreur */
+
+.logo-erreur {
+	object-fit: contain;
+	height: 100px;
+	width: 100 px;
+	margin: 10px;
+}
+
+/* Page photo */
+
+#preview {
+	height: 300px;
+	width: 300px;
+	object-fit: contain;
+	display: block;
+	margin: 8px auto;
+}
+
 #encartMobile {
 	display: none;
 }

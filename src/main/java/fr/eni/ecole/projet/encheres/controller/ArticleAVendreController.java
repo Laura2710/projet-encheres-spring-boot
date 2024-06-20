@@ -1,5 +1,7 @@
 package fr.eni.ecole.projet.encheres.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import fr.eni.ecole.projet.encheres.bll.ArticleAVendreService;
 import fr.eni.ecole.projet.encheres.bll.UtilisateurService;
@@ -244,5 +247,34 @@ public class ArticleAVendreController {
 		model.addAttribute("errorBLL", errors);
 		return "view-errors";
 	}
-
+	
+	
+	@GetMapping("/ajouter-photo")
+	public String ajouterPhoto () {
+		return "view-ajouter-image";
+	}
+	
+	// TODO Méthode Post n'est pas encore fonctionnelle pour upload photo à la BD
+	
+	/* @PostMapping("/ajouter-photo")
+	public String ajouterPhoto (@RequestParam("inputPhoto") MultipartFile file) throws IOException {
+		System.out.println(file.getName());
+		
+		if(!file.isEmpty() && file.getSize() < 600000) {
+			if (file.getContentType().equals("image/png") || file.getContentType().equals("image/jpeg")) {
+				
+				System.out.println(file.getOriginalFilename());
+				String filename = file.getOriginalFilename();
+				File dossier = new File("/images/upload/");
+				 if(!dossier.exists()) {
+					 dossier.mkdirs();
+				 }
+				 File dossierDestination = new File(dossier, filename);
+				 
+				file.transferTo(dossierDestination);
+			}
+		}
+		return "view-ajouter-image";
+	} */
+	
 }
