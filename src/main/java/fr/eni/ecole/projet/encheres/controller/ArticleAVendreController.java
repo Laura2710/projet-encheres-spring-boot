@@ -88,8 +88,6 @@ public class ArticleAVendreController {
 			String pseudo = principal.getName();
 			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
 			if (utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
-				Adresse adressePerso = this.articleAVendreService.getAdresseById(utilisateurSession.getAdresse().getId());
-				model.addAttribute("adressePerso", adressePerso);
 				model.addAttribute("articleAVendre", new ArticleAVendre());
 				model.addAttribute("modeModif", false);
 				model.addAttribute("action", "/vendre");
@@ -146,8 +144,14 @@ public class ArticleAVendreController {
 	}
 
 	@ModelAttribute("adressesRetrait")
-	public List<Adresse> injecteAdresse() {
-		List<Adresse> adressesRetrait = this.articleAVendreService.getAllAdressesRetrait();
+	public List<Adresse> injecteAdresse(Principal principal) {
+		Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(principal.getName());
+		Adresse adressePerso = this.articleAVendreService.getAdresseById(utilisateurSession.getAdresse().getId());
+		List<Adresse> adressesRetrait = new ArrayList<Adresse>();
+		adressesRetrait.add(adressePerso);
+		this.articleAVendreService.getAllAdressesRetrait().forEach(a -> {
+			adressesRetrait.add(a);
+		});;
 		return adressesRetrait;
 	}
 
@@ -155,6 +159,7 @@ public class ArticleAVendreController {
 	public String modifierArticle(@RequestParam("id") int idArticle, Model model, Principal principal) {
 		try {
 			ArticleAVendre article = this.articleAVendreService.getById(idArticle);
+			System.out.println(article);
 			if ((article.getStatut() == 0) && principal.getName().equals(article.getVendeur().getPseudo())) {
 				model.addAttribute("articleAVendre", article);
 				model.addAttribute("modeModif", true);
@@ -172,38 +177,39 @@ public class ArticleAVendreController {
 	@PostMapping("/vendre/modifier")
 	public String modifierArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre,
 			BindingResult bindingResult, Principal principal, Model model) {
+		System.out.println(articleAVendre);
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("articleAVendre", articleAVendre);
 			model.addAttribute("modeModif", true);
 			model.addAttribute("action", "/vendre/modifier");
 			return "view-vente-article";
 		}
 		try {
-			if (articleAVendre.getStatut() == 0
-					&& principal.getName().equals(articleAVendre.getVendeur().getPseudo())) {
+			if (articleAVendre.getStatut() == 0) {
 				if (!bindingResult.hasErrors()) {
 					try {
-						articleAVendreService.modifierArticleEnVente(articleAVendre);
+						articleAVendreService.modifierArticleEnVente(articleAVendre, principal.getName());
 						return "redirect:/";
 					} catch (BusinessException be) {
 						be.getClefsExternalisations().forEach(key -> {
 							ObjectError error = new ObjectError("globalError", key);
 							bindingResult.addError(error);
 						});
+						model.addAttribute("articleAVendre", articleAVendre);
+						model.addAttribute("modeModif", true);
+						model.addAttribute("action", "/vendre/modifier");
+						return "view-vente-article";
 					}
 				}
-			} else {
-				ObjectError error = new ObjectError("globalError",
-						BusinessCode.VALIDATION_UTILISATEUR_NON_CREATEUR_VENTE);
-				bindingResult.addError(error);
-				return "redirect:/";
 			}
 		} catch (BusinessException be) {
 			be.getClefsExternalisations().forEach(key -> {
 				ObjectError error = new ObjectError("globalError", key);
 				bindingResult.addError(error);
 			});
+			return "redirect:/";
 		}
-		return "index";
+		return "redirect:/";
 	}
 
 	@GetMapping("/vente/annuler")

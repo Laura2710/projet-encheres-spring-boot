@@ -97,7 +97,7 @@ public class UtilisateurController {
 			});
 		}
 		
-		return "view-profil-form";
+		return "view-profil";
 	}
 	
 	@GetMapping("/modifier-mot-de-passe")

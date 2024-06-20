@@ -58,11 +58,14 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 		}
 	
 	@Override
-	public void modifierArticleEnVente(ArticleAVendre articleAVendre) {
+	public void modifierArticleEnVente(ArticleAVendre articleAVendre, String pseudo) {
 		// test ID vérif si article existe
 		BusinessException be = new BusinessException();
 		
 		if (validationArticle(articleAVendre, be)) {
+			Utilisateur utilisateur = new Utilisateur();
+			utilisateur.setPseudo(pseudo);
+			articleAVendre.setVendeur(utilisateur);
 	            articleAVendreDAO.updateArticle(articleAVendre);
 	    } else {
 	        throw be;

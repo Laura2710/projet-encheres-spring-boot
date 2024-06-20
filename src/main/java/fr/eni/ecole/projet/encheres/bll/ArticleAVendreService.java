@@ -22,7 +22,7 @@ public interface ArticleAVendreService {
 
 	void mettreArticleEnVente(ArticleAVendre articleAVendre, Utilisateur utilisateur);
 	
-	void modifierArticleEnVente(ArticleAVendre articleAVendre);
+	void modifierArticleEnVente(ArticleAVendre articleAVendre, String pseudo);
 	
 	Categorie getCategorieById (long id);
 	
