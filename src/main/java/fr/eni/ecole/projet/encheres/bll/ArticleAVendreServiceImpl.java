@@ -160,17 +160,24 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 	@Override
 	public ArticleAVendre getById(int idArticle) {
 		BusinessException be = new BusinessException();
-		try {
-			ArticleAVendre article = this.articleAVendreDAO.getByID(idArticle);
-
-			Adresse adresse = this.adresseDAO.getByID(article.getAdresseRetrait().getId());
-			article.setAdresseRetrait(adresse);
-
-			Categorie categorie = this.categorieDAO.read(article.getCategorie().getId());
-			article.setCategorie(categorie);
-
-			return article;
-		} catch (DataAccessException e) {
+		if (idArticle > 0) {
+			try {
+				ArticleAVendre article = this.articleAVendreDAO.getByID(idArticle);
+				
+				Adresse adresse = this.adresseDAO.getByID(article.getAdresseRetrait().getId());
+				article.setAdresseRetrait(adresse);
+				
+				Categorie categorie = this.categorieDAO.read(article.getCategorie().getId());
+				article.setCategorie(categorie);
+				
+				return article;
+			} catch (DataAccessException e) {
+				be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_NULL);
+				throw be;
+			}
+			
+		}
+		else {
 			be.add(BusinessCode.VALIDATION_ARTICLE_A_VENDRE_NULL);
 			throw be;
 		}
@@ -426,23 +433,13 @@ public ArticleAVendreServiceImpl(ArticleAVendreDAO articleAVendreDAO, AdresseDAO
 
 	@Override
 	public void activerVente() {
-		BusinessException be = new BusinessException();
-		int nbr = this.articleAVendreDAO.activerVente();
-		if (nbr == 0) {
-			be.add(BusinessCode.VALIDATION_ACTIVER_VENTE);
-			throw be;
-		}
+		this.articleAVendreDAO.activerVente();
 	}
 
 
 	@Override
 	public void cloturerVente() {
-		BusinessException be = new BusinessException();
-		int nbr = this.articleAVendreDAO.cloturerVente();
-		if (nbr == 0) {
-			be.add(BusinessCode.VALIDATION_CLOTURER_VENTE);
-			throw be;
-		}
+		this.articleAVendreDAO.cloturerVente();
 	}
 
 	@Transactional(rollbackFor = BusinessException.class)

@@ -454,3 +454,7 @@ h1 {
 .radiosContainer input {
 	width: auto;
 }
+
+#encartMobile {
+	display: none;
+}

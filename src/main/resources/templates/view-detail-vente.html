@@ -11,23 +11,12 @@
 <body>
 	<main class="main-detail-vente">
 		
-			<h1 data-th-if="${showNomArticle}" data-th-text="${article.nom}" class="main-title"></h1>
-		
-			<th:block data-th-switch="${cloture}">
-			   <h1 data-th-case="'acquereur'">Vous avez remporté la vente</h1>
-			   <h1 data-th-case="'vendeur'"><a data-th-href="@{/utilisateur/profil(id=${acquereur})}" data-th-text="${acquereur}"></a> a remporté la vente</h1>
-			   <h1 data-th-case="'clotureSansAcquereur'">Aucun individu ne s'est porté acquéreur :(</h1>
-			</th:block>
-
-			<th:block data-th-switch="${statut}">
-			   <h1 data-th-case="'livraison'">Vous avez livré à <span data-th-text="${acquereur}"></span></h1>
-			   <h1 data-th-case="'annulee'" data-th-text="${article.nom + ' (annulée)'}" class="main-title"></h1>
-			</th:block>
+			<th:block data-th-replace="~{fragments/fragment-statut-detail-vente :: frag-statut}"></th:block>
 			
 			<!-- DESCRIPTION ARTICLE EN VENTE-->
 			<div data-th-replace="~{fragments/fragment-detail-vente :: frag-detail-vente}"></div>
-
 			<a data-th-if="${leVendeurEstConnecte and article.statut == 0}" class="btnPrimaire" data-th-href="@{/vendre/modifier(id=${article.id})}">Modifier</a>
+
 			
 			<!-- SI UTILISATEUR CONNECTE DIFFERENT DU VENDEUR, AFFICHER FORMULAIRE"-->
 			<th:block data-th-if="${utilisateur.credit >= enchere.montant and article.statut == 1 and !leVendeurEstConnecte}">

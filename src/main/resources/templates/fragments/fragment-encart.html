@@ -4,7 +4,6 @@
 	<div id="contenu">
 		<ul>
 			<li th:text="'Date du jour : ' + ${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></li>
-
 			<li>
 				<!-- A declencher quand la méthode pour enregistrer les membres en session sera OK -->
 			 <th:block data-th-if="${#authorization.expression('isAuthenticated()')}"><span data-th-text="#{frag-encart.tag}"></span><span data-th-text="${#authentication.name}"></span>
@@ -13,5 +12,9 @@
 
 		</ul>
 	</div>
-
+	
+	<div id="encartMobile" data-th-if="${#authorization.expression('isAuthenticated()')}">
+			<span data-th-text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"></span>
+			<span data-th-text="${'  ['+#authentication.name+']'}"></span>
+	</div>
 </div>

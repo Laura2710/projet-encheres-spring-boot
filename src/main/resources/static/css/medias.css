@@ -168,4 +168,17 @@
 	.filterSection .select-filtre {
 		grid-row: 3
 	}
+	#encart #contenu {
+		display: none;
+	}
+	#encart {
+		justify-content: flex-start;
+	}
+	#encartMobile {
+		display: flex;
+		gap: 8px;
+		border: 1px solid;
+		padding: 1em;
+		border-radius: 8px;
+	}
 }
