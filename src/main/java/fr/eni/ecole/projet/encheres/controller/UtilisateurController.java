@@ -138,7 +138,7 @@ public class UtilisateurController {
 
 	    try {
 	    	this.utilisateurService.updateMotDePasse(ancienMotDePasse,nouveauMotDePasse,utilisateur);
-	    	return "redirect:/logout";
+	    	return "redirect:/utilisateur/profil";
 	    }
 	    catch(BusinessException e) {    	
 	    	e.getClefsExternalisations().forEach(key -> {
