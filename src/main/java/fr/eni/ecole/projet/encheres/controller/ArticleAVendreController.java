@@ -63,7 +63,6 @@ public class ArticleAVendreController {
 		return "index";
 	}
 	
-	//TODO Ajoux des liens si connecté sur les artciles
 	
 	
 	@PostMapping("/rechercher")
