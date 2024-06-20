@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	data-th-replace="~{layouts/layout :: layout-enchere(
+			titrePage=~{:: title}, 
+			contenuPage=~{:: main}, 
+			ressourceSupp=~{:: link})}">
+		
+<head>
+<title>Ajout Image</title>
+</head>
+
+<body>
+	<main>
+		<h1>Ajouter une photo</h1>
+		
+		<img src="/images/Placeholder.jpg" id="preview">
+		
+		<form class="form" data-th-action="@{/ajouter-photo}" enctype="multipart/form-data" method="post">
+			<label for="inputPhoto">Photo de l'article: </label>
+			<input type="file" id="inputPhoto" name="inputPhoto" accept="image/png, image/jpeg">
+			
+			<input type="submit" class="btnPrimaire">
+		</form>
+	</main>
+</body>
+	
+</html>

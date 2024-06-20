@@ -56,6 +56,7 @@ public class EncheresSecurity {
 				.requestMatchers("/vendre").hasRole("USER")
 				.requestMatchers("/vente/annuler").hasRole("USER")
 				.requestMatchers("/vendre/modifier").hasRole("USER")
+				.requestMatchers("/ajouter-photo").hasRole("USER")
 				.anyRequest().authenticated();
 		});
 		httpSecurity.formLogin(form -> {
@@ -70,6 +71,7 @@ public class EncheresSecurity {
 											.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 											.logoutSuccessUrl("/")
 											.permitAll());
+		
 		return httpSecurity.build();
 	}
 }
