@@ -93,7 +93,7 @@
 				</ul>
 			<!-- Affichage des Exceptions -->
 			<ul data-th-if="${#fields.hasErrors('global')}" class="listErrors">
-				<li th:each="err : ${#fields.errors('global')}" th:text="${err}"></li>
+				<li th:each="err : ${#fields.errors('global')}" th:text="#{${err}}"></li>
 			</ul>
 	
 

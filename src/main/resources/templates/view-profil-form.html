@@ -17,10 +17,11 @@
 		<form class="form" method="post" data-th-action="@{/utilisateur/modifier-profil}" data-th-object="${utilisateur}">
 			<div>
 				<p>
-					Pseudo : <span data-th-text="${#authentication.name}"></span>
+					<span data-th-text="#{view-profil-form.pseudo}" class="label-profil-form"></span>
+					<span data-th-text="${#authentication.name}"></span>
 				</p>
 				<div>
-					<label id="nom">Nom(*): </label>
+					<label id="nom" data-th-text="#{view-profil-form.label.nom}"></label>
 					<input type="text" data-th-field="*{nom}" required>
 					<ul data-th-if="${#fields.hasErrors('nom')}" class="listErrors">
 						<li th:each="err : ${#fields.errors('nom')}" th:text="${err}"></li>
@@ -31,14 +32,14 @@
 
 			<div>
 				<div>
-					<label id="prenom">Prénom(*): </label>
+					<label id="prenom" data-th-text="#{view-profil-form.label.prenom}"></label>
 					<input type="text" data-th-field="*{prenom}" required>
 					<ul data-th-if="${#fields.hasErrors('prenom')}" class="listErrors">
 						<li th:each="err : ${#fields.errors('prenom')}" th:text="${err}"></li>
 					</ul>
 				</div>
 				<div>
-					<label id="email">Email(*): </label>
+					<label id="email" data-th-text="#{view-profil-form.label.email}"></label>
 					<input type="email" data-th-field="*{email}" required>
 					<ul data-th-if="${#fields.hasErrors('email')}" class="listErrors">
 						<li th:each="err : ${#fields.errors('email')}" th:text="${err}"></li>
@@ -46,14 +47,14 @@
 				</div>
 			</div>
 			<div>
-				<label id="telephone">Telephone: </label>
+				<label id="telephone" data-th-text="#{view-profil-form.label.telephone}"></label>
 				<input type="tel" data-th-field="*{telephone}">
 				<ul data-th-if="${#fields.hasErrors('telephone')}" class="listErrors">
 					<li th:each="err : ${#fields.errors('telephone')}" th:text="${err}"></li>
 				</ul>
 			</div>
 			<div>
-				<label id="adresse.rue">Adresse(*): </label>
+				<label id="adresse.rue" data-th-text="#{view-profil-form.label.adresse}"></label>
 				<div>
 					<input data-th-field="*{adresse.rue}">
 					<ul data-th-if="${#fields.hasErrors('adresse.rue')}" class="listErrors">
@@ -75,7 +76,9 @@
 			</div>
 			<div>
 				<p>
-					Mon crédit : <span data-th-text="${utilisateur.credit}"></span> point(s)
+				<span data-th-text="#{view-profil-form.credit}" class="label-profil"></span>
+					<span data-th-text="${utilisateur.credit}"></span>
+					<span data-th-text="#{view-profil-form.points}" class="label-profil-form"></span>
 				</p>
 				<input type="hidden" data-th-field="*{credit}">
 			</div>
@@ -86,6 +89,7 @@
 			</ul>
 
 			<div>
+				<input type="hidden" data-th-field="*{adresse.id}">
 				<input type="submit" value="Modifier" class="btnPrimaire">
 				<a data-th-href="@{/utilisateur/modifier-mot-de-passe}" class="btnPrimaire btnSecondaire">Modifier mot de passe</a>
 				<a data-th-href="@{/utilisateur/profil}" class="btnAnnuler">Annuler</a>

@@ -24,7 +24,7 @@
 			<div id="bloc">
 				<div id="bloc1">
 					<div id="tag">
-						<label for="inputNom">Article(*): </label>
+						<label for="inputNom" data-th-text="#{view-vente-article.label.article}"></label>
 						<input type="text" id="inputNom" data-th-field="*{nom}" required />
 						<ul data-th-if="${#fields.hasErrors('nom')}" class="listErrors">
 							<li th:each="err : ${#fields.errors('nom')}" th:text="${err}"></li>
@@ -32,7 +32,7 @@
 					</div>
 
 					<div id="tag">
-						<label for="inputCategorie">Catégorie(*): </label>
+						<label for="inputCategorie" data-th-text="#{view-vente-article.label.categorie}"></label>
 						<select id="inputCategorie" data-th-field="*{categorie}" required>
 							<option th:each="categorie : ${categories}" th:value="${categorie.id}" th:text="${categorie.libelle}"></option>
 						</select>
@@ -42,7 +42,7 @@
 					</div>
 
 					<div id="tag">
-						<label for="inputDescription">Description(*):</label>
+						<label for="inputDescription" data-th-text="#{view-vente-article.label.description}"></label>
 						<textarea id="inputDescription" th:field="*{description}" required></textarea>
 						<ul data-th-if="${#fields.hasErrors('description')}" class="listErrors">
 							<li th:each="err : ${#fields.errors('description')}" th:text="${err}"></li>
@@ -52,7 +52,7 @@
 
 				<div id="bloc2">
 					<div id="tag">
-						<label for="inputPrixInitial">Mise à prix(*):</label>
+						<label for="inputPrixInitial" data-th-text="#{view-vente-article.label.prix_initial}"></label>
 						<input type="number" id="inputPrixInitial" data-th-field="*{prixInitial}" required />
 						<ul data-th-if="${#fields.hasErrors('prixInitial')}" class="listErrors">
 							<li th:each="err : ${#fields.errors('prixInitial')}" th:text="${err}"></li>
@@ -60,7 +60,7 @@
 					</div>
 
 					<div id="tag">
-						<label for="inputDateDebutEncheres">Début de l'enchère(*):</label>
+						<label for="inputDateDebutEncheres" data-th-text="#{view-vente-article.label.date_debut}"></label>
 						<input type="date" id="inputDateDebutEncheres" name="dateDebutEncheres"
 							th:value="${articleAVendre.dateDebutEncheres}" required/>
 							<ul data-th-if="${#fields.hasErrors('dateDebutEncheres')}" class="listErrors">
@@ -69,7 +69,7 @@
 					</div>
 
 					<div id="tag">
-						<label for="inputDateFinEncheres">Fin de l'enchère(*):</label> <input
+						<label for="inputDateFinEncheres" data-th-text="#{view-vente-article.label.date_fin}"></label> <input
 							type="date" id="inputDateFinEncheres" name="dateFinEncheres"
 							th:value="${articleAVendre.dateFinEncheres}" required/>
 							<ul data-th-if="${#fields.hasErrors('dateFinEncheres')}" class="listErrors">
@@ -80,11 +80,10 @@
 			</div>
 
 			<div>
-				<label for="inputRetrait">Retrait(*): </label>
+				<label for="inputRetrait" data-th-text="#{view-vente-article.label.adresse}"></label>
 				<select id="inputRetrait" data-th-field="*{adresseRetrait}" required>
-					<option th:each="adresseRetrait : ${adressesRetrait}" th:value="${adresseRetrait.id}"
-						th:text="${adresseRetrait.rue + ' ' + adresseRetrait.codePostal + ' ' + adresseRetrait.ville}">
-					</option>
+						<option data-th-each="adresseRetrait : ${adressesRetrait}" data-th-selected="${!adresseRetrait.isAdresseEni}" th:value="${adresseRetrait.id}" th:text="${adresseRetrait.rue + ' ' + adresseRetrait.codePostal + ' ' + adresseRetrait.ville}"></option>
+				
 				</select>
 				<ul data-th-if="${#fields.hasErrors('adresseRetrait')}" class="listErrors">
 					<li th:each="err : ${#fields.errors('adresseRetrait')}" th:text="${err}"></li>
@@ -98,7 +97,7 @@
             </div>
 
              <ul data-th-if="${#fields.hasErrors('*')}" class="listErrors">
-				<li>Veuillez vérifier vos champs</li>
+				<li data-th-text="#{view-vente-article.erreur_globale}"></li>
 			</ul>
 			
 		</form>

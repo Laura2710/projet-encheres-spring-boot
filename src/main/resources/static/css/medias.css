@@ -91,6 +91,10 @@
 	#creer-compte-form {
 		width: 90%;
 	}
+	.profil {
+		padding: 2em;
+		width: 100%;
+	}
 }
 
 /* Responsive */
@@ -108,6 +112,7 @@
 	}
 	.btnActions {
 		row-gap: 16px;
+		flex-direction: column;
 	}
 	.form>div:not(.btnActions) {
 		align-items: flex-start;
@@ -143,5 +148,37 @@
 	}
 	#set button {
 		width: 100%;
+	}
+	.btnPrimaire {
+		width: 100%;
+	}
+	.filterSection {
+		width: 100%;
+	}
+	.filterSection form {
+		grid-template-columns: 1fr;
+	}
+	.filterSection .row {
+		flex-direction: column;
+		width: 100%;
+	}
+	.filterSection .radiosContainer {
+		grid-row: 2;
+	}
+	.filterSection .select-filtre {
+		grid-row: 3
+	}
+	#encart #contenu {
+		display: none;
+	}
+	#encart {
+		justify-content: flex-start;
+	}
+	#encartMobile {
+		display: flex;
+		gap: 8px;
+		border: 1px solid;
+		padding: 1em;
+		border-radius: 8px;
 	}
 }

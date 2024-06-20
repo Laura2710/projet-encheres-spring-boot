@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.eni.ecole.projet.encheres.bll.ArticleAVendreService;
-import fr.eni.ecole.projet.encheres.exceptions.BusinessException;
 
 @Component
 @EnableScheduling
@@ -17,23 +16,17 @@ public class EnchereManager {
 	public EnchereManager(ArticleAVendreService articleAVendreService) {
 		this.articleAVendreService = articleAVendreService;
 	}
-	
+
 	/**
-	 * Méthode pour activer et clôturer les enchères des articles dont la date de début ou de fin est aujourd'hui.
+	 * Méthode pour activer et clôturer les enchères des articles dont la date de
+	 * début ou de fin est aujourd'hui.
 	 */
 	@Transactional
-    @Scheduled(cron = "0 0 16 * * *")  //  signifie "tous les jours à 16h00"
-    //@Scheduled(cron = "*/10 * * * * *")  //  signifie "toutes les 10 secondes"
+	@Scheduled(cron = "0 10 9 * * *")
 	void activerEnchere() {
-		try {		
-			articleAVendreService.activerVente();
-			articleAVendreService.cloturerVente();
-			System.out.println("methode appelée");
-		} catch (BusinessException e) {
-			e.getClefsExternalisations().forEach(key -> {
-				System.out.println("Une erreur est survenue: " + key);
-			});
-		}
+		articleAVendreService.activerVente();
+		articleAVendreService.cloturerVente();
+		System.out.println("Activation et clôture des enchères du jour réussies.");
 	}
 
 }

@@ -63,7 +63,6 @@ public class UtilisateurController {
 		if (pseudoParam == null || (pseudoParam != null && pseudoParam.equals(pseudo))) {
 			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
 			model.addAttribute("utilisateur", utilisateurSession);
-			//model.addAttribute
 		}
 		if (pseudoParam != null && pseudoParam != pseudo) {
 			Utilisateur utilisateur = this.utilisateurService.getByPseudo(pseudoParam);
@@ -98,7 +97,7 @@ public class UtilisateurController {
 			});
 		}
 		
-		return "view-profil-form";
+		return "view-profil";
 	}
 	
 	@GetMapping("/modifier-mot-de-passe")
@@ -108,7 +107,6 @@ public class UtilisateurController {
 		if (pseudoParam == null || (pseudoParam != null && pseudoParam.equals(pseudo))) {
 			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
 			model.addAttribute("utilisateur", utilisateurSession);
-			//model.addAttribute
 		}
 		if (pseudoParam != null && pseudoParam != pseudo) {
 			Utilisateur utilisateur = this.utilisateurService.getByPseudo(pseudoParam);
