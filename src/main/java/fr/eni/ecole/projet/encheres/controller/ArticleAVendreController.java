@@ -60,7 +60,6 @@ public class ArticleAVendreController {
 		return "index";
 	}
 	
-	//TODO Ajoux des liens si connecté sur les artciles
 	
 	
 	@PostMapping("/rechercher")
@@ -89,6 +88,8 @@ public class ArticleAVendreController {
 			String pseudo = principal.getName();
 			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(pseudo);
 			if (utilisateurSession != null && !utilisateurSession.isAdministrateur()) {
+				Adresse adressePerso = this.articleAVendreService.getAdresseById(utilisateurSession.getAdresse().getId());
+				model.addAttribute("adressePerso", adressePerso);
 				model.addAttribute("articleAVendre", new ArticleAVendre());
 				model.addAttribute("modeModif", false);
 				model.addAttribute("action", "/vendre");
