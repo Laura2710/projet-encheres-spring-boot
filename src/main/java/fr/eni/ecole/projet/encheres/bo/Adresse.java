@@ -14,7 +14,7 @@ public class Adresse implements Serializable {
 	private long id;
 	@NotBlank
 	@Size(min = 3, max = 100)
-	@Pattern(regexp = "^[0-9A-Za-zÀ-ÿ, °-]+$")
+	@Pattern(regexp = "^[0-9A-Za-zÀ-ÿ, °\\-\\']+$")
 	private String rue;
 	
 	@NotBlank

@@ -36,7 +36,7 @@ public class RegexUtils {
 	}
 	
 	public static boolean isAlphanumericExtended(String chaine) {
-        String regex = "^[0-9A-Za-zÀ-ÿ, °-]+$";
+        String regex = "^[0-9A-Za-zÀ-ÿ, °\\-\\']+$";
 		return callMatcher(regex, chaine);
 	}
 		
