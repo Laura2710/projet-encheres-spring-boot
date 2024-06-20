@@ -249,7 +249,9 @@ public class ArticleAVendreController {
 		return "view-ajouter-image";
 	}
 	
-	@PostMapping("/ajouter-photo")
+	// TODO Méthode Post n'est pas encore fonctionnelle pour upload photo à la BD
+	
+	/* @PostMapping("/ajouter-photo")
 	public String ajouterPhoto (@RequestParam("inputPhoto") MultipartFile file) throws IOException {
 		System.out.println(file.getName());
 		
@@ -268,5 +270,6 @@ public class ArticleAVendreController {
 			}
 		}
 		return "view-ajouter-image";
-	}
+	} */
+	
 }
