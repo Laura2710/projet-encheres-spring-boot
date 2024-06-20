@@ -164,7 +164,6 @@ public class ArticleAVendreController {
 	public String modifierArticle(@RequestParam("id") int idArticle, Model model, Principal principal) {
 		try {
 			ArticleAVendre article = this.articleAVendreService.getById(idArticle);
-			System.out.println(article);
 			if ((article.getStatut() == 0) && principal.getName().equals(article.getVendeur().getPseudo())) {
 				model.addAttribute("articleAVendre", article);
 				model.addAttribute("modeModif", true);
@@ -182,7 +181,6 @@ public class ArticleAVendreController {
 	@PostMapping("/vendre/modifier")
 	public String modifierArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre,
 			BindingResult bindingResult, Principal principal, Model model) {
-		System.out.println(articleAVendre);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("articleAVendre", articleAVendre);
 			model.addAttribute("modeModif", true);
