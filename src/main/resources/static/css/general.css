@@ -473,3 +473,15 @@ h1 {
 	display: block;
 	margin: 8px auto;
 }
+
+#encartMobile {
+	display: none;
+}
+
+.hide div {
+	display: none;
+}
+
+.hide select {
+	display: none;
+}

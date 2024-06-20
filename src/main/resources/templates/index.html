@@ -3,10 +3,11 @@
 	data-th-replace="~{layouts/layout :: layout-enchere(
 			titrePage=~{:: title}, 
 			contenuPage=~{:: main}, 
-			ressourceSupp=~{:: link})}"
+			ressourceSupp=~{:: script})}"
 >
 <head>
 <title data-th-text="#{index.title}"></title>
+<script defer src="/js/filtres.js" ></script>
 </head>
 <body>
 	<main>
@@ -22,7 +23,10 @@
 				<h2>Aucun article disponible avec ces critères</h2>
 			</div>
 			<div class="articleCard" data-th-each="article : ${articlesAVendre}">
-				<h2 data-th-text="${article.nom}"></h2>
+				<h2>
+				 <span data-th-if="${!#authorization.expression('isAuthenticated()')}" data-th-text="${article.nom}"></span> 
+				 <a data-th-if="${#authorization.expression('isAuthenticated()')}" data-th-href="@{/encheres/detail(id=${article.id})}"><span data-th-text="${article.nom}"></span></a> 
+				 </h2>
 				<div class="articleCardDetails">
 					<h3>
 						<span data-th-text="#{index.prix}"></span> <span data-th-if="${article.prixVente != 0}"
@@ -35,14 +39,14 @@
 						></span>
 					</h3>
 					<h3>
-						<span data-th-text="#{index.vendeur}"></span> <span data-th-text="${article.vendeur.pseudo}"></span>
+						<span data-th-text="#{index.vendeur}"></span> <span data-th-if="${!#authorization.expression('isAuthenticated()')}" data-th-text="${article.vendeur.pseudo}"></span>
+						<a data-th-if="${#authorization.expression('isAuthenticated()')}" data-th-href="@{/utilisateur/profil(id=${article.vendeur.pseudo})}"><span data-th-text="${article.vendeur.pseudo}"></span></a>  
 					</h3>
 				</div>
 			</div>
 
 		</div>
 
-<a data-th-href="@{/utilisateur/profil(id='coach_titi')}">coach_titi_test</a>
 	</main>
 </body>
 </html>
