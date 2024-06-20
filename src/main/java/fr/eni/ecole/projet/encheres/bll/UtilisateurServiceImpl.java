@@ -279,4 +279,20 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		
 	}
 
+	@Override
+	public void updateMotDePasse(String ancienMotDePasse, String nouveauMotDePasse, Utilisateur utilisateur) {
+		BusinessException be=new BusinessException();
+		boolean isValid = true;
+		isValid &= verifierMotPasse(nouveauMotDePasse, be);
+		isValid &= verifierMotPasse(ancienMotDePasse, be);
+		if(isValid) {
+			int count= this.utilisateurDAO.findOldPwd(ancienMotDePasse, utilisateur.getPseudo());
+			
+		}
+		else {
+			throw be;
+		}
+		
+	}
+
 }

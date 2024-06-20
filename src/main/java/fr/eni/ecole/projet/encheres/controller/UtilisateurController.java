@@ -117,7 +117,37 @@ public class UtilisateurController {
 		}
 		return "view-mdp";
 	}
+	
+//	@PostMapping("/modifier-mot-de-passe")
+//	public String confirmMotDePasse(@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult) {
+//	System.out.println(utilisateur);
+//	return "view-mdp";
+//	}
+	
+	@PostMapping("/utilisateur/modifier-mot-de-passe")
+	public String modifierMotDePasse(@RequestParam("ancienMotDePasse") String ancienMotDePasse,
+	                                 @RequestParam("nouveauMotDePasse") String nouveauMotDePasse,
+	                                 @RequestParam("confirmationMdp") String confirmationMdp,
+	                                 Principal principal,
+	                                 Model model) {
+	    if (!nouveauMotDePasse.equals(confirmationMdp)) {
+	        model.addAttribute("errorMessage", "les mots de passe de correspondent pas");
+	        return "view-mdp";
+	    }
+
+	    String pseudo = principal.getName();
+	    Utilisateur utilisateur = utilisateurService.getByPseudo(pseudo);
+
+	    try {
+	    	this.utilisateurService.updateMotDePasse(ancienMotDePasse,nouveauMotDePasse,utilisateur);
+	    }
+	    catch(BusinessException e) {
+	    }
+
+	    return "redirect:/";
 	}
+}
+	
 
 			
 

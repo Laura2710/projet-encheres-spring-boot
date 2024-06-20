@@ -14,4 +14,6 @@ public interface UtilisateurService {
 
 	void miseAjourProfil(Utilisateur utilisateur, String name);
 
+	void updateMotDePasse(String ancienMotDePasse, String nouveauMotDePasse, Utilisateur utilisateur);
+
 }

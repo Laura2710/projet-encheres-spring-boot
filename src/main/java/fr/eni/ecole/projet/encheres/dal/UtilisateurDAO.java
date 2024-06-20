@@ -17,4 +17,6 @@ public interface UtilisateurDAO {
 
 	int updateProfil(Utilisateur utilisateur);
 
+	int findOldPwd(String ancienMotDePasse, String pseudo);
+
 }
