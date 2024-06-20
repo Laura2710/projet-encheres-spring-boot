@@ -33,7 +33,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("pseudo", utilisateur.getPseudo());
 		params.addValue("nom", utilisateur.getNom());
-		params.addValue("prenom", utilisateur.getNom());
+		params.addValue("prenom", utilisateur.getPrenom());
 		params.addValue("email", utilisateur.getEmail());
 		params.addValue("telephone", utilisateur.getTelephone());
 		params.addValue("motDePasse", utilisateur.getMotDePasse());
