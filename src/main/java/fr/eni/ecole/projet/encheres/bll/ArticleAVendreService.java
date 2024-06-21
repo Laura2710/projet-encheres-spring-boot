@@ -36,4 +36,7 @@ public interface ArticleAVendreService {
 
 	void cloturerVente();
 
+
+	void ajouterPhotoArticle(int idArticle, String newFilename, String name);
+
 }

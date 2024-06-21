@@ -531,6 +531,30 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 		this.articleAVendreDAO.cloturerVente();
 	}
 
+	@Override
+	public void ajouterPhotoArticle(int idArticle, String newFilename, String pseudo) {
+		// TODO RESTE A FAIRE VALIDATION 
+		
+		BusinessException be = new BusinessException();
+		boolean isValid = true;
+		// Si l'article appartient à l'utilisateur
+		isValid &= verifierArticleEstAutilisateur(idArticle, pseudo, be);
+		if(isValid) {
+			this.articleAVendreDAO.ajouterPhoto(idArticle, newFilename);
+		}
+		else {
+			throw be;
+		}
+	}
+
+	private boolean verifierArticleEstAutilisateur(int idArticle, String pseudo, BusinessException be) {
+		int count = this.articleAVendreDAO.trouverProprietaireArticle(idArticle, pseudo);
+		if (count < 1) {
+			return false;
+		}
+		return true;
+	}
+
 
 
 

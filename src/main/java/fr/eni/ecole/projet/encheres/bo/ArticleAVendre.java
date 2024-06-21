@@ -40,14 +40,17 @@ public class ArticleAVendre implements Serializable{
 	@NotNull
 	private Adresse adresseRetrait;
 	
+	private String photo;
+	
 	public ArticleAVendre() {
 		
 	}
 
-	public ArticleAVendre(long id,Categorie categorie,String nom,
-			String description,LocalDate dateDebutEncheres,
-			LocalDate dateFinEncheres, int statut,int prixInitial, int prixVente,
-			Utilisateur vendeur,Adresse adresseRetrait) {
+
+	public ArticleAVendre(long id, @NotNull Categorie categorie, @NotBlank @Size(min = 5, max = 30) String nom,
+			@NotBlank @Size(min = 20, max = 300) String description, @NotNull @Future LocalDate dateDebutEncheres,
+			@NotNull @Future LocalDate dateFinEncheres, int statut, @NotNull @Min(1) int prixInitial, int prixVente,
+			Utilisateur vendeur, @NotNull Adresse adresseRetrait, String photo) {
 		this.id = id;
 		this.categorie = categorie;
 		this.nom = nom;
@@ -59,7 +62,11 @@ public class ArticleAVendre implements Serializable{
 		this.prixVente = prixVente;
 		this.vendeur = vendeur;
 		this.adresseRetrait = adresseRetrait;
+		this.photo = photo;
 	}
+
+
+
 
 	public long getId() {
 		return id;
@@ -197,6 +204,14 @@ public class ArticleAVendre implements Serializable{
 				&& Objects.equals(dateFinEncheres, other.dateFinEncheres) && id == other.id
 				&& Objects.equals(nom, other.nom) && prixInitial == other.prixInitial && prixVente == other.prixVente
 				&& statut == other.statut && Objects.equals(vendeur, other.vendeur);
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 	
 	

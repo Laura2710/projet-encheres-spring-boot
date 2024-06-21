@@ -27,5 +27,9 @@ public interface ArticleAVendreDAO {
 
 	int cloturerVente();
 
+	int trouverProprietaireArticle(int idArticle, String pseudo);
+
+	void ajouterPhoto(int idArticle, String newFilename);
+
 
 }

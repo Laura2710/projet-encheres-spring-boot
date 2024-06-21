@@ -35,6 +35,10 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	private static final String CLOTURER_VENTE = "UPDATE articles_a_vendre SET statut_enchere=2 WHERE statut_enchere=1 AND date_fin_encheres=CAST(GETDATE() as DATE)";
 
 	private static final String LIVRER_VENTE = "UPDATE articles_a_vendre SET statut_enchere=3 WHERE no_article=:idArticle";
+
+	private static final String TROUVER_PROPRIETAIRE_ARTICLE = "SELECT COUNT(*) FROM articles_a_vendre WHERE no_article=:idArticle AND id_utilisateur=:pseudo";
+
+	private static final String AJOUTER_PHOTO = "UPDATE articles_a_vendre SET photo=:photo WHERE no_article=:idArticle";
 	
 
 	@Autowired
@@ -113,7 +117,7 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 			articleAVendre.setStatut(rs.getInt("statut_enchere"));
 			articleAVendre.setPrixInitial(rs.getInt("prix_initial"));
 			articleAVendre.setPrixVente(rs.getInt("prix_vente"));
-
+			articleAVendre.setPhoto(rs.getString("photo"));
 			Utilisateur utilisateur = new Utilisateur();
 			utilisateur.setPseudo(rs.getString("id_utilisateur"));
 			articleAVendre.setVendeur(utilisateur);
@@ -204,6 +208,23 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("idArticle", idArticle);
 		return namedParameterJdbcTemplate.update(LIVRER_VENTE, params);
+	}
+
+	@Override
+	public int trouverProprietaireArticle(int idArticle, String pseudo) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("idArticle", idArticle);
+		params.addValue("pseudo", pseudo);
+		return namedParameterJdbcTemplate.queryForObject(TROUVER_PROPRIETAIRE_ARTICLE, params, Integer.class);
+	}
+
+	@Override
+	public void ajouterPhoto(int idArticle, String newFilename) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("idArticle", idArticle);
+		params.addValue("photo", newFilename);
+		namedParameterJdbcTemplate.update(AJOUTER_PHOTO, params);
+		
 	}
 
 

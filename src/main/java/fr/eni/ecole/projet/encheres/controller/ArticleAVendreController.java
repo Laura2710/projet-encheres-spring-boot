@@ -2,6 +2,9 @@ package fr.eni.ecole.projet.encheres.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -185,12 +188,12 @@ public class ArticleAVendreController {
 		return categories;
 	}
 
-    /**
-     * Injecte les adresses de retrait dans le modèle.
-     *
-     * @param principal Les informations de l'utilisateur connecté.
-     * @return La liste des adresses de retrait.
-     */
+	/**
+	 * Injecte les adresses de retrait dans le modèle.
+	 *
+	 * @param principal Les informations de l'utilisateur connecté.
+	 * @return La liste des adresses de retrait.
+	 */
 	@ModelAttribute("adressesRetrait")
 	public List<Adresse> injecteAdresse(Principal principal) {
 		List<Adresse> adressesRetrait = new ArrayList<Adresse>();
@@ -206,14 +209,14 @@ public class ArticleAVendreController {
 		return adressesRetrait;
 	}
 
-    /**
-     * Affiche le formulaire de modification d'un article à vendre.
-     *
-     * @param idArticle L'identifiant de l'article à modifier.
-     * @param model Le modèle pour la vue.
-     * @param principal Les informations de l'utilisateur connecté.
-     * @return La vue du formulaire de modification de vente d'article.
-     */
+	/**
+	 * Affiche le formulaire de modification d'un article à vendre.
+	 *
+	 * @param idArticle L'identifiant de l'article à modifier.
+	 * @param model     Le modèle pour la vue.
+	 * @param principal Les informations de l'utilisateur connecté.
+	 * @return La vue du formulaire de modification de vente d'article.
+	 */
 	@GetMapping("/vendre/modifier")
 	public String modifierArticle(@RequestParam("id") int idArticle, Model model, Principal principal) {
 		try {
@@ -223,6 +226,7 @@ public class ArticleAVendreController {
 				model.addAttribute("modeModif", true);
 				model.addAttribute("action", "/vendre/modifier");
 				return "view-vente-article";
+
 			} else {
 				return "redirect:/";
 			}
@@ -232,16 +236,15 @@ public class ArticleAVendreController {
 		}
 	}
 
-	
-    /**
-     * Traite la modification d'un article à vendre.
-     *
-     * @param articleAVendre L'article à vendre.
-     * @param bindingResult Les résultats de la validation.
-     * @param principal Les informations de l'utilisateur connecté.
-     * @param model Le modèle pour la vue.
-     * @return La vue à afficher.
-     */
+	/**
+	 * Traite la modification d'un article à vendre.
+	 *
+	 * @param articleAVendre L'article à vendre.
+	 * @param bindingResult  Les résultats de la validation.
+	 * @param principal      Les informations de l'utilisateur connecté.
+	 * @param model          Le modèle pour la vue.
+	 * @return La vue à afficher.
+	 */
 	@PostMapping("/vendre/modifier")
 	public String modifierArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre,
 			BindingResult bindingResult, Principal principal, Model model) {
@@ -256,7 +259,8 @@ public class ArticleAVendreController {
 				if (!bindingResult.hasErrors()) {
 					try {
 						articleAVendreService.modifierArticleEnVente(articleAVendre, principal.getName());
-						return "redirect:/";
+						// return "redirect:/";
+						return "view-ajouter-image";
 					} catch (BusinessException be) {
 						be.getClefsExternalisations().forEach(key -> {
 							ObjectError error = new ObjectError("globalError", key);
@@ -279,14 +283,14 @@ public class ArticleAVendreController {
 		return "redirect:/";
 	}
 
-    /**
-     * Annule la vente d'un article.
-     *
-     * @param idArticle L'identifiant de l'article à annuler.
-     * @param principal Les informations de l'utilisateur connecté.
-     * @param model Le modèle pour la vue.
-     * @return La vue à afficher.
-     */
+	/**
+	 * Annule la vente d'un article.
+	 *
+	 * @param idArticle L'identifiant de l'article à annuler.
+	 * @param principal Les informations de l'utilisateur connecté.
+	 * @param model     Le modèle pour la vue.
+	 * @return La vue à afficher.
+	 */
 	@GetMapping("/vente/annuler")
 	public String annulerVente(@RequestParam("id") int idArticle, Principal principal, Model model) {
 		try {
@@ -325,23 +329,44 @@ public class ArticleAVendreController {
 		return "view-ajouter-image";
 	}
 
-	// TODO Méthode Post n'est pas encore fonctionnelle pour upload photo à la BD
+	// TODO Méthode Post NON TERMINEE
 
-	/*
-	 * @PostMapping("/ajouter-photo") public String ajouterPhoto
-	 * (@RequestParam("inputPhoto") MultipartFile file) throws IOException {
-	 * System.out.println(file.getName());
-	 * 
-	 * if(!file.isEmpty() && file.getSize() < 600000) { if
-	 * (file.getContentType().equals("image/png") ||
-	 * file.getContentType().equals("image/jpeg")) {
-	 * 
-	 * System.out.println(file.getOriginalFilename()); String filename =
-	 * file.getOriginalFilename(); File dossier = new File("/images/upload/");
-	 * if(!dossier.exists()) { dossier.mkdirs(); } File dossierDestination = new
-	 * File(dossier, filename);
-	 * 
-	 * file.transferTo(dossierDestination); } } return "view-ajouter-image"; }
-	 */
+	@PostMapping("/ajouter-photo")
+	public String ajouterPhoto(@RequestParam("inputPhoto") MultipartFile file, @RequestParam("idArticle") int idArticle, Principal principal, Model model) throws IOException {
+	    String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static/images/uploads";
+
+	    if (idArticle > 0) {   	
+	    	// Vérifiez si le répertoire de téléchargement existe, sinon le créer
+	    	Path uploadPath = Paths.get(UPLOAD_DIRECTORY);
+	    	if (!Files.exists(uploadPath)) {
+	    		Files.createDirectories(uploadPath);
+	    	}
+	    	
+	    	// Vérifiez si le fichier n'est pas vide et que sa taille est inférieure à 600000 octets (600 Ko)
+	    	if (!file.isEmpty() && file.getSize() < 600000) {
+	    		// Vérifiez si le fichier est de type PNG ou JPEG
+	    		if (file.getContentType().equals("image/png") || file.getContentType().equals("image/jpeg")) {
+	    			String originalFilename = file.getOriginalFilename();
+	    			if (originalFilename != null) {
+	    				
+	    				// Générer un nouveau nom de fichier unique (avec un horodatage)
+	    				String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+	    				String newFilename = System.currentTimeMillis() + fileExtension;
+	    				
+	    				// Construire le chemin complet pour le fichier à enregistrer
+	    				Path fileNameAndPath = uploadPath.resolve(newFilename);
+	    				System.out.println(newFilename);
+	    				Files.write(fileNameAndPath, file.getBytes());
+	    				
+	    				articleAVendreService.ajouterPhotoArticle(idArticle, newFilename, principal.getName());
+	    				ArticleAVendre article = articleAVendreService.getById(idArticle);
+	    				model.addAttribute("articleAVendre", article);
+	    			}
+	    		}
+	    	}
+	    }
+	    return "view-ajouter-image";
+	}
+
 
 }

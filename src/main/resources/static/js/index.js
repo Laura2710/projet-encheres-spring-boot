@@ -17,7 +17,7 @@ if (window.location.pathname.includes("mot-de-passe")) {
 
 
 
-if (window.location.pathname.includes("ajouter-photo")) {
+if (window.location.pathname.includes("ajouter-photo") || window.location.pathname.includes("vendre/modifier")) {
 	const photoManager= new PhotoManager();
 	photoManager.previewPhoto();
 }

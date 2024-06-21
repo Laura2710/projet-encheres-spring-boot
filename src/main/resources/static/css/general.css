@@ -490,3 +490,8 @@ h1 {
 #btnFiltre {
 		display: none;
 	}
+	
+.photo-article {
+	height: 100px;
+    object-fit: contain;
+}	

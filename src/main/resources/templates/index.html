@@ -24,6 +24,7 @@
 				<h2>Aucun article disponible avec ces critères.</h2>
 			</div>
 			<div class="articleCard" data-th-each="article : ${articlesAVendre}">
+				<img class="photo-article" alt="photo article" data-th-if="${article.photo != null}" data-th-src="@{'/images/uploads/' +${article.photo}}">
 				<h2>
 				 <span data-th-if="${!#authorization.expression('isAuthenticated()')}" data-th-text="${article.nom}"></span> 
 				 <a data-th-if="${#authorization.expression('isAuthenticated()')}" data-th-href="@{/encheres/detail(id=${article.id})}"><span data-th-text="${article.nom}"></span></a> 

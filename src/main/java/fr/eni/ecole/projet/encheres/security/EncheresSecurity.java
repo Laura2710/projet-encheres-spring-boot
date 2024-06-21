@@ -14,6 +14,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+
 @Configuration
 @EnableWebSecurity
 public class EncheresSecurity {
@@ -59,10 +60,15 @@ public class EncheresSecurity {
 				.requestMatchers("/ajouter-photo").hasRole("USER")
 				.anyRequest().authenticated();
 		});
-		httpSecurity.formLogin(form -> {
+		
+	    httpSecurity.sessionManagement(session -> session
+	                .invalidSessionUrl("/login")
+	            )
+		.formLogin(form -> {
 			form.loginPage("/login").permitAll();
 			form.defaultSuccessUrl("/", true).permitAll();
-            form.failureUrl("/login?error=true"); 	
+            form.failureUrl("/login?error=true");
+            form.successHandler(new CustomAuthenticationSuccessHandler());
 		});
 
 		httpSecurity.logout(logout -> logout.invalidateHttpSession(true)
