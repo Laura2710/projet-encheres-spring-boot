@@ -18,11 +18,11 @@
 				<a href="/login" data-th-text="#{frag-entete.a.connecter}"></a>
 			</li>
 			
-			<li data-th-if="${#authorization.expression('isAuthenticated()')}">
+			<li data-th-if="${#authorization.expression('isAuthenticated()') and #authorization.expression('hasRole(''USER'')')}">
 				<a href="/vendre" data-th-text="#{frag-entete.a.vendre}"></a>
 			</li>
 			
-			<li data-th-if="${#authorization.expression('isAuthenticated()')}">
+			<li data-th-if="${#authorization.expression('isAuthenticated()') and #authorization.expression('hasRole(''USER'')')}">
 				<a href="/utilisateur/profil" data-th-text="#{frag-entete.a.profil}"></a>
 			</li>
 			
