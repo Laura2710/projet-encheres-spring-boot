@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.eni.ecole.projet.encheres.bll.ArticleAVendreService;
+import fr.eni.ecole.projet.encheres.bll.EnchereService;
 import fr.eni.ecole.projet.encheres.bll.UtilisateurService;
 import fr.eni.ecole.projet.encheres.bo.ArticleAVendre;
 import fr.eni.ecole.projet.encheres.bo.Enchere;
@@ -28,10 +29,14 @@ public class EnchereController {
 
 	UtilisateurService utilisateurService;
 	ArticleAVendreService articleAVendreService;
+	EnchereService enchereService;
 
-	public EnchereController(UtilisateurService utilisateurService, ArticleAVendreService articleAVendreService) {
+	
+	public EnchereController(UtilisateurService utilisateurService, ArticleAVendreService articleAVendreService,
+			EnchereService enchereService) {
 		this.utilisateurService = utilisateurService;
 		this.articleAVendreService = articleAVendreService;
+		this.enchereService = enchereService;
 	}
 
 	/**
@@ -48,7 +53,7 @@ public class EnchereController {
 		try {
 			Utilisateur utilisateur = utilisateurService.getByPseudo(principal.getName());
 			ArticleAVendre article = this.articleAVendreService.getById(idArticle);
-			Enchere enchere = this.articleAVendreService.getEnchereByIdArticle(idArticle);
+			Enchere enchere = this.enchereService.getEnchereByIdArticle(idArticle);
 			injecterDonneesEnchere(model, utilisateur, article, enchere);
 
 			boolean isAcquereur = enchere.getAcquereur() != null;
@@ -131,7 +136,7 @@ public class EnchereController {
 
 			// Vérification des erreurs de validation du formulaire
 			if (bindingResult.hasErrors()) {
-				Enchere enchere = articleAVendreService.getEnchereByIdArticle(idArticle);
+				Enchere enchere = this.enchereService.getEnchereByIdArticle(idArticle);
 				injecterDonneesEnchere(model, utilisateur, article, enchere);
 				model.addAttribute("showNomArticle", true);
 				return "view-detail-vente";
@@ -139,7 +144,7 @@ public class EnchereController {
 
 			try {
 				// Soumission de l'offre pour l'enchère
-				articleAVendreService.faireUneOffre(enchereSoumise, utilisateur);
+				this.enchereService.faireUneOffre(enchereSoumise, utilisateur);
 			} catch (BusinessException e) {
 				handleBusinessException(e, bindingResult, model, utilisateur, idArticle);
 				model.addAttribute("showNomArticle", true);
@@ -174,7 +179,7 @@ public class EnchereController {
 			ArticleAVendre article = articleAVendreService.getById(idArticle);
 			// Vérifie si l'utilisateur actuellement connecté est le vendeur de l'article
 			if (article.getVendeur().getPseudo().equals(principal.getName())) {
-				this.articleAVendreService.effectuerRetrait(article, principal.getName());
+				this.enchereService.effectuerRetrait(article, principal.getName());
 				return "redirect:/encheres/detail?id=" + idArticle;
 			} else {
 				model.addAttribute("retraitError",
@@ -197,7 +202,7 @@ public class EnchereController {
 
 	private void preparerDonneesEnchere(Model model, Utilisateur utilisateur, int idArticle) {
 		ArticleAVendre article = articleAVendreService.getById(idArticle);
-		Enchere enchere = articleAVendreService.getEnchereByIdArticle(idArticle);
+		Enchere enchere = this.enchereService.getEnchereByIdArticle(idArticle);
 		injecterDonneesEnchere(model, utilisateur, article, enchere);
 	}
 

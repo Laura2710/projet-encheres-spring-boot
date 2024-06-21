@@ -26,7 +26,6 @@ public class EnchereManager {
 	void activerEnchere() {
 		articleAVendreService.activerVente();
 		articleAVendreService.cloturerVente();
-		System.out.println("Activation et clôture des enchères du jour réussies.");
 	}
 
 }

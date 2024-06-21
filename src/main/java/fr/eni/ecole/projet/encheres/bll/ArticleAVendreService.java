@@ -7,7 +7,6 @@ import java.util.List;
 import fr.eni.ecole.projet.encheres.bo.Adresse;
 import fr.eni.ecole.projet.encheres.bo.ArticleAVendre;
 import fr.eni.ecole.projet.encheres.bo.Categorie;
-import fr.eni.ecole.projet.encheres.bo.Enchere;
 import fr.eni.ecole.projet.encheres.bo.Utilisateur;
 
 public interface ArticleAVendreService {
@@ -15,10 +14,6 @@ public interface ArticleAVendreService {
 	List<ArticleAVendre> getArticlesAVendreEnCours();
 
 	ArticleAVendre getById(int idArticle);
-
-	void faireUneOffre(Enchere enchere, Utilisateur utilisateur);
-
-	Enchere getEnchereByIdArticle(int idArticle);
 
 	void mettreArticleEnVente(ArticleAVendre articleAVendre, Utilisateur utilisateur);
 	
@@ -34,14 +29,11 @@ public interface ArticleAVendreService {
 
 	void annulerVente(ArticleAVendre article);
 
-
 	List<ArticleAVendre> getArticlesAVendreAvecParamètres(String nomRecherche,
 			int categorieRecherche, int casUtilisationFiltres, Principal principal);
 
 	void activerVente();
 
 	void cloturerVente();
-
-	void effectuerRetrait(ArticleAVendre article, String name);
 
 }

@@ -41,30 +41,47 @@ public class ArticleAVendreController {
 		this.utilisateurService = utilisateurService;
 	}
 
+	/**
+	 * Affiche les articles à vendre en cours.
+	 *
+	 * @param model     Le modèle pour la vue.
+	 * @param principal Les informations de l'utilisateur connecté.
+	 * @return La vue index.
+	 */
 	@GetMapping
 	public String afficherArticleAVendre(Model model, Principal principal) {
 
 		List<ArticleAVendre> articlesAVendre = articleAVendreService.getArticlesAVendreEnCours();
 		model.addAttribute("articlesAVendre", articlesAVendre);
-		//Ajout au model ma variable "nomRecherche" qui contiendra la chaine de caractère a retrouver dans le nom des articles
+		// Ajout au model ma variable "nomRecherche" qui contiendra la chaine de
+		// caractère a retrouver dans le nom des articles
 		String nomRecherche = null;
 		model.addAttribute("nomRecherche", nomRecherche);
 		// Ajout au model de ma variable categorieRecherche qui contiendra l'id de la
 		// catégorie a rechercher
 		int categorieRecherche = 0;
 		model.addAttribute("categorieRecherche", categorieRecherche);
-//		Ajout de la condition "est connecté"
+		// Ajout de la condition "est connecté"
 		if (principal != null) {
-			//Ajout des parametres utiles aux filtres si l'utilisateurs est connecté et non Admin.
-			//Parametre pour les input Select
+			// Ajout des parametres utiles aux filtres si l'utilisateurs est connecté et non
+			// Admin.
+			// Parametre pour les input Select
 			int casUtilisationFiltres = 0;
 			model.addAttribute("casUtilisationFiltres", casUtilisationFiltres);
 		}
 		return "index";
 	}
-	
-	
-	
+
+	/**
+	 * Affiche les articles à vendre en fonction des paramètres de recherche.
+	 *
+	 * @param nomRecherche          Le nom de l'article recherché.
+	 * @param categorieRecherche    L'identifiant de la catégorie recherchée.
+	 * @param casUtilisationFiltres Les filtres d'utilisation.
+	 * @param model                 Le modèle pour la vue.
+	 * @param principal             Les informations de l'utilisateur connecté.
+	 * @return La vue index.
+	 */
 	@PostMapping("/rechercher")
 	public String afficherArticleAVendre(@RequestParam(value = "nomRecherche") String nomRecherche,
 			@RequestParam(value = "categorieRecherche") int categorieRecherche,
@@ -77,14 +94,22 @@ public class ArticleAVendreController {
 		model.addAttribute("categorieRecherche", categorieRecherche);
 
 		if (principal != null) {
-			//Ajout des parametres utiles aux filtres si l'utilisateurs est connecté et non Admin.
-			//Parametre pour les input select
+			// Ajout des parametres utiles aux filtres si l'utilisateurs est connecté et non
+			// Admin.
+			// Parametre pour les input select
 			model.addAttribute("casUtilisationFiltres", casUtilisationFiltres);
 		}
 		return "index";
 
 	}
 
+	/**
+	 * Affiche le formulaire pour mettre en vente un nouvel article.
+	 *
+	 * @param model     Le modèle pour la vue.
+	 * @param principal Les informations de l'utilisateur connecté.
+	 * @return La vue du formulaire de vente d'article.
+	 */
 	@GetMapping("/vendre")
 	public String vendreArticle(Model model, Principal principal) {
 		try {
@@ -104,6 +129,15 @@ public class ArticleAVendreController {
 		return "view-vente-article";
 	}
 
+	/**
+	 * Traite la mise en vente d'un nouvel article.
+	 *
+	 * @param articleAVendre L'article à vendre.
+	 * @param bindingResult  Les résultats de la validation.
+	 * @param principal      Les informations de l'utilisateur connecté.
+	 * @param model          Le modèle pour la vue.
+	 * @return La vue à afficher.
+	 */
 	@PostMapping("/vendre")
 	public String vendreArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre,
 			BindingResult bindingResult, Principal principal, Model model) {
@@ -140,26 +174,46 @@ public class ArticleAVendreController {
 		return "view-vente-article";
 	}
 
+	/**
+	 * Injecte les catégories dans le modèle.
+	 *
+	 * @return La liste des catégories.
+	 */
 	@ModelAttribute("categories")
 	public List<Categorie> injecteCategorie() {
 		List<Categorie> categories = this.articleAVendreService.getAllCategories();
 		return categories;
 	}
 
+    /**
+     * Injecte les adresses de retrait dans le modèle.
+     *
+     * @param principal Les informations de l'utilisateur connecté.
+     * @return La liste des adresses de retrait.
+     */
 	@ModelAttribute("adressesRetrait")
 	public List<Adresse> injecteAdresse(Principal principal) {
 		List<Adresse> adressesRetrait = new ArrayList<Adresse>();
 		if (principal != null) {
 			Utilisateur utilisateurSession = this.utilisateurService.getByPseudo(principal.getName());
 			Adresse adressePerso = this.articleAVendreService.getAdresseById(utilisateurSession.getAdresse().getId());
-			adressesRetrait.add(adressePerso);			
+			adressesRetrait.add(adressePerso);
 			this.articleAVendreService.getAllAdressesRetrait().forEach(a -> {
 				adressesRetrait.add(a);
-			});;
+			});
+			;
 		}
 		return adressesRetrait;
 	}
 
+    /**
+     * Affiche le formulaire de modification d'un article à vendre.
+     *
+     * @param idArticle L'identifiant de l'article à modifier.
+     * @param model Le modèle pour la vue.
+     * @param principal Les informations de l'utilisateur connecté.
+     * @return La vue du formulaire de modification de vente d'article.
+     */
 	@GetMapping("/vendre/modifier")
 	public String modifierArticle(@RequestParam("id") int idArticle, Model model, Principal principal) {
 		try {
@@ -178,6 +232,16 @@ public class ArticleAVendreController {
 		}
 	}
 
+	
+    /**
+     * Traite la modification d'un article à vendre.
+     *
+     * @param articleAVendre L'article à vendre.
+     * @param bindingResult Les résultats de la validation.
+     * @param principal Les informations de l'utilisateur connecté.
+     * @param model Le modèle pour la vue.
+     * @return La vue à afficher.
+     */
 	@PostMapping("/vendre/modifier")
 	public String modifierArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre,
 			BindingResult bindingResult, Principal principal, Model model) {
@@ -215,6 +279,14 @@ public class ArticleAVendreController {
 		return "redirect:/";
 	}
 
+    /**
+     * Annule la vente d'un article.
+     *
+     * @param idArticle L'identifiant de l'article à annuler.
+     * @param principal Les informations de l'utilisateur connecté.
+     * @param model Le modèle pour la vue.
+     * @return La vue à afficher.
+     */
 	@GetMapping("/vente/annuler")
 	public String annulerVente(@RequestParam("id") int idArticle, Principal principal, Model model) {
 		try {
@@ -238,7 +310,7 @@ public class ArticleAVendreController {
 		}
 		return "redirect:/";
 	}
-	
+
 	private String afficherVueErreur(BusinessException e, Model model) {
 		List<String> errors = new ArrayList<String>();
 		e.getClefsExternalisations().forEach(key -> {
@@ -247,34 +319,29 @@ public class ArticleAVendreController {
 		model.addAttribute("errorBLL", errors);
 		return "view-errors";
 	}
-	
-	
+
 	@GetMapping("/ajouter-photo")
-	public String ajouterPhoto () {
+	public String ajouterPhoto() {
 		return "view-ajouter-image";
 	}
-	
+
 	// TODO Méthode Post n'est pas encore fonctionnelle pour upload photo à la BD
-	
-	/* @PostMapping("/ajouter-photo")
-	public String ajouterPhoto (@RequestParam("inputPhoto") MultipartFile file) throws IOException {
-		System.out.println(file.getName());
-		
-		if(!file.isEmpty() && file.getSize() < 600000) {
-			if (file.getContentType().equals("image/png") || file.getContentType().equals("image/jpeg")) {
-				
-				System.out.println(file.getOriginalFilename());
-				String filename = file.getOriginalFilename();
-				File dossier = new File("/images/upload/");
-				 if(!dossier.exists()) {
-					 dossier.mkdirs();
-				 }
-				 File dossierDestination = new File(dossier, filename);
-				 
-				file.transferTo(dossierDestination);
-			}
-		}
-		return "view-ajouter-image";
-	} */
-	
+
+	/*
+	 * @PostMapping("/ajouter-photo") public String ajouterPhoto
+	 * (@RequestParam("inputPhoto") MultipartFile file) throws IOException {
+	 * System.out.println(file.getName());
+	 * 
+	 * if(!file.isEmpty() && file.getSize() < 600000) { if
+	 * (file.getContentType().equals("image/png") ||
+	 * file.getContentType().equals("image/jpeg")) {
+	 * 
+	 * System.out.println(file.getOriginalFilename()); String filename =
+	 * file.getOriginalFilename(); File dossier = new File("/images/upload/");
+	 * if(!dossier.exists()) { dossier.mkdirs(); } File dossierDestination = new
+	 * File(dossier, filename);
+	 * 
+	 * file.transferTo(dossierDestination); } } return "view-ajouter-image"; }
+	 */
+
 }
