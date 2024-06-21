@@ -18,8 +18,8 @@
         <h1>Modifier mot de passe</h1>
         <form id="modifer-mot-de-passe" class="form" method="post" data-th-action="@{/utilisateur/modifier-mot-de-passe}">
             <div>
-                <label id="motdepasse">Mot de passe actuel (*): </label>
-                <input type="password" name="ancienMotDePasse" required>
+               <label for="motdepasse">Mot de passe actuel (*): </label>
+			   <input type="password" id="motdepasse" name="ancienMotDePasse" required>
             </div>
             <div>
                 <label for="newMotDePasse">Nouveau mot de passe (*): </label>

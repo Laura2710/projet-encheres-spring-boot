@@ -21,8 +21,8 @@
 					<span data-th-text="${#authentication.name}"></span>
 				</p>
 				<div>
-					<label id="nom" data-th-text="#{view-profil-form.label.nom}"></label>
-					<input type="text" data-th-field="*{nom}" required>
+					<label for="nom" data-th-text="#{view-profil-form.label.nom}"></label>
+					<input type="text" id="nom" data-th-field="*{nom}" required>
 					<ul data-th-if="${#fields.hasErrors('nom')}" class="listErrors">
 						<li th:each="err : ${#fields.errors('nom')}" th:text="${err}"></li>
 					</ul>
@@ -32,43 +32,43 @@
 
 			<div>
 				<div>
-					<label id="prenom" data-th-text="#{view-profil-form.label.prenom}"></label>
-					<input type="text" data-th-field="*{prenom}" required>
+					<label for="prenom" data-th-text="#{view-profil-form.label.prenom}"></label>
+					<input type="text" id="prenom" data-th-field="*{prenom}" required>
 					<ul data-th-if="${#fields.hasErrors('prenom')}" class="listErrors">
 						<li th:each="err : ${#fields.errors('prenom')}" th:text="${err}"></li>
 					</ul>
 				</div>
 				<div>
-					<label id="email" data-th-text="#{view-profil-form.label.email}"></label>
-					<input type="email" data-th-field="*{email}" required>
+					<label for="email" data-th-text="#{view-profil-form.label.email}"></label>
+					<input type="email" id="email" data-th-field="*{email}" required>
 					<ul data-th-if="${#fields.hasErrors('email')}" class="listErrors">
 						<li th:each="err : ${#fields.errors('email')}" th:text="${err}"></li>
 					</ul>
 				</div>
 			</div>
 			<div>
-				<label id="telephone" data-th-text="#{view-profil-form.label.telephone}"></label>
-				<input type="tel" data-th-field="*{telephone}">
+				<label for="telephone" data-th-text="#{view-profil-form.label.telephone}"></label>
+				<input type="tel" id="telephone" data-th-field="*{telephone}">
 				<ul data-th-if="${#fields.hasErrors('telephone')}" class="listErrors">
 					<li th:each="err : ${#fields.errors('telephone')}" th:text="${err}"></li>
 				</ul>
 			</div>
 			<div>
-				<label id="adresse.rue" data-th-text="#{view-profil-form.label.adresse}"></label>
+				<label for="adresse.rue" data-th-text="#{view-profil-form.label.adresse}"></label>
 				<div>
-					<input data-th-field="*{adresse.rue}">
+					<input id="adresse.rue" data-th-field="*{adresse.rue}">
 					<ul data-th-if="${#fields.hasErrors('adresse.rue')}" class="listErrors">
 						<li th:each="err : ${#fields.errors('adresse.rue')}" th:text="${err}"></li>
 					</ul>
 				</div>
 				<div>
-					<input data-th-field="*{adresse.codePostal}">
+					<input id="adresse.codePostal" data-th-field="*{adresse.codePostal}">
 					<ul data-th-if="${#fields.hasErrors('adresse.codePostal')}" class="listErrors">
 						<li th:each="err : ${#fields.errors('adresse.codePostal')}" th:text="${err}"></li>
 					</ul>
 				</div>
 				<div>
-					<input data-th-field="*{adresse.ville}">
+					<input id="adresse.ville" data-th-field="*{adresse.ville}">
 					<ul data-th-if="${#fields.hasErrors('adresse.ville')}" class="listErrors">
 						<li th:each="err : ${#fields.errors('adresse.ville')}" th:text="${err}"></li>
 					</ul>
@@ -76,7 +76,7 @@
 			</div>
 			<div>
 				<p>
-				<span data-th-text="#{view-profil-form.credit}" class="label-profil"></span>
+					<span data-th-text="#{view-profil-form.credit}" class="label-profil"></span>
 					<span data-th-text="${utilisateur.credit}"></span>
 					<span data-th-text="#{view-profil-form.points}" class="label-profil-form"></span>
 				</p>
